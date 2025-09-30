@@ -24,4 +24,4 @@ jobs:
         env:
           REDIS_URL: ${{ secrets.REDIS_URL }}
         run: |
-          python tasks/status_checker.py || echo "⚠️ Script failed, skipping..."
+          python tasks/status_update.py || echo "⚠️ Script failed, skipping..."
