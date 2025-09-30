@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/Header';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -79,6 +80,24 @@ export default function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-V1CRVHSMCW"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-V1CRVHSMCW');
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-50 flex flex-col">
           <Header />
