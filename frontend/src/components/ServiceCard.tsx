@@ -1,12 +1,8 @@
 'use client';
 
-import { Service } from '@/types/service';
+import { Service, ServiceCardProps } from '@/types';
 import { clsx } from 'clsx';
-import { CheckCircle, AlertTriangle, XCircle, Wrench, ExternalLink, Clock } from 'lucide-react';
-
-interface ServiceCardProps {
-  service: Service;
-}
+import { CheckCircle, XCircle, Wrench, ExternalLink, Clock } from 'lucide-react';
 
 const statusConfig = {
   normal: {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Service, FilterOptions } from '@/types/service';
 import { loadBackendData } from '@/utils/dataTransform';
@@ -12,7 +12,7 @@ import { Search, Grid, List, SortAsc, SortDesc, Loader2, AlertCircle } from 'luc
 type SortField = 'name' | 'status' | 'responseTime' | 'agency';
 type SortOrder = 'asc' | 'desc';
 
-export default function ServicesPage() {
+function ServicesContent() {
   const searchParams = useSearchParams();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -262,5 +262,20 @@ export default function ServicesPage() {
       {/* 상태 기준 안내 */}
       <StatusGuide />
     </div>
+  );
+}
+
+export default function ServicesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-gray-600">로딩 중...</p>
+        </div>
+      </div>
+    }>
+      <ServicesContent />
+    </Suspense>
   );
 }

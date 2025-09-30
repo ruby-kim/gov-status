@@ -57,26 +57,26 @@ export default function AgencyStatsTable({ agencyStats }: AgencyStatsTableProps)
                   {agency.agency}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {agency.total}
+                  {agency.current.total}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">
-                  {agency.normal}
+                  {agency.current.normal}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
-                  {agency.maintenance}
+                  {agency.current.maintenance}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                  {agency.problem}
+                  {agency.current.problem}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {agency.normalRate.toFixed(1)}%
+                  {agency.current.normalRate.toFixed(1)}%
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={clsx(
                     'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
-                    getStatusColor(agency.normalRate)
+                    getStatusColor(agency.current.normalRate)
                   )}>
-                    {getStatusText(agency.normalRate)}
+                    {getStatusText(agency.current.normalRate)}
                   </span>
                 </td>
               </tr>

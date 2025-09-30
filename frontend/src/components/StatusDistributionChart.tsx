@@ -13,11 +13,6 @@ const COLORS = {
   problem: '#EF4444'    // red-500
 };
 
-const LABELS = {
-  normal: '정상',
-  maintenance: '점검중',
-  problem: '문제'
-};
 
 export default function StatusDistributionChart({ stats }: StatusDistributionChartProps) {
   const data = [

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, AlertTriangle, XCircle, Wrench, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle, XCircle, Wrench, Info, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StatusGuideProps {
   className?: string;

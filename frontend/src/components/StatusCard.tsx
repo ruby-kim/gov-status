@@ -1,8 +1,8 @@
 'use client';
 
-import { ServiceStatus } from '@/types/service';
+import { ServiceStatus } from '@/types';
 import { clsx } from 'clsx';
-import { CheckCircle, AlertTriangle, XCircle, Wrench } from 'lucide-react';
+import { CheckCircle, XCircle, Wrench } from 'lucide-react';
 
 interface StatusCardProps {
   status: ServiceStatus;

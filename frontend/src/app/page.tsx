@@ -25,8 +25,8 @@ export default function Dashboard() {
         setServices(servicesData);
         
         // 실제 마지막 업데이트 시간 설정
-        if (dashboardData.lastUpdated) {
-          setLastUpdated(new Date(dashboardData.lastUpdated).toLocaleString('ko-KR'));
+        if ((dashboardData as any).lastUpdated) { // eslint-disable-line @typescript-eslint/no-explicit-any
+          setLastUpdated(new Date((dashboardData as any).lastUpdated).toLocaleString('ko-KR')); // eslint-disable-line @typescript-eslint/no-explicit-any
         } else {
           setLastUpdated(new Date().toLocaleString('ko-KR'));
         }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ChevronUp, Move } from 'lucide-react';
 
 export default function ScrollToTop() {
@@ -54,7 +54,7 @@ export default function ScrollToTop() {
     }
   };
 
-  const handleMove = (clientX: number, clientY: number) => {
+  const handleMove = useCallback((clientX: number, clientY: number) => {
     if (isDragging) {
       const newX = clientX - dragOffset.x;
       const newY = clientY - dragOffset.y;
@@ -68,11 +68,11 @@ export default function ScrollToTop() {
         y: Math.max(0, Math.min(newY, maxY))
       });
     }
-  };
+  }, [isDragging, dragOffset.x, dragOffset.y]);
 
-  const handleEnd = () => {
+  const handleEnd = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget || (e.target as HTMLElement).closest('[data-drag-handle]')) {
@@ -89,23 +89,23 @@ export default function ScrollToTop() {
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     handleMove(e.clientX, e.clientY);
-  };
+  }, [handleMove]);
 
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = useCallback((e: TouchEvent) => {
     const touch = e.touches[0];
     handleMove(touch.clientX, touch.clientY);
     e.preventDefault();
-  };
+  }, [handleMove]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     handleEnd();
-  };
+  }, [handleEnd]);
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     handleEnd();
-  };
+  }, [handleEnd]);
 
   useEffect(() => {
     if (isDragging) {
@@ -121,7 +121,7 @@ export default function ScrollToTop() {
         document.removeEventListener('touchend', handleTouchEnd);
       };
     }
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   if (!isVisible) {
     return null;
