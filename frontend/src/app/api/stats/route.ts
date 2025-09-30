@@ -24,7 +24,7 @@ export async function GET() {
 
     return NextResponse.json(stats, {
       headers: {
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=30'
+        'Cache-Control': 's-maxage=600, stale-while-revalidate=300'
       }
     });
   } catch (error) {

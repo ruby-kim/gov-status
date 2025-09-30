@@ -13,7 +13,7 @@ export const GITHUB_CONFIG = {
 
 // 프로젝트 정보
 export const PROJECT_CONFIG = {
-  NAME: '정부서비스 상태 모니터링',
+  NAME: '정부 사이트 장애 현황 모니터링',
   DESCRIPTION: '정부 서비스들의 상태를 모니터링하고 분석하는 대시보드 (10분마다 업데이트)',
   VERSION: '1.0.0'
 } as const;
