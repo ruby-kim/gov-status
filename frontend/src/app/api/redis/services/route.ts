@@ -12,7 +12,7 @@ export async function GET() {
     const services = JSON.parse(servicesData);
     return NextResponse.json(services, {
       headers: {
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=30'
+        'Cache-Control': 's-maxage=600, stale-while-revalidate=300'
       }
     });
   } catch (error) {

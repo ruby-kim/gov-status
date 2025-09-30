@@ -29,7 +29,7 @@ export default function Header() {
                 <Activity className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">
-                정부서비스 상태
+                정부 사이트 장애 현황
               </span>
             </Link>
           </div>
