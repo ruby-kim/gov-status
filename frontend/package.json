@@ -7,10 +7,7 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "eslint",
-    "deploy": "vercel --prod",
-    "preview": "vercel",
-    "generate-og": "node scripts/generate-og-image.js"
+    "lint": "eslint"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -31,7 +28,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
-    "sharp": "^0.34.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

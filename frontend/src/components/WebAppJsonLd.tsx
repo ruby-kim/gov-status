@@ -93,7 +93,7 @@ export default function WebAppJsonLd({
     }))
   } : null;
 
-  const allJsonLd: any[] = [webAppJsonLd];
+  const allJsonLd: object[] = [webAppJsonLd];
   if (faqJsonLd) allJsonLd.push(faqJsonLd);
   if (breadcrumbJsonLd) allJsonLd.push(breadcrumbJsonLd);
 
