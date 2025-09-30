@@ -1,6 +1,6 @@
 'use client';
 
-import { Service, ServiceCardProps } from '@/types';
+import { ServiceCardProps } from '@/types';
 import { clsx } from 'clsx';
 import { CheckCircle, XCircle, Wrench, ExternalLink, Clock } from 'lucide-react';
 
