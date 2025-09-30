@@ -1,0 +1,155 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { ChevronUp, Move } from 'lucide-react';
+
+export default function ScrollToTop() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      // 스크롤이 300px 이상일 때 버튼 표시
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', toggleVisibility);
+    };
+  }, []);
+
+  // 초기 위치 설정 (우하단)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPosition({
+        x: window.innerWidth - 80, // 오른쪽에서 80px
+        y: window.innerHeight - 80  // 아래에서 80px
+      });
+    }
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleStart = (clientX: number, clientY: number) => {
+    setIsDragging(true);
+    const rect = document.querySelector('[data-scroll-button]')?.getBoundingClientRect();
+    if (rect) {
+      setDragOffset({
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      });
+    }
+  };
+
+  const handleMove = (clientX: number, clientY: number) => {
+    if (isDragging) {
+      const newX = clientX - dragOffset.x;
+      const newY = clientY - dragOffset.y;
+      
+      // 화면 경계 내에서만 이동
+      const maxX = window.innerWidth - 60;
+      const maxY = window.innerHeight - 60;
+      
+      setPosition({
+        x: Math.max(0, Math.min(newX, maxX)),
+        y: Math.max(0, Math.min(newY, maxY))
+      });
+    }
+  };
+
+  const handleEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget || (e.target as HTMLElement).closest('[data-drag-handle]')) {
+      handleStart(e.clientX, e.clientY);
+      e.preventDefault();
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.target === e.currentTarget || (e.target as HTMLElement).closest('[data-drag-handle]')) {
+      const touch = e.touches[0];
+      handleStart(touch.clientX, touch.clientY);
+      e.preventDefault();
+    }
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    handleMove(e.clientX, e.clientY);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
+    e.preventDefault();
+  };
+
+  const handleMouseUp = () => {
+    handleEnd();
+  };
+
+  const handleTouchEnd = () => {
+    handleEnd();
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
+  }, [isDragging, dragOffset]);
+
+  if (!isVisible) {
+    return null;
+  }
+
+  return (
+    <div
+      className="fixed z-40 md:hidden"
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        cursor: isDragging ? 'grabbing' : 'grab'
+      }}
+    >
+      <button
+        data-scroll-button
+        onClick={scrollToTop}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        className="text-white rounded-full p-3 shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 flex flex-col items-center space-y-1"
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}
+        aria-label="맨 위로 이동"
+      >
+        <ChevronUp className="w-5 h-5" />
+        <Move className="w-3 h-3 opacity-60" data-drag-handle />
+      </button>
+    </div>
+  );
+}
