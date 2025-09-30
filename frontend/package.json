@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint",
     "deploy": "vercel --prod",
@@ -15,6 +16,7 @@
     "ioredis": "^5.8.0",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
+    "next-sitemap": "^4.2.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "recharts": "^3.2.1"
