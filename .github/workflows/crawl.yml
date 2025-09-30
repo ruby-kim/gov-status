@@ -1,0 +1,27 @@
+name: Crawl and Update Redis
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"   # 10분 간격 (UTC 기준)
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip" 
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run crawler
+        env:
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+        run: |
+          python tasks/status_checker.py || echo "⚠️ Script failed, skipping..."
