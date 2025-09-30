@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import ScrollToTop from '@/components/ScrollToTop';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -98,6 +99,7 @@ export default function RootLayout({
             </div>
           </footer>
           <ScrollToTop />
+          {process.env.NODE_ENV === 'production' && <Analytics />}
         </div>
       </body>
     </html>
