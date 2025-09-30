@@ -18,7 +18,7 @@ jobs:
           cache: "pip" 
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r tasks/requirements.txt
 
       - name: Run crawler
         env:
