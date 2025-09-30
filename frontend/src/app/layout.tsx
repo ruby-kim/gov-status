@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/Header';
 import ScrollToTop from '@/components/ScrollToTop';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -78,6 +80,24 @@ export default function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-V1CRVHSMCW"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-V1CRVHSMCW');
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-50 flex flex-col">
           <Header />
@@ -91,13 +111,18 @@ export default function RootLayout({
                 <p>
                   Contact: <a href="mailto:govstatus@anb-network.com" className="text-gray-700 hover:text-gray-900 hover:underline">govstatus@anb-network.com</a>
                 </p>
-                <p className="text-xs text-gray-500">
+                <div className="flex justify-center space-x-4 text-xs">
+                  <a href="/privacy" className="text-gray-500 hover:text-gray-700 hover:underline">개인정보처리방침</a>
+                  <a href="/terms" className="text-gray-500 hover:text-gray-700 hover:underline">이용약관</a>
+                </div>
+                <p className="text-sm text-gray-500">
                   이 서비스는 정부 기관의 공식 웹사이트가 아니며, 오픈소스 프로젝트 및 포트폴리오 일환으로 제작되었습니다.
                 </p>
               </div>
             </div>
           </footer>
           <ScrollToTop />
+          {process.env.NODE_ENV === 'production' && <Analytics />}
         </div>
       </body>
     </html>
