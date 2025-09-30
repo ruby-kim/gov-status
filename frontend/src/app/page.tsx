@@ -84,7 +84,7 @@ export default function Dashboard() {
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">정부서비스 상태 대시보드</h1>
+          <h1 className="text-3xl font-bold text-gray-900">정부 사이트 장애 현황 대시보드</h1>
           <p className="mt-2 text-gray-600">
             정부 서비스 모니터링 및 현황 분석 (10분마다 업데이트)
           </p>

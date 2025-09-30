@@ -7,7 +7,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: '정부서비스 상태 모니터링',
+  title: '정부 사이트 장애 현황 모니터링',
   description: '정부 서비스들의 상태를 모니터링하고 분석하는 대시보드 (10분마다 업데이트)',
   icons: {
     icon: '/favicon.svg',
@@ -32,7 +32,7 @@ export default function RootLayout({
           <footer className="bg-white border-t border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <div className="text-center text-sm text-gray-600 space-y-2">
-                <p>© {currentYear} 정부서비스 상태 모니터링 by <a href="https://anb-network.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900 hover:underline">김루비</a>. All rights reserved.</p>
+                <p>© {currentYear} 정부 사이트 장애 현황 모니터링 by <a href="https://anb-network.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900 hover:underline">김루비</a>. All rights reserved.</p>
                 <p>
                   Contact: <a href="mailto:govstatus@anb-network.com" className="text-gray-700 hover:text-gray-900 hover:underline">govstatus@anb-network.com</a>
                 </p>
