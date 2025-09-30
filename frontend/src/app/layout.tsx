@@ -111,7 +111,11 @@ export default function RootLayout({
                 <p>
                   Contact: <a href="mailto:govstatus@anb-network.com" className="text-gray-700 hover:text-gray-900 hover:underline">govstatus@anb-network.com</a>
                 </p>
-                <p className="text-xs text-gray-500">
+                <div className="flex justify-center space-x-4 text-xs">
+                  <a href="/privacy" className="text-gray-500 hover:text-gray-700 hover:underline">개인정보처리방침</a>
+                  <a href="/terms" className="text-gray-500 hover:text-gray-700 hover:underline">이용약관</a>
+                </div>
+                <p className="text-sm text-gray-500">
                   이 서비스는 정부 기관의 공식 웹사이트가 아니며, 오픈소스 프로젝트 및 포트폴리오 일환으로 제작되었습니다.
                 </p>
               </div>
