@@ -8,9 +8,13 @@ import {
 import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
 import { loadDashboardData, loadHistoryData } from '@/utils/dataTransform';
 
+import { DashboardData } from '@/types/api/dashboard';
+
+import { HistoryData } from '@/types/api/dashboard';
+
 export default function AnalyticsPage() {
-  const [dashboardData, setDashboardData] = useState<any>(null);
-  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,9 +74,7 @@ export default function AnalyticsPage() {
 
   const { overview, agencyStats } = dashboardData;
 
-  // 최고 정상율 기관들 찾기
-  const maxRate = Math.max(...agencyStats.map((agency: any) => agency.current.normalRate));
-  const topAgencies = agencyStats.filter((agency: any) => agency.current.normalRate === maxRate);
+  // 최고 정상율 기관들 찾기 (현재 사용하지 않음)
 
   // 페이지네이션 계산
   const totalItems = agencyStats.length;
@@ -220,14 +222,13 @@ export default function AnalyticsPage() {
           <div className="h-[30vh] sm:h-[40vh] md:h-[50vh] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={statusData} cx="50%" cy="50%" outerRadius="70%" dataKey="value"
-                    label={({ name, value, percent }: any) => `${name} ${value}개`}>
+                <Pie data={statusData} cx="50%" cy="50%" outerRadius="70%" dataKey="value">
                   {statusData.map((entry, index) => (
                     <Cell key={index} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip 
-                  formatter={(value: any, name: string) => [`${value}개`, name]}
+                  formatter={(value: number, name: string) => [`${value}개`, name]}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -245,11 +246,11 @@ export default function AnalyticsPage() {
               <XAxis dataKey="hour" angle={-30} textAnchor="end" fontSize={10}/>
               <YAxis fontSize={10} domain={[0, 100]} />
               <Tooltip 
-                formatter={(value: any, name: string, props: any) => [
+                formatter={(value: number) => [
                   `${value}%`, 
                   '정상율'
                 ]}
-                labelFormatter={(label: string, payload: any) => {
+                labelFormatter={(label: string, payload: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
                   if (payload && payload.length > 0) {
                     const data = payload[0].payload;
                     return `${data.date ? data.date + ' ' : ''}${label}`;
@@ -293,7 +294,7 @@ export default function AnalyticsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {paginatedAgencyStats.map((agency: any, index: number) => {
+                {paginatedAgencyStats.map((agency, index: number) => {
                   const avgRate = agency.average;
                   const trend = agency.trend;
                   return (
@@ -305,7 +306,7 @@ export default function AnalyticsPage() {
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 hover:underline"
                         >
-                          {agency.name || agency.agency}
+                          {agency.agency}
                         </a>
                       </td>
                       <td className="px-3 py-2 text-center">

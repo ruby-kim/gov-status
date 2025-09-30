@@ -1,21 +1,5 @@
-import { Service, AgencyStats } from '@/types/service';
-
-export interface DashboardData {
-  services: Service[];
-  stats: any;
-  overview: {
-    totalServices: number;
-    normalServices: number;
-    maintenanceServices: number;
-    problemServices: number;
-    overallNormalRate: number;
-    bestAgency: { name: string; rate: number } | null;
-    warningAgencies: number;
-    avgResponseTime: number;
-    recentAvgRate: number;
-  };
-  agencyStats: AgencyStats[];
-}
+import { Service } from '@/types/service';
+import { DashboardData, HistoryData } from '@/types/api/dashboard';
 
 export async function loadDashboardData(): Promise<DashboardData> {
   try {
@@ -33,7 +17,7 @@ export async function loadDashboardData(): Promise<DashboardData> {
   }
 }
 
-export async function loadHistoryData(): Promise<any[]> {
+export async function loadHistoryData(): Promise<HistoryData[]> {
   try {
     const response = await fetch('/api/redis/history?days=1');
 
@@ -50,7 +34,7 @@ export async function loadHistoryData(): Promise<any[]> {
   }
 }
 
-export async function loadBackendData(): Promise<any[]> {
+export async function loadBackendData(): Promise<Service[]> {
   try {
     const response = await fetch('/api/redis/services');
 

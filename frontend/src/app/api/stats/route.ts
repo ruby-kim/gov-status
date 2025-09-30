@@ -15,10 +15,10 @@ export async function GET() {
     // 통계 계산
     const stats = {
       totalServices: data.length,
-      normalServices: data.filter((service: any) => service.status === 'normal').length,
-      maintenanceServices: data.filter((service: any) => service.status === 'maintenance').length,
-      problemServices: data.filter((service: any) => service.status === 'problem').length,
-      totalAgencies: new Set(data.map((service: any) => service.agency.name)).size,
+      normalServices: data.filter((service: { status: string }) => service.status === 'normal').length,
+      maintenanceServices: data.filter((service: { status: string }) => service.status === 'maintenance').length,
+      problemServices: data.filter((service: { status: string }) => service.status === 'problem').length,
+      totalAgencies: new Set(data.map((service: { agency: { name: string } }) => service.agency.name)).size,
       lastUpdated: new Date().toISOString()
     };
 

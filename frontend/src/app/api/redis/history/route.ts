@@ -18,10 +18,10 @@ export async function GET(request: Request) {
     }
 
     // ZSET의 모든 멤버 확인
-    const allMembers = await redis.zrange('stats:history', 0, -1, 'WITHSCORES');
+    await redis.zrange('stats:history', 0, -1, 'WITHSCORES');
 
     // 최근 멤버들 확인
-    const recentMembers = await redis.zrevrange('stats:history', 0, 5, 'WITHSCORES');
+    await redis.zrevrange('stats:history', 0, 5, 'WITHSCORES');
     const historyData = await redis.zrangebyscore(
       'stats:history',
       daysAgo,

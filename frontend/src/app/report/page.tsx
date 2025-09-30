@@ -16,7 +16,8 @@ export default function ReportPage() {
       icon: AlertCircle,
       color: 'text-red-600',
       bgColor: 'bg-red-50',
-      borderColor: 'border-red-200'
+      borderColor: 'border-red-200',
+      formUrl: 'https://forms.gle/HRa1tiDwTXutuAPG8'
     },
     {
       id: 'missing-service',
@@ -25,7 +26,8 @@ export default function ReportPage() {
       icon: Info,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200'
+      borderColor: 'border-blue-200',
+      formUrl: 'https://forms.gle/q11WXgBAKNZKFAQG7'
     },
     {
       id: 'technical-issue',
@@ -34,7 +36,8 @@ export default function ReportPage() {
       icon: Bug,
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-50',
-      borderColor: 'border-yellow-200'
+      borderColor: 'border-yellow-200',
+      formUrl: 'https://forms.gle/CqNadnxLDdYpn3kc8'
     },
     {
       id: 'other',
@@ -43,7 +46,8 @@ export default function ReportPage() {
       icon: Mail,
       color: 'text-gray-600',
       bgColor: 'bg-gray-50',
-      borderColor: 'border-gray-200'
+      borderColor: 'border-gray-200',
+      formUrl: 'https://forms.gle/YZEFkNQJugsmPQUUA'
     }
   ];
 
@@ -53,10 +57,12 @@ export default function ReportPage() {
   };
 
   const handleSubmit = () => {
-    // 구글 폼으로 리다이렉트
-    const googleFormUrl = 'https://forms.gle/YOUR_FORM_ID_HERE';
-    window.open(googleFormUrl, '_blank');
-    setIsSubmitted(true);
+    // 선택된 제보 유형에 맞는 구글 폼으로 리다이렉트
+    const selectedReportType = reportTypes.find(type => type.id === selectedType);
+    if (selectedReportType?.formUrl) {
+      window.open(selectedReportType.formUrl, '_blank');
+      setIsSubmitted(true);
+    }
   };
 
   return (
@@ -211,6 +217,7 @@ export default function ReportPage() {
             <p>• 개인정보는 제보 처리 목적으로만 사용되며, 제3자에게 제공되지 않습니다.</p>
             <p>• 제보 처리 결과는 개별적으로 연락드리지 않을 수 있습니다.</p>
             <p>• 긴급한 문제나 민원은 해당 기관에 직접 문의하시기 바랍니다.</p>
+            <p className="text-blue-600 font-semibold">• 원하시는 경우, 기여자 명단에 이름(또는 닉네임)을 올려드립니다</p>
           </div>
         </div>
 
