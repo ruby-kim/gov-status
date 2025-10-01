@@ -17,6 +17,14 @@ export interface DashboardData {
     recentAvgRate: number;
     agencies: AgencyStatus[];
   };
+  agencies: {
+    agencyId: string;
+    name: string;
+    url: string;
+    mainCategory: string;
+    subCategory: string;
+    tags: string[];
+  }[];
   agencyStats: AgencyStats[];
   lastUpdated?: string;
 }

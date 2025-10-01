@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
@@ -13,14 +13,41 @@ import WebAppJsonLd from '@/components/WebAppJsonLd';
 import { HistoryData } from '@/types/api/dashboard';
 
 export default function AnalyticsContent() {
-  const [overview, setOverview] = useState<any>(null);
-  const [agencies, setAgencies] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
+  const [overview, setOverview] = useState<{
+    totalServices: number;
+    normalServices: number;
+    maintenanceServices: number;
+    problemServices: number;
+    overallNormalRate: number;
+    bestAgency: { name: string; rate: number } | null;
+    warningAgencies: number;
+    avgResponseTime: number;
+    fastestAgency: { name: string; responseTime: number } | null;
+  } | null>(null);
+  const [agencies, setAgencies] = useState<{
+    agencyId: string;
+    name: string;
+    url: string;
+    mainCategory: string;
+    subCategory: string;
+    tags: string[];
+  }[]>([]);
+  const [services, setServices] = useState<{
+    id: string;
+    name: string;
+    url: string;
+    status: 'normal' | 'maintenance' | 'problem';
+    agency: {
+      id: string;
+      name: string;
+      mainCategory: string;
+      subCategory: string;
+    };
+  }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
-  const [historyLoading, setHistoryLoading] = useState(true);
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,7 +128,7 @@ export default function AnalyticsContent() {
   });
   
   // bestAgency의 정상율과 동일한 정상율을 가진 기관들의 개수
-  const bestAgenciesCount = Array.from(agencyRates.entries()).filter(([agencyId, stats]) => {
+  const bestAgenciesCount = Array.from(agencyRates.entries()).filter(([, stats]) => {
     const normalRate = stats.total > 0 ? (stats.normal / stats.total) * 100 : 0;
     return Math.abs(normalRate - bestAgencyRate) < 0.01; // 소수점 오차 고려
   }).length;

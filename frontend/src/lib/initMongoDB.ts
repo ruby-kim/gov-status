@@ -33,7 +33,7 @@ export async function initializeMongoDB() {
 /**
  * 샘플 데이터 삽입
  */
-async function insertSampleData(db: any) {
+async function insertSampleData(db: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
   // 샘플 기관 데이터
   const sampleAgencies: Agency[] = [
     {

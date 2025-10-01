@@ -82,9 +82,6 @@ export async function GET() {
       : 0;
 
     // 6. bestAgency 계산 (하루 동안의 hourly_stats 데이터 기반)
-    const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
 
     // 최신 데이터가 있는 날짜 사용
     const availableTimestamps = await db.collection('hourly_stats').distinct('timestampHour');

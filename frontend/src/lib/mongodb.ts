@@ -5,7 +5,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-const options: any = {
+const options: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
   // MongoDB Atlas 최적화 설정
   maxPoolSize: 10, // 연결 풀 크기
   serverSelectionTimeoutMS: 5000, // 서버 선택 타임아웃
@@ -25,7 +25,7 @@ let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
 if (process.env.NODE_ENV === 'development') {
-  let globalWithMongo = global as typeof globalThis & {
+  const globalWithMongo = global as typeof globalThis & {
     _mongoClientPromise?: Promise<MongoClient>;
   };
 
