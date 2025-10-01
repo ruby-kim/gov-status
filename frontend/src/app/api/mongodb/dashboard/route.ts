@@ -48,9 +48,6 @@ export async function GET() {
     const agencies = await db.collection<Agency>('agencies').find({}).toArray();
     const agenciesMap = new Map(agencies.map(agency => [agency.agencyId, agency]));
 
-    console.log('Found', agencies.length, 'agencies');
-    console.log('Found', latestOverallStats.agencies.length, 'agency statuses');
-
     // 3. 통계 계산
     const stats = {
       overall: latestOverallStats.overall
@@ -88,8 +85,6 @@ export async function GET() {
       })
       .toArray();
 
-    console.log('Found', todayStats.length, 'hourly stats for best agency calculation');
-
     // 기관별로 정상율 계산
     const agencyStats = new Map<string, { total: number; normal: number; normalRate: number }>();
 
@@ -111,8 +106,6 @@ export async function GET() {
     if (sortedAgencies.length > 0) {
       const maxNormalRate = sortedAgencies[0][1].normalRate;
       const bestAgencies = sortedAgencies.filter(([, stats]) => stats.normalRate === maxNormalRate);
-
-      console.log('Found', bestAgencies.length, 'agencies with max normal rate:', maxNormalRate);
 
       // 가장 높은 정상율을 가진 기관들 중에서 랜덤 선택
       const randomBestAgency = bestAgencies[Math.floor(Math.random() * bestAgencies.length)];
