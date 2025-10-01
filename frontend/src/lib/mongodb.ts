@@ -5,7 +5,16 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-const options: any = {
+const options: {
+  maxPoolSize: number;
+  serverSelectionTimeoutMS: number;
+  socketTimeoutMS: number;
+  auth?: {
+    username: string;
+    password: string;
+  };
+  authSource?: string;
+} = {
   maxPoolSize: 10,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
@@ -20,7 +29,6 @@ if (process.env.MONGODB_USERNAME && process.env.MONGODB_PASSWORD) {
 }
 
 let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
 
 const globalWithMongo = global as typeof globalThis & {
   _mongoClientPromise?: Promise<MongoClient>;
@@ -30,7 +38,7 @@ if (!globalWithMongo._mongoClientPromise) {
   client = new MongoClient(uri, options);
   globalWithMongo._mongoClientPromise = client.connect();
 }
-clientPromise = globalWithMongo._mongoClientPromise;
+const clientPromise = globalWithMongo._mongoClientPromise;
 
 export default clientPromise;
 
