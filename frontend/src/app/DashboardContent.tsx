@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ServiceStats } from '@/types/service';
-import { useStats } from '@/contexts/StatsContext';
+import { loadDashboardData } from '@/utils/dataTransform';
 import StatsOverview from '@/components/StatsOverview';
 import StatusDistributionChart from '@/components/StatusDistributionChart';
 import StatusGuide from '@/components/StatusGuide';
@@ -11,16 +11,29 @@ import { Activity, TrendingUp, AlertCircle, CheckCircle, Loader2 } from 'lucide-
 import { formatPercentage } from '@/utils/formatUtils';
 
 export default function DashboardContent() {
-  const { getOverview, isLoading, error } = useStats();
+  const [overview, setOverview] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>('');
 
-  const overview = getOverview();
-
   useEffect(() => {
-    if (overview?.lastUpdated) {
-      setLastUpdated(new Date(overview.lastUpdated).toLocaleString('ko-KR'));
-    }
-  }, [overview]);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await loadDashboardData();
+        setOverview(data.overview);
+        setLastUpdated(new Date(data.lastUpdated || new Date()).toLocaleString('ko-KR'));
+      } catch (err) {
+        setError('데이터를 불러오는 중 오류가 발생했습니다.');
+        console.error('Error loading data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   if (isLoading) {
     return (

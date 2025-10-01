@@ -218,6 +218,7 @@ export async function GET() {
         recentAvgRate: Math.round(overallNormalRate * 100) / 100,
         agencies: latestOverallStats.agencies || []
       },
+      agencies: agencies,
       agencyStats: agencyStatsArray
     }, {
       headers: {

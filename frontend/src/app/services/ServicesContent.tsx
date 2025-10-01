@@ -8,7 +8,7 @@ import ServiceCard from '@/components/ServiceCard';
 import ServiceFilters from '@/components/ServiceFilters';
 import StatusGuide from '@/components/StatusGuide';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
-import { Search, Grid, List, SortAsc, SortDesc, Loader2, AlertCircle } from 'lucide-react';
+import { Search, Grid, List, SortAsc, SortDesc, Loader2, AlertCircle, Activity } from 'lucide-react';
 
 type SortField = 'name' | 'status' | 'responseTime' | 'agency';
 type SortOrder = 'asc' | 'desc';
@@ -16,8 +16,9 @@ type SortOrder = 'asc' | 'desc';
 function ServicesContent() {
   const searchParams = useSearchParams();
   const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
   const [filters, setFilters] = useState<FilterOptions>({});
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
@@ -35,28 +36,33 @@ function ServicesContent() {
     }
   }, [searchParams]);
 
+  // 데이터 로딩
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
+        setError(null);
         const data = await loadBackendData();
         setServices(data);
-        
-        // 사용 가능한 하위 카테고리 추출
-        const subCategories = [...new Set(data.map(service => service.agency.subCategory))].sort();
-        
-        setAvailableSubCategories(subCategories);
-        setError(null);
+        setLastUpdated(new Date().toLocaleString('ko-KR'));
       } catch (err) {
         setError('데이터를 불러오는 중 오류가 발생했습니다.');
         console.error('Error loading data:', err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  // 사용 가능한 하위 카테고리 추출
+  useEffect(() => {
+    if (services.length > 0) {
+      const subCategories = [...new Set(services.map(service => service.agency.subCategory))].sort();
+      setAvailableSubCategories(subCategories);
+    }
+  }, [services]);
 
   const filteredAndSortedServices = useMemo(() => {
     const filtered = services.filter(service => {
@@ -143,7 +149,7 @@ function ServicesContent() {
       <SortDesc className="w-4 h-4" />;
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -212,6 +218,12 @@ function ServicesContent() {
           <p className="mt-2 text-gray-600">
             정부 서비스들의 상태를 확인하고 관리하세요 (10분마다 업데이트)
           </p>
+        </div>
+        <div className="mt-4 sm:mt-0 flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <Activity className="w-4 h-4" />
+            <span>마지막 업데이트: {lastUpdated || '로딩 중...'}</span>
+          </div>
         </div>
       </div>
 

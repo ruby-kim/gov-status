@@ -7,12 +7,11 @@ import { GITHUB_CONFIG } from '@/constants/config';
 import { Contributor } from '@/types/contributor';
 import contributorsData from '@/data/contributors.json';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
-import { useStats } from '@/contexts/StatsContext';
+import { loadDashboardData } from '@/utils/dataTransform';
 
 export default function ContributorsContent() {
-  const { getOverview } = useStats();
-  const contextStats = getOverview();
   const [contributors, setContributors] = useState<Contributor[]>([]);
+  const [overview, setOverview] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,9 +20,12 @@ export default function ContributorsContent() {
       try {
         setLoading(true);
         
-        // 기여자 데이터 로드
+        // 기여자 데이터와 대시보드 데이터 로드
         const contributors = contributorsData as Contributor[];
+        const dashboardData = await loadDashboardData();
+        
         setContributors(contributors);
+        setOverview(dashboardData.overview);
         
         setError(null);
       } catch (err) {
@@ -234,7 +236,7 @@ export default function ContributorsContent() {
               <Globe className="w-8 h-8 text-green-600" />
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">
-              {contextStats ? contextStats.totalServices : 'N/A'}
+              {overview ? overview.totalServices : 'N/A'}
             </div>
             <div className="text-gray-600">모니터링 사이트</div>
           </div>
