@@ -8,9 +8,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '정부 서비스 통합 포털',
     agency: {
+      id: 'agency1',
       mainCategory: '중앙행정기관',
       subCategory: '행정안전부',
-      name: '행정안전부'
+      name: '행정안전부',
+      url: 'https://www.mois.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 120,
@@ -23,9 +25,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '국세청 전자세금계산서 및 신고납부 시스템',
     agency: {
+      id: 'agency2',
       mainCategory: '중앙행정기관',
       subCategory: '기획재정부',
-      name: '국세청'
+      name: '국세청',
+      url: 'https://www.nts.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 95,
@@ -38,9 +42,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '건강보험 관련 서비스',
     agency: {
+      id: 'agency3',
       mainCategory: '중앙행정기관',
       subCategory: '보건복지부',
-      name: '건강보험공단'
+      name: '건강보험공단',
+      url: 'https://www.nhis.or.kr'
     },
     lastChecked: new Date(),
     responseTime: 250,
@@ -53,9 +59,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '국민연금 관련 서비스',
     agency: {
+      id: 'agency4',
       mainCategory: '중앙행정기관',
       subCategory: '보건복지부',
-      name: '국민연금공단'
+      name: '국민연금공단',
+      url: 'https://www.nps.or.kr'
     },
     lastChecked: new Date(),
     responseTime: 180,
@@ -68,9 +76,11 @@ export const sampleServices: Service[] = [
     status: 'problem',
     description: '서울특별시 공식 홈페이지',
     agency: {
+      id: 'agency5',
       mainCategory: '지방자치단체',
       subCategory: '서울특별시',
-      name: '서울특별시'
+      name: '서울특별시',
+      url: 'https://www.seoul.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 0,
@@ -83,9 +93,11 @@ export const sampleServices: Service[] = [
     status: 'maintenance',
     description: '경기도 공식 홈페이지',
     agency: {
+      id: 'agency6',
       mainCategory: '지방자치단체',
       subCategory: '경기도',
-      name: '경기도'
+      name: '경기도',
+      url: 'https://www.gg.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 0,
@@ -98,9 +110,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '공무원 인사관리 및 혁신 서비스',
     agency: {
+      id: 'agency7',
       mainCategory: '중앙행정기관',
       subCategory: '인사혁신처',
-      name: '인사혁신처'
+      name: '인사혁신처',
+      url: 'https://www.ipa.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 110,
@@ -113,9 +127,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '헌법재판소 공식 홈페이지',
     agency: {
+      id: 'agency8',
       mainCategory: '중앙행정기관',
       subCategory: '헌법상대통령자문기구',
-      name: '헌법재판소'
+      name: '헌법재판소',
+      url: 'https://www.ccourt.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 140,
@@ -128,9 +144,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '국가정보원 공식 홈페이지',
     agency: {
+      id: 'agency9',
       mainCategory: '중앙행정기관',
       subCategory: '국가정보원',
-      name: '국가정보원'
+      name: '국가정보원',
+      url: 'https://www.nis.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 300,
@@ -143,9 +161,11 @@ export const sampleServices: Service[] = [
     status: 'normal',
     description: '부산광역시 공식 홈페이지',
     agency: {
+      id: 'agency10',
       mainCategory: '지방자치단체',
       subCategory: '부산광역시',
-      name: '부산광역시'
+      name: '부산광역시',
+      url: 'https://www.busan.go.kr'
     },
     lastChecked: new Date(),
     responseTime: 160,
@@ -156,41 +176,41 @@ export const sampleServices: Service[] = [
 // 더 많은 샘플 데이터를 생성하는 함수
 export function generateMoreSampleData(): Service[] {
   const agencies = [
-    { mainCategory: '중앙행정기관' as const, subCategory: '기획재정부', name: '기획재정부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '교육부', name: '교육부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '과학기술정보통신부', name: '과학기술정보통신부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '외교부', name: '외교부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '통일부', name: '통일부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '법무부', name: '법무부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '국방부', name: '국방부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '행정안전부', name: '행정안전부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '문화체육관광부', name: '문화체육관광부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '농림축산식품부', name: '농림축산식품부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '산업통상자원부', name: '산업통상자원부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '보건복지부', name: '보건복지부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '환경부', name: '환경부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '고용노동부', name: '고용노동부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '여성가족부', name: '여성가족부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '국토교통부', name: '국토교통부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '해양수산부', name: '해양수산부' },
-    { mainCategory: '중앙행정기관' as const, subCategory: '중소벤처기업부', name: '중소벤처기업부' },
-    { mainCategory: '지방자치단체' as const, subCategory: '서울특별시', name: '서울특별시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '부산광역시', name: '부산광역시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '대구광역시', name: '대구광역시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '인천광역시', name: '인천광역시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '광주광역시', name: '광주광역시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '대전광역시', name: '대전광역시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '울산광역시', name: '울산광역시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '세종특별자치시', name: '세종특별자치시' },
-    { mainCategory: '지방자치단체' as const, subCategory: '경기도', name: '경기도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '강원도', name: '강원도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '충청북도', name: '충청북도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '충청남도', name: '충청남도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '전라북도', name: '전라북도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '전라남도', name: '전라남도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '경상북도', name: '경상북도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '경상남도', name: '경상남도' },
-    { mainCategory: '지방자치단체' as const, subCategory: '제주특별자치도', name: '제주특별자치도' }
+    { id: 'agency11', mainCategory: '중앙행정기관' as const, subCategory: '기획재정부', name: '기획재정부', url: 'https://www.moef.go.kr' },
+    { id: 'agency12', mainCategory: '중앙행정기관' as const, subCategory: '교육부', name: '교육부', url: 'https://www.moe.go.kr' },
+    { id: 'agency13', mainCategory: '중앙행정기관' as const, subCategory: '과학기술정보통신부', name: '과학기술정보통신부', url: 'https://www.msit.go.kr' },
+    { id: 'agency14', mainCategory: '중앙행정기관' as const, subCategory: '외교부', name: '외교부', url: 'https://www.mofa.go.kr' },
+    { id: 'agency15', mainCategory: '중앙행정기관' as const, subCategory: '통일부', name: '통일부', url: 'https://www.unikorea.go.kr' },
+    { id: 'agency16', mainCategory: '중앙행정기관' as const, subCategory: '법무부', name: '법무부', url: 'https://www.moj.go.kr' },
+    { id: 'agency17', mainCategory: '중앙행정기관' as const, subCategory: '국방부', name: '국방부', url: 'https://www.mnd.go.kr' },
+    { id: 'agency18', mainCategory: '중앙행정기관' as const, subCategory: '행정안전부', name: '행정안전부', url: 'https://www.mois.go.kr' },
+    { id: 'agency19', mainCategory: '중앙행정기관' as const, subCategory: '문화체육관광부', name: '문화체육관광부', url: 'https://www.mcst.go.kr' },
+    { id: 'agency20', mainCategory: '중앙행정기관' as const, subCategory: '농림축산식품부', name: '농림축산식품부', url: 'https://www.mafra.go.kr' },
+    { id: 'agency21', mainCategory: '중앙행정기관' as const, subCategory: '산업통상자원부', name: '산업통상자원부', url: 'https://www.motie.go.kr' },
+    { id: 'agency22', mainCategory: '중앙행정기관' as const, subCategory: '보건복지부', name: '보건복지부', url: 'https://www.mohw.go.kr' },
+    { id: 'agency23', mainCategory: '중앙행정기관' as const, subCategory: '환경부', name: '환경부', url: 'https://www.me.go.kr' },
+    { id: 'agency24', mainCategory: '중앙행정기관' as const, subCategory: '고용노동부', name: '고용노동부', url: 'https://www.moel.go.kr' },
+    { id: 'agency25', mainCategory: '중앙행정기관' as const, subCategory: '여성가족부', name: '여성가족부', url: 'https://www.mogef.go.kr' },
+    { id: 'agency26', mainCategory: '중앙행정기관' as const, subCategory: '국토교통부', name: '국토교통부', url: 'https://www.molit.go.kr' },
+    { id: 'agency27', mainCategory: '중앙행정기관' as const, subCategory: '해양수산부', name: '해양수산부', url: 'https://www.mof.go.kr' },
+    { id: 'agency28', mainCategory: '중앙행정기관' as const, subCategory: '중소벤처기업부', name: '중소벤처기업부', url: 'https://www.mss.go.kr' },
+    { id: 'agency29', mainCategory: '지방자치단체' as const, subCategory: '서울특별시', name: '서울특별시', url: 'https://www.seoul.go.kr' },
+    { id: 'agency30', mainCategory: '지방자치단체' as const, subCategory: '부산광역시', name: '부산광역시', url: 'https://www.busan.go.kr' },
+    { id: 'agency31', mainCategory: '지방자치단체' as const, subCategory: '대구광역시', name: '대구광역시', url: 'https://www.daegu.go.kr' },
+    { id: 'agency32', mainCategory: '지방자치단체' as const, subCategory: '인천광역시', name: '인천광역시', url: 'https://www.incheon.go.kr' },
+    { id: 'agency33', mainCategory: '지방자치단체' as const, subCategory: '광주광역시', name: '광주광역시', url: 'https://www.gwangju.go.kr' },
+    { id: 'agency34', mainCategory: '지방자치단체' as const, subCategory: '대전광역시', name: '대전광역시', url: 'https://www.daejeon.go.kr' },
+    { id: 'agency35', mainCategory: '지방자치단체' as const, subCategory: '울산광역시', name: '울산광역시', url: 'https://www.ulsan.go.kr' },
+    { id: 'agency36', mainCategory: '지방자치단체' as const, subCategory: '세종특별자치시', name: '세종특별자치시', url: 'https://www.sejong.go.kr' },
+    { id: 'agency37', mainCategory: '지방자치단체' as const, subCategory: '경기도', name: '경기도', url: 'https://www.gg.go.kr' },
+    { id: 'agency38', mainCategory: '지방자치단체' as const, subCategory: '강원도', name: '강원도', url: 'https://www.gangwon.go.kr' },
+    { id: 'agency39', mainCategory: '지방자치단체' as const, subCategory: '충청북도', name: '충청북도', url: 'https://www.cb21.go.kr' },
+    { id: 'agency40', mainCategory: '지방자치단체' as const, subCategory: '충청남도', name: '충청남도', url: 'https://www.chungnam.go.kr' },
+    { id: 'agency41', mainCategory: '지방자치단체' as const, subCategory: '전라북도', name: '전라북도', url: 'https://www.jeonbuk.go.kr' },
+    { id: 'agency42', mainCategory: '지방자치단체' as const, subCategory: '전라남도', name: '전라남도', url: 'https://www.jeonnam.go.kr' },
+    { id: 'agency43', mainCategory: '지방자치단체' as const, subCategory: '경상북도', name: '경상북도', url: 'https://www.gb.go.kr' },
+    { id: 'agency44', mainCategory: '지방자치단체' as const, subCategory: '경상남도', name: '경상남도', url: 'https://www.gyeongnam.go.kr' },
+    { id: 'agency45', mainCategory: '지방자치단체' as const, subCategory: '제주특별자치도', name: '제주특별자치도', url: 'https://www.jeju.go.kr' }
   ];
 
   const serviceNames = [

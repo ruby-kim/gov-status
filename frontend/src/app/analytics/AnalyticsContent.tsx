@@ -2,22 +2,52 @@
 
 import { useState, useEffect } from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
-import { loadDashboardData, loadHistoryData } from '@/utils/dataTransform';
+import { loadDashboardData, loadBackendData, loadHistoryData } from '@/utils/dataTransform';
+import { formatPercentage, formatAgencyWithRate } from '@/utils/formatUtils';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
-
-import { DashboardData } from '@/types/api/dashboard';
 
 import { HistoryData } from '@/types/api/dashboard';
 
 export default function AnalyticsContent() {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [historyData, setHistoryData] = useState<HistoryData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [overview, setOverview] = useState<{
+    totalServices: number;
+    normalServices: number;
+    maintenanceServices: number;
+    problemServices: number;
+    overallNormalRate: number;
+    bestAgency: { name: string; rate: number } | null;
+    warningAgencies: number;
+    avgResponseTime: number;
+    fastestAgency: { name: string; responseTime: number } | null;
+  } | null>(null);
+  const [agencies, setAgencies] = useState<{
+    agencyId: string;
+    name: string;
+    url: string;
+    mainCategory: string;
+    subCategory: string;
+    tags: string[];
+  }[]>([]);
+  const [services, setServices] = useState<{
+    id: string;
+    name: string;
+    url: string;
+    status: 'normal' | 'maintenance' | 'problem';
+    agency: {
+      id: string;
+      name: string;
+      mainCategory: string;
+      subCategory: string;
+    };
+  }[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [historyData, setHistoryData] = useState<HistoryData[]>([]);
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,24 +56,31 @@ export default function AnalyticsContent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const [dashboard, history] = await Promise.all([
+        setIsLoading(true);
+        setError(null);
+        const [dashboardData, servicesData, historyData] = await Promise.all([
           loadDashboardData(),
+          loadBackendData(),
           loadHistoryData()
         ]);
-        setDashboardData(dashboard);
-        setHistoryData(history);
+        
+        setOverview(dashboardData.overview);
+        setAgencies(dashboardData.agencies || []);
+        setServices(servicesData);
+        setHistoryData(historyData);
+        setLastUpdated(new Date(dashboardData.lastUpdated || new Date()).toLocaleString('ko-KR'));
       } catch (err) {
         setError('데이터를 불러오는 중 오류가 발생했습니다.');
         console.error('Error loading data:', err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -71,11 +108,60 @@ export default function AnalyticsContent() {
     );
   }
 
-  if (!dashboardData) return null;
+  if (!overview) return null;
 
-  const { overview, agencyStats } = dashboardData;
+  // bestAgency의 정상율과 동일한 정상율을 가진 기관들의 개수 계산
+  const bestAgencyRate = overview.bestAgency?.rate || 0;
+  
+  // 각 기관별로 현재 정상율 계산 (services 데이터 사용)
+  const agencyRates = new Map();
+  services.forEach(service => {
+    const agencyId = service.agency.id;
+    if (!agencyRates.has(agencyId)) {
+      agencyRates.set(agencyId, { total: 0, normal: 0 });
+    }
+    const stats = agencyRates.get(agencyId);
+    stats.total += 1;
+    if (service.status === 'normal') {
+      stats.normal += 1;
+    }
+  });
+  
+  // bestAgency의 정상율과 동일한 정상율을 가진 기관들의 개수
+  const bestAgenciesCount = Array.from(agencyRates.entries()).filter(([, stats]) => {
+    const normalRate = stats.total > 0 ? (stats.normal / stats.total) * 100 : 0;
+    return Math.abs(normalRate - bestAgencyRate) < 0.01; // 소수점 오차 고려
+  }).length;
 
-  // 최고 정상율 기관들 찾기 (현재 사용하지 않음)
+  const statusData = [
+    { name: '정상', value: overview.normalServices, color: '#10B981' },
+    { name: '점검중', value: overview.maintenanceServices, color: '#3B82F6' },
+    { name: '문제', value: overview.problemServices, color: '#EF4444' }
+  ].filter(item => item.value > 0);
+
+  const totalServices = overview.totalServices;
+
+  // 기관별 통계 데이터 생성
+  const agencyStats = Array.from(agencyRates.entries()).map(([agencyId, stats]) => {
+    const agency = agencies.find(a => a.agencyId === agencyId);
+    const normalRate = stats.total > 0 ? (stats.normal / stats.total) * 100 : 0;
+    
+    return {
+      agencyId: agencyId,
+      agency: agency?.name || 'Unknown Agency',
+      url: agency?.url || '',
+      current: {
+        normalRate: normalRate,
+        maintenanceRate: 0,
+        problemRate: 0
+      },
+      month1: { normalRate: null },
+      month2: { normalRate: null },
+      month3: { normalRate: null },
+      average: normalRate,
+      trend: 0
+    };
+  });
 
   // 페이지네이션 계산
   const totalItems = agencyStats.length;
@@ -84,30 +170,10 @@ export default function AnalyticsContent() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedAgencyStats = agencyStats.slice(startIndex, endIndex);
 
-  // 차트 데이터
-  const shuffledAgencyStats = [...agencyStats].sort((a, b) => {
-    const rateDiff = b.current.normalRate - a.current.normalRate;
-    if (rateDiff !== 0) return rateDiff;
-    return Math.random() - 0.5;
-  });
-
-  const chartData = shuffledAgencyStats.slice(0, 10).map(agency => ({
-    name: agency.agency,
-    정상율: agency.current.normalRate
-  }));
-
-  const statusData = [
-    { name: '정상', value: overview.normalServices, color: '#10B981' },
-    { name: '점검중', value: overview.maintenanceServices, color: '#3B82F6' },
-    { name: '문제', value: overview.problemServices, color: '#EF4444' }
-  ].filter(item => item.value > 0);
-
-  const totalServices = overview.normalServices + overview.maintenanceServices + overview.problemServices;
-
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: unknown[] }) => {
     if (active && payload && payload.length) {
       const data = payload[0] as { name: string; value: number };
-      const percentage = ((data.value / totalServices) * 100).toFixed(1);
+      const percentage = formatPercentage((data.value / totalServices) * 100);
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900">{data.name}</p>
@@ -195,8 +261,16 @@ export default function AnalyticsContent() {
       <div className="space-y-6">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">서비스 분석</h1>
-        <p className="mt-2 text-gray-600">정부 서비스들의 상세 통계 및 3개월 트렌드 분석</p>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">서비스 분석</h1>
+          <p className="mt-2 text-gray-600">정부 서비스들의 상세 통계 및 3개월 트렌드 분석</p>
+        </div>
+        <div className="mt-4 sm:mt-0 flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <Activity className="w-4 h-4" />
+            <span>마지막 업데이트: {lastUpdated || '로딩 중...'}</span>
+          </div>
+        </div>
       </div>
 
       {/* 주요 지표 */}
@@ -208,7 +282,10 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">전체 정상율</dt>
                 <dd className="text-xl lg:text-2xl font-bold text-gray-900">
-                  {overview.overallNormalRate.toFixed(1)}%
+                  {formatPercentage(overview.overallNormalRate)}
+                </dd>
+                <dd className="text-xs text-gray-500 mt-1">
+                  총 {overview.totalServices.toLocaleString()}개 중 {overview.normalServices.toLocaleString()}개 정상
                 </dd>
               </div>
             </div>
@@ -221,8 +298,14 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">최고 정상율 기관</dt>
                 <dd className="text-lg lg:text-xl font-bold text-gray-900">
-                  {overview.bestAgency ? `${overview.bestAgency.name} (${overview.bestAgency.rate.toFixed(1)}%)` : 'N/A'}
+                  {overview.bestAgency ? 
+                    formatAgencyWithRate(overview.bestAgency.name, overview.bestAgency.rate) : 'N/A'}
                 </dd>
+                {bestAgenciesCount > 1 && (
+                  <dd className="text-xs text-gray-500 mt-1">
+                    외 {bestAgenciesCount - 1}개
+                  </dd>
+                )}
               </div>
             </div>
           </div>
@@ -234,6 +317,9 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">주의 필요 기관</dt>
                 <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.warningAgencies}개</dd>
+                <dd className="text-xs text-gray-500 mt-1">
+                  총 {overview.totalServices.toLocaleString()}개 중 {overview.warningAgencies.toLocaleString()}개 주의 필요
+                </dd>
               </div>
             </div>
           </div>
@@ -245,6 +331,9 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">평균 응답시간</dt>
                 <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.avgResponseTime}ms</dd>
+                <dd className="text-xs text-gray-500 mt-1">
+                  {overview.fastestAgency ? `가장 빠른 기관: ${overview.fastestAgency.name} (${overview.fastestAgency.responseTime}ms)` : 'N/A'}
+                </dd>
               </div>
             </div>
           </div>
@@ -253,34 +342,18 @@ export default function AnalyticsContent() {
 
       {/* 차트 섹션 - 데스크톱에서 나란히 배치 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 기관별 정상율 차트 */}
-        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">기관별 정상율 (상위 10개)</h3>
-          <div className="h-[30vh] sm:h-[40vh] md:h-[50vh] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" angle={-30} textAnchor="end" fontSize={10}/>
-                <YAxis fontSize={10}/>
-                <Tooltip />
-                <Bar dataKey="정상율" fill="#3B82F6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
         {/* 서비스 상태 분포 */}
         <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">서비스 상태 분포</h3>
-          <div className="h-[30vh] sm:h-[40vh] md:h-[50vh] w-full">
+          <div className="h-[25vh] sm:h-[30vh] md:h-[40vh] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={statusData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
+                  innerRadius={40}
+                  outerRadius={80}
                   paddingAngle={2}
                   dataKey="value"
                 >
@@ -293,8 +366,8 @@ export default function AnalyticsContent() {
                   verticalAlign="bottom" 
                   height={36}
                   formatter={(value, entry) => (
-                    <span style={{ color: entry?.color }}>
-                      {value} ({((entry?.payload?.value || 0) / totalServices * 100).toFixed(1)}%)
+                    <span style={{ color: entry?.color, fontSize: '12px' }}>
+                      {value} ({formatPercentage((entry?.payload?.value || 0) / totalServices * 100)})
                     </span>
                   )}
                 />
@@ -302,39 +375,39 @@ export default function AnalyticsContent() {
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
 
-      {/* 시간대별 트렌드 */}
-      <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">시간대별 서비스 정상율 트렌드</h3>
-        <div className="h-[30vh] sm:h-[40vh] md:h-[50vh] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={hourlyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="hour" angle={-30} textAnchor="end" fontSize={10}/>
-              <YAxis fontSize={10} domain={[0, 100]} />
-              <Tooltip 
-                formatter={(value: number) => [
-                  `${value}%`, 
-                  '정상율'
-                ]}
-                labelFormatter={(label: string, payload: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-                  if (payload && payload.length > 0) {
-                    const data = payload[0].payload;
-                    return `${data.date ? data.date + ' ' : ''}${label}`;
-                  }
-                  return label;
-                }}
-                contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '6px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }}
-              />
-              <Line dataKey="정상율" stroke="#3B82F6" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+        {/* 시간대별 트렌드 */}
+        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">시간대별 서비스 정상율 트렌드</h3>
+          <div className="h-[25vh] sm:h-[30vh] md:h-[40vh] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={hourlyData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="hour" angle={-30} textAnchor="end" fontSize={10}/>
+                <YAxis fontSize={10} domain={[0, 100]} />
+                <Tooltip 
+                  formatter={(value: number) => [
+                    `${value}%`, 
+                    '정상율'
+                  ]}
+                  labelFormatter={(label: string, payload: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+                    if (payload && payload.length > 0) {
+                      const data = payload[0].payload;
+                      return `${data.date ? data.date + ' ' : ''}${label}`;
+                    }
+                    return label;
+                  }}
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
+                />
+                <Line dataKey="정상율" stroke="#3B82F6" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
@@ -366,7 +439,7 @@ export default function AnalyticsContent() {
                   const avgRate = agency.average;
                   const trend = agency.trend;
                   return (
-                    <tr key={agency.agency} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <tr key={agency.agencyId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                       <td className="px-3 py-2 font-medium text-gray-900" style={{ maxWidth: '300px', wordBreak: 'break-word' }}>
                         <a
                           href={agency.url || '#'}
@@ -378,19 +451,19 @@ export default function AnalyticsContent() {
                         </a>
                       </td>
                       <td className="px-3 py-2 text-center">
-                        {agency.current.normalRate === 100 ? '100%' : agency.current.normalRate === 0 ? '0%' : `${agency.current.normalRate.toFixed(1)}%`}
+                        {formatPercentage(agency.current.normalRate)}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month1.normalRate ? (agency.month1.normalRate === 100 ? '100%' : agency.month1.normalRate === 0 ? '0%' : `${agency.month1.normalRate.toFixed(1)}%`) : 'N/A'}
+                        {agency.month1.normalRate ? formatPercentage(agency.month1.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month2.normalRate ? (agency.month2.normalRate === 100 ? '100%' : agency.month2.normalRate === 0 ? '0%' : `${agency.month2.normalRate.toFixed(1)}%`) : 'N/A'}
+                        {agency.month2.normalRate ? formatPercentage(agency.month2.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month3.normalRate ? (agency.month3.normalRate === 100 ? '100%' : agency.month3.normalRate === 0 ? '0%' : `${agency.month3.normalRate.toFixed(1)}%`) : 'N/A'}
+                        {agency.month3.normalRate ? formatPercentage(agency.month3.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">
-                        {avgRate ? (avgRate === 100 ? '100%' : avgRate === 0 ? '0%' : `${avgRate.toFixed(1)}%`) : 'N/A'}
+                        {avgRate ? formatPercentage(avgRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">{trend ? trend.toFixed(1) : 'N/A'}</td>
                     </tr>

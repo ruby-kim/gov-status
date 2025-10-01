@@ -2,6 +2,7 @@
 
 import { AgencyStats } from '@/types/service';
 import { clsx } from 'clsx';
+import { formatPercentage } from '@/utils/formatUtils';
 
 interface AgencyStatsTableProps {
   agencyStats: AgencyStats[];
@@ -69,7 +70,7 @@ export default function AgencyStatsTable({ agencyStats }: AgencyStatsTableProps)
                   {agency.current.problem}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {agency.current.normalRate.toFixed(1)}%
+                  {formatPercentage(agency.current.normalRate)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={clsx(

@@ -7,12 +7,20 @@ import { GITHUB_CONFIG } from '@/constants/config';
 import { Contributor } from '@/types/contributor';
 import contributorsData from '@/data/contributors.json';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
+import { loadDashboardData } from '@/utils/dataTransform';
 
 export default function ContributorsContent() {
   const [contributors, setContributors] = useState<Contributor[]>([]);
-  const [stats, setStats] = useState<{
+  const [overview, setOverview] = useState<{
     totalServices: number;
-    totalAgencies: number;
+    normalServices: number;
+    maintenanceServices: number;
+    problemServices: number;
+    overallNormalRate: number;
+    bestAgency: { name: string; rate: number } | null;
+    warningAgencies: number;
+    avgResponseTime: number;
+    fastestAgency: { name: string; responseTime: number } | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,21 +30,12 @@ export default function ContributorsContent() {
       try {
         setLoading(true);
         
-        // 기여자 데이터 로드
+        // 기여자 데이터와 대시보드 데이터 로드
         const contributors = contributorsData as Contributor[];
-        setContributors(contributors);
+        const dashboardData = await loadDashboardData();
         
-        // 통계 데이터 로드
-        const statsResponse = await fetch('/api/stats');
-        if (statsResponse.ok) {
-          const statsData = await statsResponse.json();
-          setStats({
-            totalServices: statsData.totalServices,
-            totalAgencies: statsData.totalAgencies
-          });
-        } else {
-          console.error('Failed to fetch stats:', statsResponse.status, statsResponse.statusText);
-        }
+        setContributors(contributors);
+        setOverview(dashboardData.overview);
         
         setError(null);
       } catch (err) {
@@ -247,7 +246,7 @@ export default function ContributorsContent() {
               <Globe className="w-8 h-8 text-green-600" />
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">
-              {stats ? stats.totalServices : '51'}
+              {overview ? overview.totalServices : 'N/A'}
             </div>
             <div className="text-gray-600">모니터링 사이트</div>
           </div>
