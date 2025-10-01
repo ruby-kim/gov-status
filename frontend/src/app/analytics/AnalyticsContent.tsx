@@ -6,44 +6,39 @@ import {
   LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
-import { loadDashboardData, loadHistoryData } from '@/utils/dataTransform';
+import { loadHistoryData } from '@/utils/dataTransform';
+import { formatPercentage, formatAgencyWithRate } from '@/utils/formatUtils';
+import { useStats } from '@/contexts/StatsContext';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
-
-import { DashboardData } from '@/types/api/dashboard';
 
 import { HistoryData } from '@/types/api/dashboard';
 
 export default function AnalyticsContent() {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const { getOverview, getAgencies, isLoading, error } = useStats();
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [historyLoading, setHistoryLoading] = useState(true);
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchHistoryData = async () => {
       try {
-        setLoading(true);
-        const [dashboard, history] = await Promise.all([
-          loadDashboardData(),
-          loadHistoryData()
-        ]);
-        setDashboardData(dashboard);
+        setHistoryLoading(true);
+        const history = await loadHistoryData();
         setHistoryData(history);
       } catch (err) {
-        setError('데이터를 불러오는 중 오류가 발생했습니다.');
-        console.error('Error loading data:', err);
+        console.error('Error loading history data:', err);
+        setHistoryData([]);
       } finally {
-        setLoading(false);
+        setHistoryLoading(false);
       }
     };
-    fetchData();
+    fetchHistoryData();
   }, []);
 
-  if (loading) {
+  if (isLoading || historyLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -71,11 +66,26 @@ export default function AnalyticsContent() {
     );
   }
 
-  if (!dashboardData) return null;
+  const overview = getOverview();
+  const agencies = getAgencies();
+  
+  if (!overview) return null;
 
-  const { overview, agencyStats } = dashboardData;
-
-  // 최고 정상율 기관들 찾기 (현재 사용하지 않음)
+  // Context에서 가져온 데이터를 기존 구조로 변환
+  const agencyStats = agencies.map(agency => ({
+    agency: agency.name,
+    url: agency.url,
+    current: {
+      normalRate: agency.status === 'normal' ? 100 : agency.status === 'maintenance' ? 50 : 0,
+      maintenanceRate: agency.status === 'maintenance' ? 50 : 0,
+      problemRate: agency.status === 'problem' ? 100 : 0
+    },
+    month1: { normalRate: null },
+    month2: { normalRate: null },
+    month3: { normalRate: null },
+    average: agency.status === 'normal' ? 100 : agency.status === 'maintenance' ? 50 : 0,
+    trend: 0
+  }));
 
   // 페이지네이션 계산
   const totalItems = agencyStats.length;
@@ -102,12 +112,12 @@ export default function AnalyticsContent() {
     { name: '문제', value: overview.problemServices, color: '#EF4444' }
   ].filter(item => item.value > 0);
 
-  const totalServices = overview.normalServices + overview.maintenanceServices + overview.problemServices;
+  const totalServices = overview.totalServices;
 
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: unknown[] }) => {
     if (active && payload && payload.length) {
       const data = payload[0] as { name: string; value: number };
-      const percentage = ((data.value / totalServices) * 100).toFixed(1);
+      const percentage = formatPercentage((data.value / totalServices) * 100);
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900">{data.name}</p>
@@ -208,7 +218,10 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">전체 정상율</dt>
                 <dd className="text-xl lg:text-2xl font-bold text-gray-900">
-                  {overview.overallNormalRate.toFixed(1)}%
+                  {formatPercentage(overview.overallNormalRate)}
+                </dd>
+                <dd className="text-xs text-gray-500 mt-1">
+                  총 {overview.totalServices.toLocaleString()}개 중 {overview.normalServices.toLocaleString()}개 정상
                 </dd>
               </div>
             </div>
@@ -221,7 +234,8 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">최고 정상율 기관</dt>
                 <dd className="text-lg lg:text-xl font-bold text-gray-900">
-                  {overview.bestAgency ? `${overview.bestAgency.name} (${overview.bestAgency.rate.toFixed(1)}%)` : 'N/A'}
+                  {overview.bestAgency ? 
+                    formatAgencyWithRate(overview.bestAgency.name, overview.bestAgency.rate) : 'N/A'}
                 </dd>
               </div>
             </div>
@@ -234,6 +248,9 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">주의 필요 기관</dt>
                 <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.warningAgencies}개</dd>
+                <dd className="text-xs text-gray-500 mt-1">
+                  총 {overview.totalServices.toLocaleString()}개 중 {overview.warningAgencies.toLocaleString()}개 주의 필요
+                </dd>
               </div>
             </div>
           </div>
@@ -245,6 +262,9 @@ export default function AnalyticsContent() {
               <div className="ml-3">
                 <dt className="text-sm font-medium text-gray-500">평균 응답시간</dt>
                 <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.avgResponseTime}ms</dd>
+                <dd className="text-xs text-gray-500 mt-1">
+                  {overview.fastestAgency ? `가장 빠른 기관: ${overview.fastestAgency.name} (${overview.fastestAgency.responseTime}ms)` : 'N/A'}
+                </dd>
               </div>
             </div>
           </div>
@@ -294,7 +314,7 @@ export default function AnalyticsContent() {
                   height={36}
                   formatter={(value, entry) => (
                     <span style={{ color: entry?.color }}>
-                      {value} ({((entry?.payload?.value || 0) / totalServices * 100).toFixed(1)}%)
+                      {value} ({formatPercentage((entry?.payload?.value || 0) / totalServices * 100)})
                     </span>
                   )}
                 />
@@ -378,19 +398,19 @@ export default function AnalyticsContent() {
                         </a>
                       </td>
                       <td className="px-3 py-2 text-center">
-                        {agency.current.normalRate === 100 ? '100%' : agency.current.normalRate === 0 ? '0%' : `${agency.current.normalRate.toFixed(1)}%`}
+                        {formatPercentage(agency.current.normalRate)}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month1.normalRate ? (agency.month1.normalRate === 100 ? '100%' : agency.month1.normalRate === 0 ? '0%' : `${agency.month1.normalRate.toFixed(1)}%`) : 'N/A'}
+                        {agency.month1.normalRate ? formatPercentage(agency.month1.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month2.normalRate ? (agency.month2.normalRate === 100 ? '100%' : agency.month2.normalRate === 0 ? '0%' : `${agency.month2.normalRate.toFixed(1)}%`) : 'N/A'}
+                        {agency.month2.normalRate ? formatPercentage(agency.month2.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month3.normalRate ? (agency.month3.normalRate === 100 ? '100%' : agency.month3.normalRate === 0 ? '0%' : `${agency.month3.normalRate.toFixed(1)}%`) : 'N/A'}
+                        {agency.month3.normalRate ? formatPercentage(agency.month3.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">
-                        {avgRate ? (avgRate === 100 ? '100%' : avgRate === 0 ? '0%' : `${avgRate.toFixed(1)}%`) : 'N/A'}
+                        {avgRate ? formatPercentage(avgRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">{trend ? trend.toFixed(1) : 'N/A'}</td>
                     </tr>

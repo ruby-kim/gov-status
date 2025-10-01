@@ -5,6 +5,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/next';
+import { StatsProvider } from '@/contexts/StatsContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -99,15 +100,16 @@ export default function RootLayout({
         )}
       </head>
       <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-          <Header />
-          <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 pt-20 flex-1">
-            {children}
-          </main>
+        <StatsProvider>
+          <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Header />
+            <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 pt-20 flex-1">
+              {children}
+            </main>
           <footer className="bg-white border-t border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <div className="text-center text-sm text-gray-600 space-y-2">
-                <p>© {currentYear} 정부 사이트 장애 현황 모니터링 by <a href="https://anb-network.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900 hover:underline">김루비</a>. All rights reserved.</p>
+                <p>© {currentYear} 정부 사이트 장애 현황 모니터링 by <a href="https://anb-network.com" target="_blank" className="text-gray-700 hover:text-gray-900 hover:underline">김루비</a>. All rights reserved.</p>
                 <p>
                   Contact: <a href="mailto:govstatus@anb-network.com" className="text-gray-700 hover:text-gray-900 hover:underline">govstatus@anb-network.com</a>
                 </p>
@@ -121,9 +123,10 @@ export default function RootLayout({
               </div>
             </div>
           </footer>
-          <ScrollToTop />
-          {process.env.NODE_ENV === 'production' && <Analytics />}
-        </div>
+            <ScrollToTop />
+            {process.env.NODE_ENV === 'production' && <Analytics />}
+          </div>
+        </StatsProvider>
       </body>
     </html>
   );

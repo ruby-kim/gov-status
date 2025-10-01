@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getDatabase, OverallStats } from '@/lib/mongodb';
+import { getDatabase } from '@/lib/mongodb';
+import { OverallStats, Agency, HourlyStats } from '@/types';
 
 export async function GET() {
   try {
@@ -71,6 +72,9 @@ export async function GET() {
 
     // 가장 최신 날짜 사용
     const latestTimestamp = availableTimestamps.sort().pop();
+    if (!latestTimestamp) {
+      return NextResponse.json({ error: 'No valid timestamps found' }, { status: 404 });
+    }
     const latestDate = new Date(latestTimestamp);
     const startOfDay = new Date(latestDate.getFullYear(), latestDate.getMonth(), latestDate.getDate());
     const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);

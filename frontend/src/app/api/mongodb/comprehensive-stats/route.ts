@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getDatabase, OverallStats, Agency } from '@/lib/mongodb';
+import { getDatabase } from '@/lib/mongodb';
+import { OverallStats, Agency } from '@/types';
 
 export async function GET() {
   try {

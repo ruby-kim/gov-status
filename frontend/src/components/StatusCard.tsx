@@ -3,6 +3,7 @@
 import { ServiceStatus } from '@/types';
 import { clsx } from 'clsx';
 import { CheckCircle, XCircle, Wrench } from 'lucide-react';
+import { formatPercentage } from '@/utils/formatUtils';
 
 interface StatusCardProps {
   status: ServiceStatus;
@@ -56,16 +57,16 @@ export default function StatusCard({ status, count, total, percentage }: StatusC
               {config.label}
             </p>
             <p className="text-2xl font-bold text-gray-900">
-              {count.toLocaleString()}
+              {(count || 0).toLocaleString()}
             </p>
           </div>
         </div>
         <div className="text-right">
           <p className={clsx('text-2xl font-bold', config.textColor)}>
-            {percentage.toFixed(1)}%
+            {formatPercentage(percentage || 0)}
           </p>
           <p className="text-sm text-gray-500">
-            전체 {total.toLocaleString()}개 중
+            전체 {(total || 0).toLocaleString()}개 중
           </p>
         </div>
       </div>

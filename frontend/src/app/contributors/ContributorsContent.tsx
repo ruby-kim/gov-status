@@ -7,13 +7,12 @@ import { GITHUB_CONFIG } from '@/constants/config';
 import { Contributor } from '@/types/contributor';
 import contributorsData from '@/data/contributors.json';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
+import { useStats } from '@/contexts/StatsContext';
 
 export default function ContributorsContent() {
+  const { getOverview } = useStats();
+  const contextStats = getOverview();
   const [contributors, setContributors] = useState<Contributor[]>([]);
-  const [stats, setStats] = useState<{
-    totalServices: number;
-    totalAgencies: number;
-  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,18 +24,6 @@ export default function ContributorsContent() {
         // 기여자 데이터 로드
         const contributors = contributorsData as Contributor[];
         setContributors(contributors);
-        
-        // 통계 데이터 로드
-        const statsResponse = await fetch('/api/stats');
-        if (statsResponse.ok) {
-          const statsData = await statsResponse.json();
-          setStats({
-            totalServices: statsData.totalServices,
-            totalAgencies: statsData.totalAgencies
-          });
-        } else {
-          console.error('Failed to fetch stats:', statsResponse.status, statsResponse.statusText);
-        }
         
         setError(null);
       } catch (err) {
@@ -247,7 +234,7 @@ export default function ContributorsContent() {
               <Globe className="w-8 h-8 text-green-600" />
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">
-              {stats ? stats.totalServices : '51'}
+              {contextStats ? contextStats.totalServices : 'N/A'}
             </div>
             <div className="text-gray-600">모니터링 사이트</div>
           </div>
