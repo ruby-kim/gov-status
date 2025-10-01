@@ -5,28 +5,11 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-const options: {
-  maxPoolSize: number;
-  serverSelectionTimeoutMS: number;
-  socketTimeoutMS: number;
-  auth?: {
-    username: string;
-    password: string;
-  };
-  authSource?: string;
-} = {
+const options = {
   maxPoolSize: 10,
   serverSelectionTimeoutMS: 5000,
   socketTimeoutMS: 45000,
 };
-
-if (process.env.MONGODB_USERNAME && process.env.MONGODB_PASSWORD) {
-  options.auth = {
-    username: process.env.MONGODB_USERNAME,
-    password: process.env.MONGODB_PASSWORD,
-  };
-  options.authSource = process.env.MONGODB_AUTH_SOURCE || 'admin';
-}
 
 let client: MongoClient;
 
@@ -43,11 +26,6 @@ const clientPromise = globalWithMongo._mongoClientPromise;
 export default clientPromise;
 
 export async function getDatabase(): Promise<Db> {
-  try {
-    const client = await clientPromise;
-    return client.db(process.env.MONGODB_DATABASE || 'gov-status');
-  } catch (error) {
-    console.error('MongoDB connection error:', error);
-    throw error;
-  }
+  const client = await clientPromise;
+  return client.db(process.env.MONGODB_DATABASE || 'gov-status');
 }
