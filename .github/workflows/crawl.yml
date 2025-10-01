@@ -22,7 +22,6 @@ jobs:
 
       - name: Run crawler
         env:
-          REDIS_URL: ${{ secrets.REDIS_URL }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
         run: |
