@@ -1,4 +1,5 @@
 import { Service, AgencyStats, ServiceStats, FilterOptions, ServiceStatus } from '../service';
+import { AgencyStatus } from '../mongodb';
 
 export interface DashboardData {
   services: Service[];
@@ -12,7 +13,9 @@ export interface DashboardData {
     bestAgency: { name: string; rate: number } | null;
     warningAgencies: number;
     avgResponseTime: number;
+    fastestAgency: { name: string; responseTime: number } | null;
     recentAvgRate: number;
+    agencies: AgencyStatus[];
   };
   agencyStats: AgencyStats[];
   lastUpdated?: string;
