@@ -11,24 +11,14 @@ export async function GET() {
       await db.admin().ping();
       mongoConnected = true;
     } catch {
-      console.log('MongoDB connection failed, using sample data');
+      console.log('MongoDB connection failed');
     }
 
     if (!mongoConnected) {
-      // MongoDB 연결 실패 시 샘플 데이터 사용
-      const { allServices } = await import('@/data/sampleData');
-      const stats = {
-        totalServices: allServices.length,
-        normalServices: allServices.filter(s => s.status === 'normal').length,
-        maintenanceServices: allServices.filter(s => s.status === 'maintenance').length,
-        problemServices: allServices.filter(s => s.status === 'problem').length,
-        totalAgencies: new Set(allServices.map(s => s.agency.name)).size,
-        lastUpdated: new Date().toISOString()
-      };
-      return NextResponse.json(stats);
+      return NextResponse.json({ error: 'MongoDB connection failed' }, { status: 500 });
     }
 
-    // MongoDB에서 최신 전체 통계 가져오기
+    // 최신 전체 통계 가져오기
     const latestStats = await db.collection<OverallStats>('overall_stats')
       .findOne({}, { sort: { timestamp: -1 } });
 
@@ -39,7 +29,6 @@ export async function GET() {
     // 기관 수 계산
     const agencyCount = await db.collection('agencies').countDocuments();
 
-    // 통계 계산
     const stats = {
       totalServices: latestStats.overall.total,
       normalServices: latestStats.overall.normal,
@@ -55,10 +44,7 @@ export async function GET() {
       }
     });
   } catch (error) {
-    console.error('Error fetching stats:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch statistics' },
-      { status: 500 }
-    );
+    console.error('Error fetching stats data:', error);
+    return NextResponse.json({ error: 'Failed to fetch stats data' }, { status: 500 });
   }
 }

@@ -3,7 +3,7 @@ import { DashboardData, HistoryData } from '@/types/api/dashboard';
 
 export async function loadDashboardData(): Promise<DashboardData> {
   try {
-    const response = await fetch('/api/redis/dashboard');
+    const response = await fetch('/api/mongodb/dashboard');
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -19,7 +19,7 @@ export async function loadDashboardData(): Promise<DashboardData> {
 
 export async function loadHistoryData(): Promise<HistoryData[]> {
   try {
-    const response = await fetch('/api/redis/history?days=1');
+    const response = await fetch('/api/mongodb/history?days=1');
 
     if (!response.ok) {
       console.warn(`History API returned ${response.status}, using empty data`);
@@ -36,7 +36,7 @@ export async function loadHistoryData(): Promise<HistoryData[]> {
 
 export async function loadBackendData(): Promise<Service[]> {
   try {
-    const response = await fetch('/api/redis/services');
+    const response = await fetch('/api/mongodb/services');
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
