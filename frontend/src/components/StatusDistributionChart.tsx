@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { ServiceStats } from '@/types/service';
+import { formatPercentage } from '@/utils/formatUtils';
 
 interface StatusDistributionChartProps {
   stats: ServiceStats;
@@ -24,7 +25,7 @@ export default function StatusDistributionChart({ stats }: StatusDistributionCha
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: unknown[] }) => {
     if (active && payload && payload.length) {
       const data = payload[0] as { name: string; value: number };
-      const percentage = ((data.value / stats.total) * 100).toFixed(1);
+      const percentage = formatPercentage((data.value / stats.total) * 100);
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900">{data.name}</p>
@@ -62,7 +63,7 @@ export default function StatusDistributionChart({ stats }: StatusDistributionCha
               height={36}
               formatter={(value, entry) => (
                 <span style={{ color: entry?.color }}>
-                  {value} ({((entry?.payload?.value || 0) / stats.total * 100).toFixed(1)}%)
+                  {value} ({formatPercentage((entry?.payload?.value || 0) / stats.total * 100)})
                 </span>
               )}
             />

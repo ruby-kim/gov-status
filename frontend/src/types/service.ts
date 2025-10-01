@@ -7,9 +7,11 @@ export interface Service {
   status: ServiceStatus;
   description?: string;
   agency: {
+    id: string;
     mainCategory: '중앙행정기관' | '지방자치단체';
     subCategory: string;
     name: string;
+    url: string;
   };
   lastChecked: Date;
   responseTime?: number;

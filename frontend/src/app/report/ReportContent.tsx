@@ -256,7 +256,7 @@ export default function ReportContent() {
             <p>• 개인정보는 제보 처리 목적으로만 사용되며, 제3자에게 제공되지 않습니다.</p>
             <p>• 제보 처리 결과는 개별적으로 연락드리지 않을 수 있습니다.</p>
             <p>• 긴급한 문제나 민원은 해당 기관에 직접 문의하시기 바랍니다.</p>
-            <p className="text-blue-600 font-semibold">• 원하시는 경우, 기여자 명단에 이름(또는 닉네임)을 올려드립니다</p>
+            <p className="text-blue-600 font-semibold">• 원하시는 경우, 기여자 명단에 이름(또는 닉네임)을 올려드립니다.</p>
           </div>
         </div>
 
