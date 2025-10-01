@@ -47,153 +47,153 @@ frontend/next-env.d.ts
 # ===========================================
 
 # Byte-compiled / optimized / DLL files
-backend/__pycache__/
-backend/*.py[cod]
-backend/*$py.class
+__pycache__
+tasks/*.py[cod]
+tasks/*$py.class
 
 # C extensions
-backend/*.so
+tasks/*.so
 
 # Distribution / packaging
-backend/.Python
-backend/build/
-backend/develop-eggs/
-backend/dist/
-backend/downloads/
-backend/eggs/
-backend/.eggs/
-backend/lib/
-backend/lib64/
-backend/parts/
-backend/sdist/
-backend/var/
-backend/wheels/
-backend/share/python-wheels/
-backend/*.egg-info/
-backend/.installed.cfg
-backend/*.egg
-backend/MANIFEST
+tasks/.Python
+tasks/build/
+tasks/develop-eggs/
+tasks/dist/
+tasks/downloads/
+tasks/eggs/
+tasks/.eggs/
+tasks/lib/
+tasks/lib64/
+tasks/parts/
+tasks/sdist/
+tasks/var/
+tasks/wheels/
+tasks/share/python-wheels/
+tasks/*.egg-info/
+tasks/.installed.cfg
+tasks/*.egg
+tasks/MANIFEST
 
 # PyInstaller
-backend/*.manifest
-backend/*.spec
+tasks/*.manifest
+tasks/*.spec
 
 # Installer logs
-backend/pip-log.txt
-backend/pip-delete-this-directory.txt
+tasks/pip-log.txt
+tasks/pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-backend/htmlcov/
-backend/.tox/
-backend/.nox/
-backend/.coverage
-backend/.coverage.*
-backend/.cache
-backend/nosetests.xml
-backend/coverage.xml
-backend/*.cover
-backend/*.py.cover
-backend/.hypothesis/
-backend/.pytest_cache/
-backend/cover/
+tasks/htmlcov/
+tasks/.tox/
+tasks/.nox/
+tasks/.coverage
+tasks/.coverage.*
+tasks/.cache
+tasks/nosetests.xml
+tasks/coverage.xml
+tasks/*.cover
+tasks/*.py.cover
+tasks/.hypothesis/
+tasks/.pytest_cache/
+tasks/cover/
 
 # Translations
-backend/*.mo
-backend/*.pot
+tasks/*.mo
+tasks/*.pot
 
 # Django stuff
-backend/*.log
-backend/local_settings.py
-backend/db.sqlite3
-backend/db.sqlite3-journal
+tasks/*.log
+tasks/local_settings.py
+tasks/db.sqlite3
+tasks/db.sqlite3-journal
 
 # Flask stuff
-backend/instance/
-backend/.webassets-cache
+tasks/instance/
+tasks/.webassets-cache
 
 # Scrapy stuff
-backend/.scrapy
+tasks/.scrapy
 
 # Sphinx documentation
-backend/docs/_build/
+tasks/docs/_build/
 
 # PyBuilder
-backend/.pybuilder/
-backend/target/
+tasks/.pybuilder/
+tasks/target/
 
 # Jupyter Notebook
-backend/.ipynb_checkpoints
+tasks/.ipynb_checkpoints
 
 # IPython
-backend/profile_default/
-backend/ipython_config.py
+tasks/profile_default/
+tasks/ipython_config.py
 
 # pipenv
-backend/Pipfile.lock
+tasks/Pipfile.lock
 
 # poetry
-backend/poetry.lock
-backend/poetry.toml
+tasks/poetry.lock
+tasks/poetry.toml
 
 # pdm
-backend/pdm.lock
-backend/pdm.toml
-backend/.pdm-python
-backend/.pdm-build/
+tasks/pdm.lock
+tasks/pdm.toml
+tasks/.pdm-python
+tasks/.pdm-build/
 
 # pixi
-backend/pixi.lock
-backend/.pixi
+tasks/pixi.lock
+tasks/.pixi
 
 # PEP 582
-backend/__pypackages__/
+tasks/__pypackages__/
 
 # Celery stuff
-backend/celerybeat-schedule
-backend/celerybeat.pid
+tasks/celerybeat-schedule
+tasks/celerybeat.pid
 
 # SageMath parsed files
-backend/*.sage.py
+tasks/*.sage.py
 
 # Environments
-backend/.env
-backend/.envrc
-backend/.venv
-backend/env/
-backend/venv/
-backend/ENV/
-backend/env.bak/
-backend/venv.bak/
+tasks/.env
+tasks/.envrc
+tasks/.venv
+tasks/env/
+tasks/venv/
+tasks/ENV/
+tasks/env.bak/
+tasks/venv.bak/
 
 # Spyder project settings
-backend/.spyderproject
-backend/.spyproject
+tasks/.spyderproject
+tasks/.spyproject
 
 # Rope project settings
-backend/.ropeproject
+tasks/.ropeproject
 
 # mkdocs documentation
-backend/site/
+tasks/site/
 
 # mypy
-backend/.mypy_cache/
-backend/.dmypy.json
-backend/dmypy.json
+tasks/.mypy_cache/
+tasks/.dmypy.json
+tasks/dmypy.json
 
 # Pyre type checker
-backend/.pyre/
+tasks/.pyre/
 
 # pytype static type analyzer
-backend/.pytype/
+tasks/.pytype/
 
 # Cython debug symbols
-backend/cython_debug/
+tasks/cython_debug/
 
 # Ruff stuff
-backend/.ruff_cache/
+tasks/.ruff_cache/
 
 # PyPI configuration file
-backend/.pypirc
+tasks/.pypirc
 
 # ===========================================
 # General - Ignore Rules
