@@ -55,7 +55,18 @@ class AgencyManager:
             for row in reader:
                 if len(row) >= 2 and row[1].strip():
                     name, url = row[0].strip(), row[1].strip()
-                    agency_id = str(uuid.uuid5(uuid.NAMESPACE_URL, url))
+
+                    # 기존 기관 찾기: URL 또는 이름이 일치하면 같은 기관으로 간주
+                    existing = db["agencies"].find_one({
+                        "$or": [{"url": url}, {"name": name}]
+                    })
+
+                    if existing:
+                        agency_id = existing["agencyId"]
+                    else:
+                        # 완전히 새로운 기관 -> 새로운 ID 부여
+                        agency_id = str(uuid.uuid4())
+
                     agency_doc = {
                         "agencyId": agency_id,
                         "name": name,
@@ -63,7 +74,10 @@ class AgencyManager:
                         **self.classify_agency(name),
                         "tags": self.generate_tags(name, url)
                     }
+
                     db["agencies"].update_one(
-                        {"agencyId": agency_id}, {"$set": agency_doc}, upsert=True
+                        {"agencyId": agency_id},
+                        {"$set": agency_doc},
+                        upsert=True
                     )
         print("✅ agencies 컬렉션 업데이트 완료")
