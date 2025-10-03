@@ -101,6 +101,8 @@ export async function GET() {
       .sort(([, a], [, b]) => b.normalRate - a.normalRate);
 
     let bestAgency = null;
+
+    // 1차: hourly_stats 데이터에서 정상율이 가장 높은 기관 찾기
     if (sortedAgencies.length > 0) {
       const maxNormalRate = sortedAgencies[0][1].normalRate;
       const bestAgencies = sortedAgencies.filter(([, stats]) => stats.normalRate === maxNormalRate);
@@ -109,23 +111,49 @@ export async function GET() {
       const randomBestAgency = bestAgencies[Math.floor(Math.random() * bestAgencies.length)];
       const agency = agenciesMap.get(randomBestAgency[0]);
 
-      bestAgency = agency ? {
-        name: agency.name,
-        rate: randomBestAgency[1].normalRate
-      } : null;
+      if (agency) {
+        bestAgency = {
+          name: agency.name,
+          rate: randomBestAgency[1].normalRate
+        };
+      }
+    }
 
-    } else {
-      // hourly_stats 데이터가 없으면 overall_stats의 agencies에서 정상 상태인 기관 중 랜덤 선택
+    // 2차: hourly_stats에서 찾지 못했으면 overall_stats의 agencies에서 찾기
+    if (!bestAgency) {
       console.log('No hourly stats data, using overall_stats agencies as fallback');
       const normalAgencies = latestOverallStats.agencies.filter(a => a.status === 'normal');
       if (normalAgencies.length > 0) {
         const randomAgency = normalAgencies[Math.floor(Math.random() * normalAgencies.length)];
         const agency = agenciesMap.get(randomAgency.agencyId);
-        bestAgency = agency ? {
-          name: agency.name,
-          rate: 100 // 정상 상태이므로 100%
-        } : null;
+        if (agency) {
+          bestAgency = {
+            name: agency.name,
+            rate: 100 // 정상 상태이므로 100%
+          };
+        }
       }
+    }
+
+    // 3차: 여전히 없으면 전체 기관 중에서 랜덤 선택 (정상율 0%라도)
+    if (!bestAgency) {
+      console.log('No normal agencies found, selecting random agency');
+      const allAgencies = Array.from(agenciesMap.values());
+      if (allAgencies.length > 0) {
+        const randomAgency = allAgencies[Math.floor(Math.random() * allAgencies.length)];
+        bestAgency = {
+          name: randomAgency.name,
+          rate: 0 // 최소한의 값이라도 표시
+        };
+      }
+    }
+
+    // 4차: 마지막 fallback - 기본값
+    if (!bestAgency) {
+      bestAgency = {
+        name: '데이터 없음',
+        rate: 0
+      };
     }
 
 

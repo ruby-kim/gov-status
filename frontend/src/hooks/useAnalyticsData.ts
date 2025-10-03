@@ -264,7 +264,7 @@ export function useAnalyticsData() {
       }
 
       // 실제 데이터의 시간이 아닌, 계산된 시간대 사용
-      const displayHour = timeSlots[index] || timestamp.getHours();
+      const displayHour = index < timeSlots.length ? timeSlots[index] : timestamp.getHours();
 
       // 현재 시간을 기준으로 날짜 계산
       const now = new Date();
