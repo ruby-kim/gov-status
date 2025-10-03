@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { loadDashboardData, loadBackendData, loadHistoryData, loadAgencyHistoryData } from '@/utils/dataTransform';
-import { formatPercentage } from '@/utils/formatUtils';
 import { HistoryData } from '@/types/api/dashboard';
 
 export function useAnalyticsData() {
@@ -89,13 +88,9 @@ export function useAnalyticsData() {
   if (!overview) {
     return {
       overview: null,
-      agencies: [],
-      services: [],
       isLoading,
       error,
       lastUpdated,
-      historyData: [],
-      agencyHistoryData: [],
       statusData: [],
       totalServices: 0,
       hourlyData: [],
@@ -313,13 +308,9 @@ export function useAnalyticsData() {
 
   return {
     overview,
-    agencies,
-    services,
     isLoading,
     error,
     lastUpdated,
-    historyData,
-    agencyHistoryData,
     statusData,
     totalServices,
     hourlyData,

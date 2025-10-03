@@ -11,13 +11,9 @@ import { useAnalyticsData } from '@/hooks/useAnalyticsData';
 export default function AnalyticsContent() {
   const {
     overview,
-    agencies,
-    services,
     isLoading,
     error,
     lastUpdated,
-    historyData,
-    agencyHistoryData,
     statusData,
     totalServices,
     hourlyData,
