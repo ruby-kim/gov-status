@@ -114,7 +114,6 @@ export async function GET() {
         rate: randomBestAgency[1].normalRate
       } : null;
 
-      console.log('Selected best agency:', bestAgency);
     } else {
       // hourly_stats 데이터가 없으면 overall_stats의 agencies에서 정상 상태인 기관 중 랜덤 선택
       console.log('No hourly stats data, using overall_stats agencies as fallback');
@@ -126,7 +125,6 @@ export async function GET() {
           name: agency.name,
           rate: 100 // 정상 상태이므로 100%
         } : null;
-        console.log('Fallback best agency:', bestAgency);
       }
     }
 

@@ -52,7 +52,6 @@ export async function GET() {
 
     // 가장 최신 timestampHour 사용
     const latestTimestampHour = availableTimestamps.sort().pop();
-    console.log('Using latest timestampHour:', latestTimestampHour);
 
     const latestHourlyStats = await db.collection<HourlyStats>('hourly_stats')
       .find({ timestampHour: latestTimestampHour })
