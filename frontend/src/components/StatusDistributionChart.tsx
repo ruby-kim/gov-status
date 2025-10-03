@@ -7,6 +7,7 @@ import { formatPercentage } from '@/utils/formatUtils';
 
 interface StatusDistributionChartProps {
   stats: ServiceStats;
+  height?: string; // 선택적 높이 prop 추가
 }
 
 const COLORS = {
@@ -16,7 +17,7 @@ const COLORS = {
 };
 
 
-export default function StatusDistributionChart({ stats }: StatusDistributionChartProps) {
+export default function StatusDistributionChart({ stats, height = "h-[25vh] sm:h-[30vh] md:h-[40vh]" }: StatusDistributionChartProps) {
   const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function StatusDistributionChart({ stats }: StatusDistributionCha
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">서비스 상태 분포</h3>
-      <div className="h-[30vh] sm:h-[35vh] md:h-[45vh] lg:h-[50vh] w-full">
+      <div className={`${height} w-full`}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
