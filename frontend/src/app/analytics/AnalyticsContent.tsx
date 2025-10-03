@@ -6,7 +6,7 @@ import {
   LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
-import { loadDashboardData, loadBackendData, loadHistoryData } from '@/utils/dataTransform';
+import { loadDashboardData, loadBackendData, loadHistoryData, loadAgencyHistoryData } from '@/utils/dataTransform';
 import { formatPercentage, formatAgencyWithRate } from '@/utils/formatUtils';
 import WebAppJsonLd from '@/components/WebAppJsonLd';
 
@@ -48,6 +48,14 @@ export default function AnalyticsContent() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
+  const [agencyHistoryData, setAgencyHistoryData] = useState<Array<{
+    agencyId: string;
+    history: Array<{
+      timestamp: string;
+      normalRate: number;
+      stats: { total: number; normal: number; maintenance: number; problem: number };
+    }>;
+  }>>([]);
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,16 +66,18 @@ export default function AnalyticsContent() {
       try {
         setIsLoading(true);
         setError(null);
-        const [dashboardData, servicesData, historyData] = await Promise.all([
+        const [dashboardData, servicesData, historyData, agencyHistoryData] = await Promise.all([
           loadDashboardData(),
           loadBackendData(),
-          loadHistoryData()
+          loadHistoryData(),
+          loadAgencyHistoryData()
         ]);
         
         setOverview(dashboardData.overview);
         setAgencies(dashboardData.agencies || []);
         setServices(servicesData);
         setHistoryData(historyData);
+        setAgencyHistoryData(agencyHistoryData);
         setLastUpdated(new Date(dashboardData.lastUpdated || new Date()).toLocaleString('ko-KR'));
       } catch (err) {
         setError('데이터를 불러오는 중 오류가 발생했습니다.');
@@ -141,10 +151,78 @@ export default function AnalyticsContent() {
 
   const totalServices = overview.totalServices;
 
+  // 기관별 시간대별 정상율 계산 함수
+  const calculateAgencyNormalRate = (agencyId: string, targetDate: Date) => {
+    const targetDateStr = targetDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+    
+    // 해당 기관의 히스토리 데이터 찾기
+    const agencyData = agencyHistoryData.find(a => a.agencyId === agencyId);
+    if (!agencyData || agencyData.history.length === 0) {
+      return null;
+    }
+    
+    // 해당 날짜의 데이터 필터링 (하루 동안의 모든 시간대)
+    const dayData = agencyData.history.filter(h => {
+      // timestamp에서 날짜 부분만 추출 (시간대 고려)
+      let timestampDateStr;
+      if (h.timestamp.includes('GMT+0900')) {
+        // "Fri Oct 03 2025 00:00:00 GMT+0900 (Korean Standard Time)" 형식
+        // 문자열에서 직접 날짜 부분 추출 (더 안전한 방법)
+        const parts = h.timestamp.split(' ');
+        const month = parts[1]; // "Oct"
+        const day = parts[2];   // "03"
+        const year = parts[3];  // "2025"
+        
+        // 월 이름을 숫자로 변환
+        const monthMap: { [key: string]: string } = {
+          'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+          'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+          'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+        };
+        
+        const monthNum = monthMap[month] || '01';
+        timestampDateStr = `${year}-${monthNum}-${day.padStart(2, '0')}`;
+      } else {
+        // ISO 형식인 경우
+        const timestampDate = new Date(h.timestamp);
+        timestampDateStr = timestampDate.toISOString().split('T')[0];
+      }
+      
+      return timestampDateStr === targetDateStr;
+    });
+    
+    if (dayData.length === 0) {
+      return null;
+    }
+    
+    // 해당 날짜의 모든 시간대 데이터를 합산하여 정상율 계산
+    const totalStats = dayData.reduce((acc, h) => ({
+      total: acc.total + h.stats.total,
+      normal: acc.normal + h.stats.normal,
+      maintenance: acc.maintenance + h.stats.maintenance,
+      problem: acc.problem + h.stats.problem
+    }), { total: 0, normal: 0, maintenance: 0, problem: 0 });
+    
+    const normalRate = totalStats.total > 0 ? (totalStats.normal / totalStats.total) * 100 : 0;
+    
+    // total이 0보다 크면 정상율 반환 (0%도 유효한 값)
+    return totalStats.total > 0 ? normalRate : null;
+  };
+
   // 기관별 통계 데이터 생성
   const agencyStats = Array.from(agencyRates.entries()).map(([agencyId, stats]) => {
     const agency = agencies.find(a => a.agencyId === agencyId);
     const normalRate = stats.total > 0 ? (stats.normal / stats.total) * 100 : 0;
+    
+    // 시간대별 정상율 계산
+    const now = new Date();
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const day1Rate = calculateAgencyNormalRate(agencyId, yesterday);
+    const week1Rate = calculateAgencyNormalRate(agencyId, weekAgo);
+    const month1Rate = calculateAgencyNormalRate(agencyId, monthAgo);
     
     return {
       agencyId: agencyId,
@@ -155,9 +233,9 @@ export default function AnalyticsContent() {
         maintenanceRate: 0,
         problemRate: 0
       },
-      day1: { normalRate: null }, // 하루 전
-      week1: { normalRate: null }, // 일주일 전
-      month1: { normalRate: null }, // 1달 전
+      day1: { normalRate: day1Rate },
+      week1: { normalRate: week1Rate },
+      month1: { normalRate: month1Rate },
       trend: 0
     };
   });
@@ -501,13 +579,13 @@ export default function AnalyticsContent() {
                         {formatPercentage(agency.current.normalRate)}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.day1.normalRate ? formatPercentage(agency.day1.normalRate) : 'N/A'}
+                        {agency.day1.normalRate !== null ? formatPercentage(agency.day1.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.week1.normalRate ? formatPercentage(agency.week1.normalRate) : 'N/A'}
+                        {agency.week1.normalRate !== null ? formatPercentage(agency.week1.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month1.normalRate ? formatPercentage(agency.month1.normalRate) : 'N/A'}
+                        {agency.month1.normalRate !== null ? formatPercentage(agency.month1.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">{trend ? trend.toFixed(1) : 'N/A'}</td>
                     </tr>

@@ -49,3 +49,27 @@ export async function loadBackendData(): Promise<Service[]> {
     throw error;
   }
 }
+
+export async function loadAgencyHistoryData(): Promise<Array<{
+  agencyId: string;
+  history: Array<{
+    timestamp: string;
+    normalRate: number;
+    stats: { total: number; normal: number; maintenance: number; problem: number };
+  }>;
+}>> {
+  try {
+    const response = await fetch('/api/mongodb/agency-history?days=30');
+
+    if (!response.ok) {
+      console.warn(`Agency history API returned ${response.status}, using empty data`);
+      return [];
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error loading agency history data:', error);
+    return [];
+  }
+}
