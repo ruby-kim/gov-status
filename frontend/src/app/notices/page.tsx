@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, AlertCircle, Bell, Info } from 'lucide-react';
+import { EXTERNAL_LINKS } from '@/constants/config';
 
 export default function NoticesPage() {
   const [iframeError, setIframeError] = useState(false);
@@ -30,7 +31,7 @@ export default function NoticesPage() {
         {!iframeError ? (
           <div className="relative h-screen min-w-[1200px]">
             <iframe
-              src="https://notice.naver.com/notices/wwwpc?searchValue=%25EA%25B5%25AD%25EA%25B0%2580%25EC%25A0%2595%25EB%25B3%25B4%25EC%259E%2590%25EC%259B%2590%25EA%25B4%2580%25EB%25A6%25AC%25EC%259B%2590%2520%25ED%2599%2594%25EC%259E%25AC&page=1&pageSize=10&newNoticeHour=168&darkmode=n&t=l"
+              src={EXTERNAL_LINKS.NAVER_NOTICE}
               width="100%"
               height="100%"
               allowFullScreen
@@ -53,7 +54,7 @@ export default function NoticesPage() {
                 보안 정책으로 인해 iframe으로 표시할 수 없습니다.
               </p>
               <a
-                href="https://notice.naver.com/notices/wwwpc?searchValue=%25EA%25B5%25AD%25EA%25B0%2580%25EC%25A0%2595%25EB%25B3%25B4%25EC%259E%2590%25EC%259B%2590%25EA%25B4%2580%25EB%25A6%25AC%25EC%259B%2590%2520%25ED%2599%2594%25EC%259E%25AC&page=1&pageSize=10&newNoticeHour=168&darkmode=n&t=l"
+                href={EXTERNAL_LINKS.NAVER_NOTICE}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -71,7 +72,7 @@ export default function NoticesPage() {
         {!iframeError ? (
           <div className="relative h-[80vh]">
             <iframe
-              src="https://notice.naver.com/notices/wwwpc?searchValue=%25EA%25B5%25AD%25EA%25B0%2580%25EC%25A0%2595%25EB%25B3%25B4%25EC%259E%2590%25EC%259B%2590%25EA%25B4%2580%25EB%25A6%25AC%25EC%259B%2590%2520%25ED%2599%2594%25EC%259E%25AC&page=1&pageSize=10&newNoticeHour=168&darkmode=n&t=l"
+              src={EXTERNAL_LINKS.NAVER_NOTICE}
               width="100%"
               height="100%"
               allowFullScreen
@@ -93,7 +94,7 @@ export default function NoticesPage() {
                 보안 정책으로 인해 iframe으로 표시할 수 없습니다.
               </p>
               <a
-                href="https://notice.naver.com/notices/wwwpc?searchValue=%25EA%25B5%25AD%25EA%25B0%2580%25EC%25A0%2595%25EB%25B3%25B4%25EC%259E%2590%25EC%259B%2590%25EA%25B4%2580%25EB%25A6%25AC%25EC%259B%2590%2520%25ED%2599%2594%25EC%259E%25AC&page=1&pageSize=10&newNoticeHour=168&darkmode=n&t=l"
+                href={EXTERNAL_LINKS.NAVER_NOTICE}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
