@@ -104,17 +104,11 @@ export async function GET() {
 
     // 1차: hourly_stats 데이터에서 정상율이 가장 높은 기관 찾기
     if (sortedAgencies.length > 0) {
-      const maxNormalRate = sortedAgencies[0][1].normalRate;
-      const bestAgencies = sortedAgencies.filter(([, stats]) => stats.normalRate === maxNormalRate);
-
-      // 가장 높은 정상율을 가진 기관들 중에서 랜덤 선택
-      const randomBestAgency = bestAgencies[Math.floor(Math.random() * bestAgencies.length)];
-      const agency = agenciesMap.get(randomBestAgency[0]);
-
+      const agency = agenciesMap.get(sortedAgencies[0][0]);
       if (agency) {
         bestAgency = {
           name: agency.name,
-          rate: randomBestAgency[1].normalRate
+          rate: sortedAgencies[0][1].normalRate
         };
       }
     }
@@ -135,16 +129,17 @@ export async function GET() {
       }
     }
 
-    // 3차: 여전히 없으면 전체 기관 중에서 랜덤 선택 (정상율 0%라도)
+    // 3차: 여전히 없으면 첫 번째 기관 선택
     if (!bestAgency) {
-      console.log('No normal agencies found, selecting random agency');
-      const allAgencies = Array.from(agenciesMap.values());
-      if (allAgencies.length > 0) {
-        const randomAgency = allAgencies[Math.floor(Math.random() * allAgencies.length)];
-        bestAgency = {
-          name: randomAgency.name,
-          rate: 0 // 최소한의 값이라도 표시
-        };
+      console.log('No normal agencies found, selecting first agency');
+      if (sortedAgencies.length > 0) {
+        const agency = agenciesMap.get(sortedAgencies[0][0]);
+        if (agency) {
+          bestAgency = {
+            name: agency.name,
+            rate: sortedAgencies[0][1].normalRate
+          };
+        }
       }
     }
 
