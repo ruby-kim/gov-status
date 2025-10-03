@@ -1,15 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, Legend
-} from 'recharts';
-import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
 import { loadDashboardData, loadBackendData, loadHistoryData, loadAgencyHistoryData } from '@/utils/dataTransform';
-import { formatPercentage, formatAgencyWithRate } from '@/utils/formatUtils';
+import { formatPercentage } from '@/utils/formatUtils';
 import PageJsonLd from '@/components/PageJsonLd';
-import AnalyticsTable from '@/components/AnalyticsTable';
+import AnalyticsTable from '@/components/analytics/AnalyticsTable';
+import AnalyticsHeader from '@/components/analytics/AnalyticsHeader';
+import AnalyticsOverview from '@/components/analytics/AnalyticsOverview';
+import AnalyticsCharts from '@/components/analytics/AnalyticsCharts';
 
 import { HistoryData } from '@/types/api/dashboard';
 
@@ -239,21 +238,6 @@ export default function AnalyticsContent() {
   });
 
 
-  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: unknown[] }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0] as { name: string; value: number };
-      const percentage = formatPercentage((data.value / totalServices) * 100);
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900">{data.name}</p>
-          <p className="text-sm text-gray-600">
-            {data.value.toLocaleString()}개 ({percentage}%)
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   // 시간대별 통계
   const generateHourlyData = (): { hour: string; date: string; normalRate: number }[] => {
@@ -348,160 +332,10 @@ export default function AnalyticsContent() {
     <>
       <PageJsonLd page="analytics" />
       <div className="space-y-6">
-      {/* 헤더 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">서비스 분석</h1>
-          <p className="mt-2 text-gray-600">정부 서비스들의 상세 통계 및 1개월 트렌드 분석</p>
-        </div>
-        <div className="mt-4 sm:mt-0 flex items-center space-x-4">
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <Activity className="w-4 h-4" />
-            <span>마지막 업데이트: {lastUpdated || '로딩 중...'}</span>
-          </div>
-        </div>
-      </div>
+      <AnalyticsHeader lastUpdated={lastUpdated} />
+      <AnalyticsOverview overview={overview} bestAgenciesCount={bestAgenciesCount} />
 
-      {/* 주요 지표 */}
-      <div className="mb-2">
-        <p className="text-sm text-gray-500">※ 최신 수집 데이터 기준</p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 w-full">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center">
-              <Activity className="h-8 w-8 text-green-600" />
-              <div className="ml-3">
-                <dt className="text-sm font-medium text-gray-500">전체 정상율</dt>
-                <dd className="text-xl lg:text-2xl font-bold text-gray-900">
-                  {formatPercentage(overview.overallNormalRate)}
-                </dd>
-                <dd className="text-xs text-gray-500 mt-1">
-                  총 {overview.totalServices.toLocaleString()}개 중 {overview.normalServices.toLocaleString()}개 정상
-                </dd>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center">
-              <TrendingUp className="h-8 w-8 text-blue-600" />
-              <div className="ml-3">
-                <dt className="text-sm font-medium text-gray-500">최고 정상율 기관</dt>
-                <dd className="text-lg lg:text-xl font-bold text-gray-900">
-                  {overview.bestAgency ? 
-                    formatAgencyWithRate(overview.bestAgency.name, overview.bestAgency.rate) : 'N/A'}
-                </dd>
-                {bestAgenciesCount > 1 && (
-                  <dd className="text-xs text-gray-500 mt-1">
-                    외 {bestAgenciesCount - 1}개
-                  </dd>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center">
-              <AlertTriangle className="h-8 w-8 text-yellow-600" />
-              <div className="ml-3">
-                <dt className="text-sm font-medium text-gray-500">주의 필요 기관</dt>
-                <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.warningAgencies}개</dd>
-                <dd className="text-xs text-gray-500 mt-1">
-                  총 {overview.totalServices.toLocaleString()}개 중 {overview.warningAgencies.toLocaleString()}개 주의 필요
-                </dd>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center">
-              <Activity className="h-8 w-8 text-purple-600" />
-              <div className="ml-3">
-                <dt className="text-sm font-medium text-gray-500">평균 응답시간</dt>
-                <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.avgResponseTime}ms</dd>
-                <dd className="text-xs text-gray-500 mt-1">
-                  {overview.fastestAgency ? `가장 빠른 기관: ${overview.fastestAgency.name} (${overview.fastestAgency.responseTime}ms)` : 'N/A'}
-                </dd>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 차트 섹션 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 서비스 상태 분포 */}
-        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">서비스 상태 분포</h3>
-          <div className="h-[25vh] sm:h-[30vh] md:h-[40vh] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={statusData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36}
-                  formatter={(value, entry) => (
-                    <span style={{ color: entry?.color, fontSize: '12px' }}>
-                      {value} ({formatPercentage((entry?.payload?.value || 0) / totalServices * 100)})
-                    </span>
-                  )}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* 시간대별 트렌드 */}
-        <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">시간대별 서비스 정상율 트렌드</h3>
-          <div className="h-[25vh] sm:h-[30vh] md:h-[40vh] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={hourlyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="hour" angle={-30} textAnchor="end" fontSize={10}/>
-                <YAxis fontSize={10} domain={[0, 100]} />
-                <Tooltip 
-                  formatter={(value: number) => [
-                    `${value}%`, 
-                    '정상율'
-                  ]}
-                  labelFormatter={(label: string, payload: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-                    if (payload && payload.length > 0) {
-                      const data = payload[0].payload;
-                      return `${data.date ? data.date + ' ' : ''}${label}`;
-                    }
-                    return label;
-                  }}
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '6px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                  }}
-                />
-                <Line dataKey="normalRate" stroke="#3B82F6" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
+      <AnalyticsCharts statusData={statusData} totalServices={totalServices} hourlyData={hourlyData} />
 
        {/* 기관별 상세 테이블 */}
        <AnalyticsTable agencyStats={agencyStats} />
