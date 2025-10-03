@@ -557,9 +557,9 @@ export default function AnalyticsContent() {
                 <tr>
                   <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase">기관명</th>
                   <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">오늘</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">하루 전</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">일주일 전</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">1달 전</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">하루 전</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">일주일 전</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">1달 전</th>
                   <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">↗</th>
                 </tr>
               </thead>
@@ -581,13 +581,13 @@ export default function AnalyticsContent() {
                       <td className="px-3 py-2 text-center">
                         {formatPercentage(agency.current.normalRate)}
                       </td>
-                      <td className="px-3 py-2 text-center hidden sm:table-cell">
+                      <td className="px-3 py-2 text-center">
                         {agency.day1.normalRate !== null ? formatPercentage(agency.day1.normalRate) : 'N/A'}
                       </td>
-                      <td className="px-3 py-2 text-center hidden sm:table-cell">
+                      <td className="px-3 py-2 text-center">
                         {agency.week1.normalRate !== null ? formatPercentage(agency.week1.normalRate) : 'N/A'}
                       </td>
-                      <td className="px-3 py-2 text-center hidden sm:table-cell">
+                      <td className="px-3 py-2 text-center">
                         {agency.month1.normalRate !== null ? formatPercentage(agency.month1.normalRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">{trend ? trend.toFixed(1) : 'N/A'}</td>
