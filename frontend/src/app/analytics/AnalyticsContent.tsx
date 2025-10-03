@@ -560,12 +560,22 @@ export default function AnalyticsContent() {
                   <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">하루 전</th>
                   <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">일주일 전</th>
                   <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">1달 전</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">↗</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {paginatedAgencyStats.map((agency, index: number) => {
-                  const trend = agency.trend;
+                  const getCurrentRateColor = () => {
+                    if (agency.day1.normalRate === null) return 'text-gray-900'; // 어제 데이터가 없으면 기본 색상
+                    
+                    const currentRate = agency.current.normalRate;
+                    const yesterdayRate = agency.day1.normalRate;
+                    const difference = currentRate - yesterdayRate;
+                    
+                    if (difference > 0) return 'text-green-600'; // 상승
+                    if (difference < 0) return 'text-red-600'; // 하락
+                    return 'text-gray-900'; // 동일
+                  };
+
                   return (
                     <tr key={agency.agencyId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                       <td className="px-3 py-2 font-medium text-gray-900" style={{ maxWidth: '300px', wordBreak: 'break-word' }}>
@@ -578,7 +588,7 @@ export default function AnalyticsContent() {
                           {agency.agency}
                         </a>
                       </td>
-                      <td className="px-3 py-2 text-center">
+                      <td className={`px-3 py-2 text-center font-semibold ${getCurrentRateColor()}`}>
                         {formatPercentage(agency.current.normalRate)}
                       </td>
                       <td className="px-3 py-2 text-center">
@@ -590,7 +600,6 @@ export default function AnalyticsContent() {
                       <td className="px-3 py-2 text-center">
                         {agency.month1.normalRate !== null ? formatPercentage(agency.month1.normalRate) : 'N/A'}
                       </td>
-                      <td className="px-3 py-2 text-center">{trend ? trend.toFixed(1) : 'N/A'}</td>
                     </tr>
                   );
                 })}
