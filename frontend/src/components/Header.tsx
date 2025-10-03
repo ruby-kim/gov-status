@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Activity, BarChart3, List, Home, MessageSquare, Users, Menu, X } from 'lucide-react';
+import { Activity, BarChart3, List, Home, MessageSquare, Users, Menu, X, Bell } from 'lucide-react';
 import { useState } from 'react';
 
 const navigation = [
   { name: '대시보드', href: '/', icon: Home },
+  { name: '공지사항', href: '/notices', icon: Bell },
   { name: '서비스 현황', href: '/services', icon: List },
   { name: '통계', href: '/analytics', icon: BarChart3 },
   { name: '정보 제보', href: '/report', icon: MessageSquare },
