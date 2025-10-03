@@ -102,12 +102,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-50 flex flex-col">
           <Header />
-          <div className="pt-16">
-            <NoticeBanner />
-            <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex-1">
-              {children}
-            </main>
-          </div>
+          <NoticeBanner />
+          <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 pt-32 flex-1">
+            {children}
+          </main>
           <footer className="bg-white border-t border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <div className="text-center text-sm text-gray-600 space-y-2">
