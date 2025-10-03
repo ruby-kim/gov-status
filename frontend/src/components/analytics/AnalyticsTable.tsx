@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown, ChevronDown } from 'lucide-react';
 import { formatPercentage } from '@/utils/formatUtils';
 
 interface AgencyStats {
@@ -35,6 +35,41 @@ export default function AnalyticsTable({ agencyStats }: AnalyticsTableProps) {
   // 페이지 입력 상태
   const [isEditingPage, setIsEditingPage] = useState(false);
   const [pageInput, setPageInput] = useState('');
+  
+  // 드롭다운 상태
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 필터 옵션
+  const filterOptions = [
+    { value: 'all', label: '전체' },
+    { value: 'improved', label: '개선됨' },
+    { value: 'declined', label: '악화됨' },
+    { value: 'stable', label: '안정적' }
+  ];
+
+  const handleFilterChange = (value: 'all' | 'improved' | 'declined' | 'stable') => {
+    setFilterStatus(value);
+    setCurrentPage(1);
+    setIsDropdownOpen(false);
+  };
+
+  // 드롭다운 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   // 필터링 및 정렬 로직
   const filteredAndSortedAgencyStats = agencyStats
@@ -164,19 +199,31 @@ export default function AnalyticsTable({ agencyStats }: AnalyticsTableProps) {
             </div>
             
             {/* 상태 필터 */}
-            <select
-              value={filterStatus}
-              onChange={(e) => {
-                setFilterStatus(e.target.value as 'all' | 'improved' | 'declined' | 'stable');
-                setCurrentPage(1);
-              }}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="all">전체</option>
-              <option value="improved">개선됨</option>
-              <option value="declined">악화됨</option>
-              <option value="stable">안정적</option>
-            </select>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white hover:bg-gray-50 transition-colors duration-150 flex items-center justify-between min-w-[120px]"
+              >
+                <span>{filterOptions.find(option => option.value === filterStatus)?.label}</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-150 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                  {filterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleFilterChange(option.value as 'all' | 'improved' | 'declined' | 'stable')}
+                      className={`w-full px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors duration-150 first:rounded-t-md last:rounded-b-md ${
+                        filterStatus === option.value ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div 
