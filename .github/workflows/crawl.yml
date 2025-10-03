@@ -3,7 +3,7 @@ name: Crawl and Update MongoDB
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/10 * * * *"   # 10분 간격 (UTC 기준)
+    - cron: "*/5 * * * *"   # 10분 간격 (UTC 기준): 데이터 수집 및 저징 5분 + 5분마다 github actions 실행 = 1회 당 10분    # 추후 크롤러 개선 시 10분으로 변경 필요
 
 jobs:
   crawl:
