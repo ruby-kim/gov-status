@@ -3,11 +3,10 @@
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Service, FilterOptions } from '@/types/service';
-import { loadBackendData } from '@/utils/dataTransform';
 import ServiceCard from '@/components/ServiceCard';
 import ServiceFilters from '@/components/ServiceFilters';
 import StatusGuide from '@/components/StatusGuide';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 import { Search, Grid, List, SortAsc, SortDesc, Loader2, AlertCircle, Activity } from 'lucide-react';
 
 type SortField = 'name' | 'status' | 'responseTime' | 'agency';
@@ -42,9 +41,15 @@ function ServicesContent() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await loadBackendData();
-        setServices(data);
-        setLastUpdated(new Date().toLocaleString('ko-KR'));
+        const response = await fetch('/api/mongodb/services');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setServices(data.services);
+        setLastUpdated(new Date(data.lastUpdated).toLocaleString('ko-KR'));
       } catch (err) {
         setError('데이터를 불러오는 중 오류가 발생했습니다.');
         console.error('Error loading data:', err);
@@ -173,50 +178,14 @@ function ServicesContent() {
 
   return (
     <>
-      <WebAppJsonLd
-        name="서비스 현황 - 정부 사이트 장애 현황"
-        description="모든 정부 서비스의 실시간 상태를 확인하세요. 검색, 필터링, 정렬 기능으로 원하는 서비스를 쉽게 찾을 수 있습니다."
-        url="https://gov-status.vercel.app/services"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "서비스를 어떻게 검색할 수 있나요?",
-            answer: "상단의 검색창에 서비스명이나 기관명을 입력하면 실시간으로 필터링됩니다. 정확한 이름을 모를 경우 부분 검색도 가능합니다."
-          },
-          {
-            question: "필터링 기능은 어떻게 사용하나요?",
-            answer: "상태별(정상/점검중/문제), 기관별, 응답시간별로 필터링할 수 있습니다. 여러 필터를 동시에 적용하여 원하는 서비스만 볼 수 있습니다."
-          },
-          {
-            question: "정렬은 어떤 기준으로 할 수 있나요?",
-            answer: "서비스명, 상태, 응답시간, 기관명 순으로 오름차순/내림차순 정렬이 가능합니다. 기본적으로 서비스명 순으로 정렬됩니다."
-          },
-          {
-            question: "서비스 카드에서 어떤 정보를 확인할 수 있나요?",
-            answer: "서비스명, 기관명, 현재 상태, 응답시간, 마지막 업데이트 시간을 확인할 수 있습니다. 클릭하면 상세 정보를 볼 수 있습니다."
-          },
-          {
-            question: "그리드/리스트 보기는 어떻게 전환하나요?",
-            answer: "우측 상단의 그리드/리스트 아이콘을 클릭하여 보기 방식을 전환할 수 있습니다. 그리드는 카드 형태, 리스트는 테이블 형태로 표시됩니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-          { name: "서비스 현황", url: "https://gov-status.vercel.app/services", position: 2 }
-        ]}
-      />
-      <div className="space-y-6">
+      <PageJsonLd page="services" />
+      <div className="space-y-6 pt-28 services-page">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">서비스 현황</h1>
           <p className="mt-2 text-gray-600">
-            정부 서비스들의 상태를 확인하고 관리하세요 (10분마다 업데이트)
+            정부 서비스들의 최신 상태를 확인하세요 (10분마다 업데이트)
           </p>
         </div>
         <div className="mt-4 sm:mt-0 flex items-center space-x-4">
@@ -305,7 +274,7 @@ function ServicesContent() {
       {filteredAndSortedServices.length > 0 && (
         <div className="flex items-center justify-center py-8">
           <p className="text-sm text-gray-500">
-            {filteredAndSortedServices.length}개의 서비스를 표시 중
+            <span className="stats-text">{filteredAndSortedServices.length}개의 서비스를 표시 중</span>
           </p>
         </div>
       )}

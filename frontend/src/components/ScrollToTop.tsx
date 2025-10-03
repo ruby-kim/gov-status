@@ -11,18 +11,25 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const toggleVisibility = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      
       // 스크롤이 300px 이상일 때 버튼 표시
-      if (window.pageYOffset > 300) {
+      if (scrollTop > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    // 초기 체크
+    toggleVisibility();
+
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
+    document.addEventListener('scroll', toggleVisibility, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', toggleVisibility);
+      document.removeEventListener('scroll', toggleVisibility);
     };
   }, []);
 
@@ -129,7 +136,7 @@ export default function ScrollToTop() {
 
   return (
     <div
-      className="fixed z-40 md:hidden"
+      className="fixed z-50 md:hidden"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -141,9 +148,13 @@ export default function ScrollToTop() {
         onClick={scrollToTop}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
-        className="text-white rounded-full p-3 shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 flex flex-col items-center space-y-1"
+        className="text-white rounded-full p-3 shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 flex flex-col items-center space-y-1 touch-manipulation"
         style={{
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          minWidth: '48px',
+          minHeight: '48px'
         }}
         aria-label="맨 위로 이동"
       >

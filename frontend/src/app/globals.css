@@ -25,6 +25,53 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 텍스트 줄바꿈 최적화 */
+* {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+}
+
+/* 한국어 텍스트 최적화 */
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+}
+
+/* 서비스 페이지만 예외: 배너가 늘어지기 방지 */
+.services-page {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.services-page * {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+/* 숫자와 단위가 함께 있을 때 줄바꿈 방지 */
+.number-unit {
+  white-space: nowrap;
+}
+
+/* 통계 텍스트 최적화 */
+.stats-text {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+}
+
 /* 테이블 가로 스크롤 스타일 */
 .table-scroll {
   overflow-x: auto;

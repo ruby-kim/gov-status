@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
-import { Agency, HourlyStats } from '@/types';
+import { Agency, HourlyStats, AgencyStatus } from '@/types';
 
 export async function GET() {
   try {
@@ -18,7 +18,10 @@ export async function GET() {
     // MongoDB가 연결되지 않았으면 샘플 데이터 사용
     if (!mongoConnected) {
       const { allServices } = await import('@/data/sampleData');
-      return NextResponse.json(allServices);
+      return NextResponse.json({
+        services: allServices,
+        lastUpdated: new Date().toISOString()
+      });
     }
 
     // 1. 최신 전체 통계에서 시간 정보 가져오기
@@ -28,23 +31,27 @@ export async function GET() {
     if (!latestOverallStats) {
       console.log('No overall stats found, using sample data');
       const { allServices } = await import('@/data/sampleData');
-      return NextResponse.json(allServices);
+      return NextResponse.json({
+        services: allServices,
+        lastUpdated: new Date().toISOString()
+      });
     }
 
     // 2. 최신 시간대의 기관별 통계 가져오기
-    // hourly_stats에서 사용 가능한 최신 timestampHour 찾기
     const availableTimestamps = await db.collection<HourlyStats>('hourly_stats')
       .distinct('timestampHour');
 
     if (availableTimestamps.length === 0) {
       console.log('No hourly stats found, using sample data');
       const { allServices } = await import('@/data/sampleData');
-      return NextResponse.json(allServices);
+      return NextResponse.json({
+        services: allServices,
+        lastUpdated: new Date().toISOString()
+      });
     }
 
     // 가장 최신 timestampHour 사용
     const latestTimestampHour = availableTimestamps.sort().pop();
-    console.log('Using latest timestampHour:', latestTimestampHour);
 
     const latestHourlyStats = await db.collection<HourlyStats>('hourly_stats')
       .find({ timestampHour: latestTimestampHour })
@@ -57,10 +64,21 @@ export async function GET() {
     if (latestHourlyStats.length === 0) {
       console.log('No hourly stats found, using sample data');
       const { allServices } = await import('@/data/sampleData');
-      return NextResponse.json(allServices);
+      return NextResponse.json({
+        services: allServices,
+        lastUpdated: new Date().toISOString()
+      });
     }
 
-    // 4. 서비스 데이터 구성 (기관별 통계를 기반으로)
+    // 4. overall_stats의 agencies에서 responseTime 정보 가져오기
+    const agencyResponseTimes = new Map<string, number>();
+    latestOverallStats.agencies.forEach((agencyStatus: AgencyStatus) => {
+      if (agencyStatus.responseTime != null) {
+        agencyResponseTimes.set(agencyStatus.agencyId, agencyStatus.responseTime);
+      }
+    });
+
+    // 5. 서비스 데이터 구성 (기관별 통계를 기반으로)
     const services = latestHourlyStats.map(hourlyStat => {
       const agency = agencyMap.get(hourlyStat.agencyId);
       if (!agency) return null;
@@ -73,12 +91,15 @@ export async function GET() {
         status = 'maintenance';
       }
 
+      // responseTime 가져오기
+      const responseTime = agencyResponseTimes.get(hourlyStat.agencyId) || null;
+
       return {
         id: `${hourlyStat.agencyId}-${hourlyStat._id}`, // MongoDB _id를 사용하여 고유한 ID 생성
         name: agency.name,
         url: agency.url,
         status: status,
-        responseTime: Math.floor(Math.random() * 1000) + 100, // 임시 응답시간
+        responseTime: responseTime,
         agency: {
           id: agency.agencyId,
           name: agency.name,
@@ -91,7 +112,10 @@ export async function GET() {
       };
     }).filter(Boolean);
 
-    return NextResponse.json(services, {
+    return NextResponse.json({
+      services,
+      lastUpdated: latestOverallStats.timestamp
+    }, {
       headers: {
         'Cache-Control': 's-maxage=600, stale-while-revalidate=300'
       }

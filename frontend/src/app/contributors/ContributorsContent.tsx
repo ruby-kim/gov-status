@@ -6,7 +6,7 @@ import { Github, ExternalLink, Heart, Code, Globe, Mail, Linkedin, Twitter, Inst
 import { GITHUB_CONFIG } from '@/constants/config';
 import { Contributor } from '@/types/contributor';
 import contributorsData from '@/data/contributors.json';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 import { loadDashboardData } from '@/utils/dataTransform';
 
 export default function ContributorsContent() {
@@ -111,44 +111,8 @@ export default function ContributorsContent() {
 
   return (
     <>
-      <WebAppJsonLd
-        name="기여자 - 정부 사이트 장애 현황"
-        description="정부서비스 장애 현황 모니터링 프로젝트에 기여한 멋진 기여자들을 소개합니다. 오픈소스 프로젝트에 참여해보세요."
-        url="https://gov-status.vercel.app/contributors"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "어떻게 기여할 수 있나요?",
-            answer: "코드 기여, 버그 신고, 문서화, 번역, 새로운 정부 서비스 추가 등 다양한 방법으로 기여할 수 있습니다. GitHub 저장소에서 이슈를 확인해보세요."
-          },
-          {
-            question: "기여자로 등록되려면 어떻게 해야 하나요?",
-            answer: "GitHub에서 Pull Request를 제출하고 승인되면 자동으로 기여자 목록에 추가됩니다. 코드 기여 외에도 이슈 제보나 문서화도 기여로 인정됩니다."
-          },
-          {
-            question: "기술적 지식이 없어도 기여할 수 있나요?",
-            answer: "네, 가능합니다. 문서화, 번역, 새로운 정부 서비스 정보 제공, 사용자 피드백 등 다양한 비기술적 기여 방법이 있습니다."
-          },
-          {
-            question: "기여자 정보는 어떻게 관리되나요?",
-            answer: "contributors.json 파일에서 관리되며, GitHub 프로필 정보를 기반으로 자동으로 업데이트됩니다. 개인정보는 최소한으로 수집합니다."
-          },
-          {
-            question: "프로젝트의 목표는 무엇인가요?",
-            answer: "정부 서비스의 투명성과 신뢰성을 높이고, 시민들이 정부 서비스 상태를 쉽게 확인할 수 있도록 하는 것이 목표입니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-          { name: "기여자", url: "https://gov-status.vercel.app/contributors", position: 2 }
-        ]}
-      />
-      <div className="space-y-16">
+      <PageJsonLd page="contributors" />
+      <div className="space-y-16 pt-20">
       {/* 헤더 */}
       <div className="text-center">
         <h1 className="text-5xl font-bold text-gray-900 mb-6">기여자 리스트</h1>
