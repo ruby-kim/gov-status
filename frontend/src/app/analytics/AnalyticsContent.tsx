@@ -113,7 +113,7 @@ export default function AnalyticsContent() {
   // bestAgency의 정상율과 동일한 정상율을 가진 기관들의 개수 계산
   const bestAgencyRate = overview.bestAgency?.rate || 0;
   
-  // 각 기관별로 현재 정상율 계산 (services 데이터 사용)
+  // 각 기관별로 현재 정상율 계산
   const agencyRates = new Map();
   services.forEach(service => {
     const agencyId = service.agency.id;
@@ -155,10 +155,9 @@ export default function AnalyticsContent() {
         maintenanceRate: 0,
         problemRate: 0
       },
-      month1: { normalRate: null },
-      month2: { normalRate: null },
-      month3: { normalRate: null },
-      average: normalRate,
+      day1: { normalRate: null }, // 하루 전
+      week1: { normalRate: null }, // 일주일 전
+      month1: { normalRate: null }, // 1달 전
       trend: 0
     };
   });
@@ -187,37 +186,88 @@ export default function AnalyticsContent() {
   };
 
   // 시간대별 통계
-  const generateHourlyData = () => {
-    const hourlyData = [];
+  const generateHourlyData = (): { hour: string; date: string; normalRate: number }[] => {
+    const hourlyData: { hour: string; date: string; normalRate: number }[] = [];
+    
+    // historyData가 비어있으면 빈 데이터 반환
+    if (!historyData || historyData.length === 0) {
+      console.log('No history data available');
+      return [];
+    }
+
+    // 현재 시간을 기준으로 7시간 전부터 현재 시간까지의 시간대 생성
     const now = new Date();
+    const currentHour = now.getHours();
+    
+    // 7시간 전부터 현재 시간까지의 시간대 배열 생성
+    const timeSlots: number[] = [];
     for (let i = 6; i >= 0; i--) {
-      const dataTime = new Date(now.getTime() - i * 60 * 60 * 1000);
-      dataTime.setMinutes(0, 0, 0);
-      const hour = dataTime.getHours();
-      const date = dataTime.getDate();
-      const month = dataTime.getMonth() + 1;
+      const targetHour = currentHour - i;
+      // 음수인 경우 전날로 이동
+      const adjustedHour = targetHour < 0 ? targetHour + 24 : targetHour;
+      timeSlots.push(adjustedHour);
+    }
 
-      const timeWindowStart = dataTime.getTime();
-      const timeWindowEnd = dataTime.getTime() + 60 * 60 * 1000;
-
-      const historyInTimeWindow = historyData.filter(h => {
-        const hTime = new Date(h.timestamp.replace(/\.\d{6}/, '')).getTime();
-        return hTime >= timeWindowStart && hTime < timeWindowEnd;
-      });
-
-      let normalRate = 0;
-      if (historyInTimeWindow.length > 0) {
-        normalRate =
-          historyInTimeWindow.reduce((sum, h) => sum + (h.overall.normal / h.overall.total) * 100, 0) /
-          historyInTimeWindow.length;
+    // 최근 7개 시간대의 데이터 사용
+    const recentData = historyData.slice(-7);
+    
+    // 날짜 표시를 위한 이전 날짜 추적
+    let previousDate = '';
+    
+    recentData.forEach((h, index) => {
+      // timestamp 파싱
+      let timestamp;
+      try {
+        // ISO 형식인 경우
+        if (h.timestamp.includes('T') || h.timestamp.includes('Z')) {
+          timestamp = new Date(h.timestamp);
+        } else {
+          // "Wed Oct 01 2025 12:00:00 GMT+0900" 형식인 경우
+          timestamp = new Date(h.timestamp);
+        }
+      } catch (error) {
+        console.error('Error parsing timestamp:', h.timestamp, error);
+        return;
       }
 
+      // 실제 데이터의 시간이 아닌, 계산된 시간대 사용
+      const displayHour = timeSlots[index] || timestamp.getHours();
+      
+      // 현재 시간을 기준으로 날짜 계산
+      const now = new Date();
+      const currentDate = now.getDate();
+      const currentMonth = now.getMonth() + 1;
+      
+      // displayHour가 현재 시간보다 크면 전날
+      const isPreviousDay = displayHour > now.getHours();
+      const targetDate = isPreviousDay ? currentDate - 1 : currentDate;
+      const targetMonth = isPreviousDay ? currentMonth : currentMonth;
+      
+      const currentDateStr = `${targetMonth}/${targetDate}`;
+
+      // 날짜 표시 조건:
+      // 1. 첫 번째 데이터 (index === 0)
+      // 2. 0시인 경우 (자정)
+      // 3. 이전 데이터와 날짜가 다른 경우
+      const shouldShowDate = index === 0 || 
+                           displayHour === 0 || 
+                           (index > 0 && previousDate !== currentDateStr);
+
+
+      // 정상율 계산
+      const normalRate = h.overall.total > 0 
+        ? (h.overall.normal / h.overall.total) * 100 
+        : 0;
+
       hourlyData.push({
-        hour: `${hour}시`,
-        date: i === 6 || hour === 0 ? `${month}/${date}` : '',
-        정상율: Number(normalRate.toFixed(2)),
+        hour: `${displayHour}시`,
+        date: shouldShowDate ? currentDateStr : '',
+        normalRate: Number(normalRate.toFixed(2)),
       });
-    }
+
+      // 이전 날짜 업데이트
+      previousDate = currentDateStr;
+    });
     return hourlyData;
   };
 
@@ -340,7 +390,7 @@ export default function AnalyticsContent() {
         </div>
       </div>
 
-      {/* 차트 섹션 - 데스크톱에서 나란히 배치 */}
+      {/* 차트 섹션 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 서비스 상태 분포 */}
         <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
@@ -404,7 +454,7 @@ export default function AnalyticsContent() {
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }}
                 />
-                <Line dataKey="정상율" stroke="#3B82F6" strokeWidth={2} />
+                <Line dataKey="normalRate" stroke="#3B82F6" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -415,9 +465,8 @@ export default function AnalyticsContent() {
       <div className="w-full">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 sm:p-4 lg:p-6 text-sm sm:text-base md:text-lg w-full">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">
-            기관별 3개월 정상율 상세 통계
+            기관별 정상율 상세 통계
           </h3>
-
           <div 
             className="overflow-x-auto -mx-2 sm:mx-0" 
             style={{ WebkitOverflowScrolling: 'touch' }}
@@ -426,17 +475,15 @@ export default function AnalyticsContent() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase">기관명</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">현재</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">1개월 전</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">2개월 전</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">3개월 전</th>
-                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">평균</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">오늘</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">하루 전</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">일주일 전</th>
+                  <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase hidden sm:table-cell">1달 전</th>
                   <th className="px-3 py-2 text-center font-medium text-gray-500 uppercase">↗</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {paginatedAgencyStats.map((agency, index: number) => {
-                  const avgRate = agency.average;
                   const trend = agency.trend;
                   return (
                     <tr key={agency.agencyId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
@@ -454,16 +501,13 @@ export default function AnalyticsContent() {
                         {formatPercentage(agency.current.normalRate)}
                       </td>
                       <td className="px-3 py-2 text-center hidden sm:table-cell">
+                        {agency.day1.normalRate ? formatPercentage(agency.day1.normalRate) : 'N/A'}
+                      </td>
+                      <td className="px-3 py-2 text-center hidden sm:table-cell">
+                        {agency.week1.normalRate ? formatPercentage(agency.week1.normalRate) : 'N/A'}
+                      </td>
+                      <td className="px-3 py-2 text-center hidden sm:table-cell">
                         {agency.month1.normalRate ? formatPercentage(agency.month1.normalRate) : 'N/A'}
-                      </td>
-                      <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month2.normalRate ? formatPercentage(agency.month2.normalRate) : 'N/A'}
-                      </td>
-                      <td className="px-3 py-2 text-center hidden sm:table-cell">
-                        {agency.month3.normalRate ? formatPercentage(agency.month3.normalRate) : 'N/A'}
-                      </td>
-                      <td className="px-3 py-2 text-center">
-                        {avgRate ? formatPercentage(avgRate) : 'N/A'}
                       </td>
                       <td className="px-3 py-2 text-center">{trend ? trend.toFixed(1) : 'N/A'}</td>
                     </tr>
