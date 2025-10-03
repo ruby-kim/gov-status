@@ -18,7 +18,16 @@ export default function HourlyTrendChart({ hourlyData }: HourlyTrendChartProps) 
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={hourlyData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="hour" angle={-30} textAnchor="end" fontSize={10}/>
+            <XAxis 
+              dataKey="hour" 
+              angle={-30} 
+              textAnchor="end" 
+              fontSize={10}
+              tickFormatter={(value, index) => {
+                const data = hourlyData[index];
+                return data?.date ? `${data.date}\n${value}` : value;
+              }}
+            />
             <YAxis fontSize={10} domain={[0, 100]} />
             <Tooltip 
               formatter={(value: number) => [
