@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
-import { Agency, HourlyStats } from '@/types';
+import { Agency, HourlyStats, AgencyStatus } from '@/types';
 
 export async function GET() {
   try {
@@ -73,7 +73,7 @@ export async function GET() {
 
     // 4. overall_stats의 agencies에서 responseTime 정보 가져오기
     const agencyResponseTimes = new Map<string, number>();
-    latestOverallStats.agencies.forEach((agencyStatus: any) => {
+    latestOverallStats.agencies.forEach((agencyStatus: AgencyStatus) => {
       if (agencyStatus.responseTime != null) {
         agencyResponseTimes.set(agencyStatus.agencyId, agencyStatus.responseTime);
       }

@@ -96,8 +96,6 @@ export async function GET() {
       agencyStats.set(stat.agencyId, existing);
     });
 
-    console.log('Calculated stats for', agencyStats.size, 'agencies');
-
     // 정상율이 가장 높은 기관들 찾기
     const sortedAgencies = Array.from(agencyStats.entries())
       .sort(([, a], [, b]) => b.normalRate - a.normalRate);
@@ -132,52 +130,6 @@ export async function GET() {
       }
     }
 
-    // 6. 기관별 통계 생성 (Analytics 페이지에서 필요)
-    // 현재 시간 기준으로 계산 가능한 기간 확인
-    const now = new Date();
-    const oneMonthAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
-    const twoMonthsAgo = new Date(now.getTime() - (60 * 24 * 60 * 60 * 1000));
-    const threeMonthsAgo = new Date(now.getTime() - (90 * 24 * 60 * 60 * 1000));
-
-    // 데이터 수집 시작일 (10월 1일)
-    const dataStartDate = new Date('2025-10-01T00:00:00.000Z');
-
-    const agencyStatsArray = latestOverallStats.agencies.map(agencyStatus => {
-      const agency = agenciesMap.get(agencyStatus.agencyId);
-      if (!agency) return null;
-
-      // 현재 정상율 (overall_stats의 agencies에서 상태 기반으로 계산)
-      const currentNormalRate = agencyStatus.status === 'normal' ? 100 :
-        agencyStatus.status === 'maintenance' ? 50 : 0;
-
-      // 1개월 전 데이터 계산 가능 여부
-      const canCalculateMonth1 = oneMonthAgo >= dataStartDate;
-      // 2개월 전 데이터 계산 가능 여부  
-      const canCalculateMonth2 = twoMonthsAgo >= dataStartDate;
-      // 3개월 전 데이터 계산 가능 여부
-      const canCalculateMonth3 = threeMonthsAgo >= dataStartDate;
-
-      return {
-        agency: agency.name,
-        url: agency.url,
-        current: {
-          normalRate: currentNormalRate,
-          maintenanceRate: agencyStatus.status === 'maintenance' ? 50 : 0,
-          problemRate: agencyStatus.status === 'problem' ? 100 : 0
-        },
-        month1: {
-          normalRate: canCalculateMonth1 ? Math.random() * 100 : null
-        },
-        month2: {
-          normalRate: canCalculateMonth2 ? Math.random() * 100 : null
-        },
-        month3: {
-          normalRate: canCalculateMonth3 ? Math.random() * 100 : null
-        },
-        average: currentNormalRate,
-        trend: 0 // 현재는 계산하지 않음
-      };
-    }).filter(Boolean);
 
     return NextResponse.json({
       services: [], // 빈 배열 - 대시보드에서는 불필요
@@ -211,8 +163,7 @@ export async function GET() {
         recentAvgRate: Math.round(overallNormalRate * 100) / 100,
         agencies: latestOverallStats.agencies || []
       },
-      agencies: agencies,
-      agencyStats: agencyStatsArray
+      agencies: agencies
     }, {
       headers: {
         'Cache-Control': 's-maxage=600, stale-while-revalidate=300'

@@ -366,18 +366,14 @@ export default function AnalyticsContent() {
         faq={[
           {
             question: "기관별 정상율은 어떻게 계산되나요?",
-            answer: "각 기관의 서비스 중 정상 작동하는 서비스의 비율을 백분율로 표시합니다. 3개월간의 평균값과 현재값을 비교할 수 있습니다."
+            answer: "각 기관의 서비스 중 정상 작동하는 서비스의 비율을 백분율로 표시합니다. 1개월간의 평균값과 현재값을 비교할 수 있습니다."
           },
           {
             question: "시간대별 트렌드는 어떤 데이터를 보여주나요?",
             answer: "최근 7시간 동안의 전체 서비스 정상율 변화를 시간대별로 표시합니다. 서비스 이용 패턴을 파악할 수 있습니다."
           },
           {
-            question: "상위 10개 기관은 어떤 기준으로 선정되나요?",
-            answer: "현재 정상율 기준으로 상위 10개 기관을 선정하여 표시합니다. 동일한 정상율일 경우 랜덤하게 선택됩니다."
-          },
-          {
-            question: "3개월 데이터는 어떻게 활용할 수 있나요?",
+            question: "1개월 데이터는 어떻게 활용할 수 있나요?",
             answer: "장기적인 서비스 안정성 트렌드를 파악하고, 개선이 필요한 기관을 식별하는 데 활용할 수 있습니다."
           }
         ]}
@@ -391,7 +387,7 @@ export default function AnalyticsContent() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">서비스 분석</h1>
-          <p className="mt-2 text-gray-600">정부 서비스들의 상세 통계 및 3개월 트렌드 분석</p>
+          <p className="mt-2 text-gray-600">정부 서비스들의 상세 통계 및 1개월 트렌드 분석</p>
         </div>
         <div className="mt-4 sm:mt-0 flex items-center space-x-4">
           <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -403,7 +399,7 @@ export default function AnalyticsContent() {
 
       {/* 주요 지표 */}
       <div className="mb-2">
-        <p className="text-sm text-gray-500">※ 최신 데이터 기준</p>
+        <p className="text-sm text-gray-500">※ 최신 수집 데이터 기준</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 w-full">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 w-full">
