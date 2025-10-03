@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend
@@ -24,6 +25,19 @@ interface AnalyticsChartsProps {
 }
 
 export default function AnalyticsCharts({ statusData, totalServices, hourlyData }: AnalyticsChartsProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: unknown[] }) => {
     if (active && payload && payload.length) {
       const data = payload[0] as { name: string; value: number };
@@ -52,8 +66,8 @@ export default function AnalyticsCharts({ statusData, totalServices, hourlyData 
                 data={statusData}
                 cx="50%"
                 cy="50%"
-                innerRadius={40}
-                outerRadius={80}
+                innerRadius={isMobile ? 40 : 50}
+                outerRadius={isMobile ? 80 : 100}
                 paddingAngle={2}
                 dataKey="value"
               >
