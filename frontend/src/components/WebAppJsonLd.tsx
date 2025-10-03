@@ -47,7 +47,7 @@ export default function WebAppJsonLd({
     browserRequirements: 'Requires JavaScript. Requires HTML5.',
     softwareVersion: '1.0.0',
     datePublished: '2024-01-01',
-    dateModified: new Date().toISOString(),
+    dateModified: '2024-01-01T00:00:00.000Z',
     inLanguage: 'ko-KR',
     isAccessibleForFree: true,
     ...(offers && { offers }),

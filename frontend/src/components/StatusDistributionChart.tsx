@@ -1,11 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { ServiceStats } from '@/types/service';
 import { formatPercentage } from '@/utils/formatUtils';
 
 interface StatusDistributionChartProps {
   stats: ServiceStats;
+  height?: string; // 선택적 높이 prop 추가
 }
 
 const COLORS = {
@@ -15,12 +17,56 @@ const COLORS = {
 };
 
 
-export default function StatusDistributionChart({ stats }: StatusDistributionChartProps) {
+export default function StatusDistributionChart({ stats, height = "h-[25vh] sm:h-[30vh] md:h-[40vh]" }: StatusDistributionChartProps) {
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+
+  useEffect(() => {
+    const updateScreenSize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setScreenSize('mobile');
+      } else if (width < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    
+    return () => window.removeEventListener('resize', updateScreenSize);
+  }, []);
+
   const data = [
     { name: '정상', value: stats.normal, color: COLORS.normal },
     { name: '점검중', value: stats.maintenance, color: COLORS.maintenance },
     { name: '문제', value: stats.problem, color: COLORS.problem }
   ].filter(item => item.value > 0);
+
+  // 반응형 차트 설정
+  const chartConfig = {
+    mobile: {
+      innerRadius: 30,
+      outerRadius: 60,
+      legendHeight: 30,
+      legendFontSize: '10px'
+    },
+    tablet: {
+      innerRadius: 50,
+      outerRadius: 90,
+      legendHeight: 36,
+      legendFontSize: '11px'
+    },
+    desktop: {
+      innerRadius: 60,
+      outerRadius: 120,
+      legendHeight: 36,
+      legendFontSize: '12px'
+    }
+  };
+
+  const config = chartConfig[screenSize];
 
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: unknown[] }) => {
     if (active && payload && payload.length) {
@@ -39,17 +85,17 @@ export default function StatusDistributionChart({ stats }: StatusDistributionCha
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">서비스 상태 분포</h3>
-      <div className="h-80">
+      <div className={`${height} w-full`}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={120}
+              innerRadius={config.innerRadius}
+              outerRadius={config.outerRadius}
               paddingAngle={2}
               dataKey="value"
             >
@@ -60,9 +106,12 @@ export default function StatusDistributionChart({ stats }: StatusDistributionCha
             <Tooltip content={<CustomTooltip />} />
             <Legend 
               verticalAlign="bottom" 
-              height={36}
+              height={config.legendHeight}
               formatter={(value, entry) => (
-                <span style={{ color: entry?.color }}>
+                <span style={{ 
+                  color: entry?.color, 
+                  fontSize: config.legendFontSize
+                }}>
                   {value} ({formatPercentage((entry?.payload?.value || 0) / stats.total * 100)})
                 </span>
               )}

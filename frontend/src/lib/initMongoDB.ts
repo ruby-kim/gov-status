@@ -13,15 +13,10 @@ export async function initializeMongoDB() {
     await db.collection('hourly_stats').createIndex({ agencyId: 1, timestampHour: 1 }, { unique: true });
     await db.collection('overall_stats').createIndex({ timestamp: 1 }, { unique: true });
 
-    console.log('MongoDB collections and indexes created successfully');
-
     // 샘플 데이터 삽입 (기존 데이터가 없는 경우에만)
     const agenciesCount = await db.collection('agencies').countDocuments();
     if (agenciesCount === 0) {
       await insertSampleData(db);
-      console.log('Sample data inserted successfully');
-    } else {
-      console.log('Sample data already exists, skipping insertion');
     }
 
   } catch (error) {
@@ -140,7 +135,6 @@ export async function testMongoDBConnection(): Promise<boolean> {
   try {
     const db = await getDatabase();
     await db.admin().ping();
-    console.log('MongoDB connection successful');
     return true;
   } catch (error) {
     console.error('MongoDB connection failed:', error);

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { AlertCircle, Bug, Info, Mail, ExternalLink, CheckCircle, Github } from 'lucide-react';
 import { GITHUB_CONFIG } from '@/constants/config';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 
 export default function ReportContent() {
   const [selectedType, setSelectedType] = useState<string>('');
@@ -68,43 +68,7 @@ export default function ReportContent() {
 
   return (
     <>
-      <WebAppJsonLd
-        name="정보 제보 - 정부 사이트 장애 현황"
-        description="잘못된 정보나 누락된 서비스를 발견하셨나요? 여러분의 제보가 더 정확한 서비스를 만드는 데 도움이 됩니다."
-        url="https://gov-status.vercel.app/report"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "어떤 종류의 정보를 제보할 수 있나요?",
-            answer: "잘못된 서비스 정보, 누락된 서비스, 버그 신고, 기타 개선 사항을 제보할 수 있습니다. 각 카테고리별로 적절한 제보 방법을 안내합니다."
-          },
-          {
-            question: "제보는 어떻게 처리되나요?",
-            answer: "GitHub Issues를 통해 제보가 관리되며, 개발팀이 검토 후 적절한 조치를 취합니다. 제보 후 GitHub에서 진행 상황을 확인할 수 있습니다."
-          },
-          {
-            question: "개인정보는 수집되나요?",
-            answer: "제보 시 이메일 주소만 수집되며, 이는 제보 처리 및 피드백을 위해 사용됩니다. 다른 개인정보는 수집하지 않습니다."
-          },
-          {
-            question: "제보 후 언제 반영되나요?",
-            answer: "제보 내용에 따라 다르지만, 일반적으로 1-2주 내에 검토하고 반영합니다. 긴급한 경우 더 빠르게 처리될 수 있습니다."
-          },
-          {
-            question: "GitHub 계정이 없어도 제보할 수 있나요?",
-            answer: "네, 이메일을 통해서도 제보할 수 있습니다. 하지만 GitHub Issues를 통한 제보가 더 체계적으로 관리됩니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-          { name: "정보 제보", url: "https://gov-status.vercel.app/report", position: 2 }
-        ]}
-      />
+      <PageJsonLd page="report" />
       <div className="space-y-8">
       {/* 헤더 */}
       <div className="text-center">
