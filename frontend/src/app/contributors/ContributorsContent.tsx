@@ -112,7 +112,7 @@ export default function ContributorsContent() {
   return (
     <>
       <PageJsonLd page="contributors" />
-      <div className="space-y-16">
+      <div className="space-y-16 pt-20">
       {/* 헤더 */}
       <div className="text-center">
         <h1 className="text-5xl font-bold text-gray-900 mb-6">기여자 리스트</h1>

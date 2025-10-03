@@ -86,7 +86,7 @@ export default function DashboardContent() {
   return (
     <>
       <PageJsonLd page="home" />
-      <div className="space-y-8">
+      <div className="space-y-8 pt-28">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>

@@ -54,7 +54,7 @@ export default function AnalyticsContent() {
   return (
     <>
       <PageJsonLd page="analytics" />
-      <div className="space-y-6">
+      <div className="space-y-6 pt-28">
         <AnalyticsHeader lastUpdated={lastUpdated} />
         <AnalyticsOverview overview={overview} bestAgenciesCount={bestAgenciesCount} />
         <AnalyticsCharts statusData={statusData} totalServices={totalServices} hourlyData={hourlyData} />
