@@ -43,7 +43,7 @@ export async function loadBackendData(): Promise<Service[]> {
     }
 
     const data = await response.json();
-    return data;
+    return data.services || data; // 새로운 구조에서는 data.services, 기존 구조에서는 data 자체
   } catch (error) {
     console.error('Error loading backend data:', error);
     throw error;
