@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Service, FilterOptions } from '@/types/service';
-import { loadBackendData } from '@/utils/dataTransform';
 import ServiceCard from '@/components/ServiceCard';
 import ServiceFilters from '@/components/ServiceFilters';
 import StatusGuide from '@/components/StatusGuide';
@@ -42,9 +41,15 @@ function ServicesContent() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await loadBackendData();
-        setServices(data);
-        setLastUpdated(new Date().toLocaleString('ko-KR'));
+        const response = await fetch('/api/mongodb/services');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setServices(data.services);
+        setLastUpdated(new Date(data.lastUpdated).toLocaleString('ko-KR'));
       } catch (err) {
         setError('데이터를 불러오는 중 오류가 발생했습니다.');
         console.error('Error loading data:', err);
