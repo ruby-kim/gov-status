@@ -23,14 +23,14 @@ export async function loadHistoryData(): Promise<HistoryData[]> {
 
     if (!response.ok) {
       console.warn(`History API returned ${response.status}, using empty data`);
-      return []; // 404나 다른 에러 시 빈 배열 반환
+      return [];
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     console.error('Error loading history data:', error);
-    return []; // 에러 시 빈 배열 반환
+    return [];
   }
 }
 
@@ -43,7 +43,7 @@ export async function loadBackendData(): Promise<Service[]> {
     }
 
     const data = await response.json();
-    return data.services || data; // 새로운 구조에서는 data.services, 기존 구조에서는 data 자체
+    return data.services || data;
   } catch (error) {
     console.error('Error loading backend data:', error);
     throw error;
