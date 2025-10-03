@@ -180,7 +180,7 @@ export async function GET() {
       statusDistribution
     }, {
       headers: {
-        'Cache-Control': 's-maxage=600, stale-while-revalidate=300'
+        'Cache-Control': 'public, s-maxage=180, stale-while-revalidate=0'
       }
     });
   } catch (error) {
