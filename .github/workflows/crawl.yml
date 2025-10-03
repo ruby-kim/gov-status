@@ -1,4 +1,4 @@
-name: Crawl and Update Redis
+name: Crawl and Update MongoDB
 
 on:
   workflow_dispatch:
@@ -25,4 +25,4 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
         run: |
-          python tasks/status_update.py || echo "⚠️ Script failed, skipping..."
+          python tasks/main.py || echo "⚠️ Script failed, skipping..."
