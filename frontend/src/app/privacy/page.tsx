@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 
 export const metadata: Metadata = {
   title: '개인정보처리방침',
@@ -7,45 +7,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: '개인정보처리방침',
     description: '정부 사이트 장애 현황 모니터링 서비스의 개인정보처리방침입니다.',
+    images: ['/og-image.png'],
   },
   twitter: {
     title: '개인정보처리방침',
     description: '정부 사이트 장애 현황 모니터링 서비스의 개인정보처리방침입니다.',
+    images: ['/og-image.png'],
   },
 };
 
 export default function PrivacyPolicyPage() {
   return (
     <>
-      <WebAppJsonLd
-        name="개인정보처리방침 - 정부 사이트 장애 현황"
-        description="정부 사이트 장애 현황 모니터링 서비스의 개인정보처리방침입니다."
-        url="https://gov-status.vercel.app/privacy"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "어떤 개인정보를 수집하나요?",
-            answer: "저희 서비스는 개인정보를 수집하지 않습니다. Vercel Analytics와 Google Analytics를 통해 익명화된 사용 통계만 수집합니다."
-          },
-          {
-            question: "수집된 데이터는 어떻게 사용되나요?",
-            answer: "익명화된 사용 통계는 서비스 개선 목적으로만 사용되며, 개인을 식별할 수 있는 정보는 포함되지 않습니다."
-          },
-          {
-            question: "데이터를 제3자와 공유하나요?",
-            answer: "아니요, 수집된 익명화된 통계 데이터는 제3자와 공유하지 않습니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-          { name: "개인정보처리방침", url: "https://gov-status.vercel.app/privacy", position: 2 }
-        ]}
-      />
+      <PageJsonLd page="privacy" />
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">개인정보처리방침</h1>
         

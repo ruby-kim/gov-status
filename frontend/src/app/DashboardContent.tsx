@@ -6,7 +6,7 @@ import { loadDashboardData } from '@/utils/dataTransform';
 import StatsOverview from '@/components/StatsOverview';
 import StatusDistributionChart from '@/components/StatusDistributionChart';
 import StatusGuide from '@/components/StatusGuide';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 import { Activity, TrendingUp, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { formatPercentage } from '@/utils/formatUtils';
 
@@ -85,54 +85,7 @@ export default function DashboardContent() {
 
   return (
     <>
-      <WebAppJsonLd
-        name="정부 사이트 장애 현황"
-        description="정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다. 10분마다 최신 데이터로 업데이트."
-        url="https://gov-status.vercel.app"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "서비스 상태는 얼마나 자주 업데이트되나요?",
-            answer: "10분마다 자동으로 업데이트됩니다. 실시간에 가까운 최신 상태를 확인할 수 있습니다."
-          },
-          {
-            question: "어떤 정부 서비스들을 모니터링하나요?",
-            answer: "정부24, 공공서비스, 각 부처별 주요 웹사이트와 온라인 서비스를 모니터링합니다. 총 100개 이상의 정부 서비스를 대상으로 합니다."
-          },
-          {
-            question: "서비스 상태는 어떻게 분류되나요?",
-            answer: "정상(녹색), 점검중(파란색), 문제(빨간색) 3가지 상태로 분류됩니다. 각 상태는 서비스의 접속 가능 여부와 응답 시간을 기준으로 판단합니다."
-          },
-          {
-            question: "장애가 발생했을 때 어떻게 알 수 있나요?",
-            answer: "대시보드에서 빨간색으로 표시되며, 상세 페이지에서 구체적인 장애 원인과 복구 시간을 확인할 수 있습니다."
-          },
-          {
-            question: "모바일에서도 사용할 수 있나요?",
-            answer: "네, 반응형 웹 디자인으로 모바일, 태블릿, 데스크톱 모든 기기에서 최적화된 화면으로 이용할 수 있습니다."
-          },
-          {
-            question: "데이터는 얼마나 오래 보관되나요?",
-            answer: "1개월간의 상세 데이터를 보관하며, 장기 트렌드 분석을 통해 서비스 안정성 개선에 활용할 수 있습니다."
-          },
-          {
-            question: "개인정보가 수집되나요?",
-            answer: "아니요, 서비스 접속 상태만 모니터링하며 개인정보는 수집하지 않습니다. 공개된 웹사이트의 접속 가능 여부만 확인합니다."
-          },
-          {
-            question: "API를 통해 데이터를 가져올 수 있나요?",
-            answer: "네, RESTful API를 제공합니다. /api/stats, /api/dashboard, /api/history 엔드포인트를 통해 JSON 형태로 데이터를 조회할 수 있습니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 }
-        ]}
-      />
+      <PageJsonLd page="home" />
       <div className="space-y-8">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">

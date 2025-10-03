@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 
 export const metadata: Metadata = {
   title: '이용약관',
@@ -7,45 +7,19 @@ export const metadata: Metadata = {
   openGraph: {
     title: '이용약관',
     description: '정부 사이트 장애 현황 모니터링 서비스의 이용약관입니다.',
+    images: ['/og-image.png'],
   },
   twitter: {
     title: '이용약관',
     description: '정부 사이트 장애 현황 모니터링 서비스의 이용약관입니다.',
+    images: ['/og-image.png'],
   },
 };
 
 export default function TermsOfUsePage() {
   return (
     <>
-      <WebAppJsonLd
-        name="이용약관 - 정부 사이트 장애 현황"
-        description="정부 사이트 장애 현황 모니터링 서비스의 이용약관입니다."
-        url="https://gov-status.vercel.app/terms"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "이 서비스는 무료인가요?",
-            answer: "네, 이 서비스는 완전히 무료로 제공됩니다. 개인정보도 수집하지 않습니다."
-          },
-          {
-            question: "서비스의 정확성은 보장되나요?",
-            answer: "서비스는 10분마다 자동으로 업데이트되지만, 실시간 정확성을 100% 보장하지는 않습니다. 참고용으로만 사용해 주세요."
-          },
-          {
-            question: "상업적 이용이 가능한가요?",
-            answer: "MIT 라이선스 하에 제공되므로 상업적 이용이 가능합니다. 단, 서비스의 정확성에 대한 책임은 이용자에게 있습니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-          { name: "이용약관", url: "https://gov-status.vercel.app/terms", position: 2 }
-        ]}
-      />
+      <PageJsonLd page="terms" />
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">이용약관</h1>
         

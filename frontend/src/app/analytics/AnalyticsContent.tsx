@@ -8,7 +8,7 @@ import {
 import { TrendingUp, Activity, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
 import { loadDashboardData, loadBackendData, loadHistoryData, loadAgencyHistoryData } from '@/utils/dataTransform';
 import { formatPercentage, formatAgencyWithRate } from '@/utils/formatUtils';
-import WebAppJsonLd from '@/components/WebAppJsonLd';
+import PageJsonLd from '@/components/PageJsonLd';
 
 import { HistoryData } from '@/types/api/dashboard';
 
@@ -353,35 +353,7 @@ export default function AnalyticsContent() {
 
   return (
     <>
-      <WebAppJsonLd
-        name="서비스 분석 - 정부 사이트 장애 현황"
-        description="정부 서비스의 상세한 분석 데이터를 확인하세요. 기관별 정상율, 시간대별 트렌드, 서비스 상태 분포 등을 실시간으로 모니터링합니다."
-        url="https://gov-status.vercel.app/analytics"
-        applicationCategory="GovernmentApplication"
-        operatingSystem="Any"
-        author={{
-          name: "김루비",
-          url: "https://anb-network.com"
-        }}
-        faq={[
-          {
-            question: "기관별 정상율은 어떻게 계산되나요?",
-            answer: "각 기관의 서비스 중 정상 작동하는 서비스의 비율을 백분율로 표시합니다. 1개월간의 평균값과 현재값을 비교할 수 있습니다."
-          },
-          {
-            question: "시간대별 트렌드는 어떤 데이터를 보여주나요?",
-            answer: "최근 7시간 동안의 전체 서비스 정상율 변화를 시간대별로 표시합니다. 서비스 이용 패턴을 파악할 수 있습니다."
-          },
-          {
-            question: "1개월 데이터는 어떻게 활용할 수 있나요?",
-            answer: "장기적인 서비스 안정성 트렌드를 파악하고, 개선이 필요한 기관을 식별하는 데 활용할 수 있습니다."
-          }
-        ]}
-        breadcrumb={[
-          { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-          { name: "서비스 분석", url: "https://gov-status.vercel.app/analytics", position: 2 }
-        ]}
-      />
+      <PageJsonLd page="analytics" />
       <div className="space-y-6">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
