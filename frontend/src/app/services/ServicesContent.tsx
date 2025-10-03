@@ -185,7 +185,7 @@ function ServicesContent() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">서비스 현황</h1>
           <p className="mt-2 text-gray-600">
-            정부 서비스들의 상태를 확인하고 관리하세요 (10분마다 업데이트)
+            정부 서비스들의 최신 상태를 확인하세요 (10분마다 업데이트)
           </p>
         </div>
         <div className="mt-4 sm:mt-0 flex items-center space-x-4">
