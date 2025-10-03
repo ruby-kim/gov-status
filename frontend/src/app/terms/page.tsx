@@ -192,9 +192,9 @@ export default function TermsOfUsePage() {
               </p>
               <p className="text-gray-700">
                 <strong>GitHub:</strong> 
-                <a href="https://github.com/anb-network/gov-status" 
+                <a href="https://github.com/ruby-kim/gov-status" 
                    className="text-blue-600 hover:text-blue-800 underline ml-1">
-                  github.com/anb-network/gov-status
+                  github.com/ruby-kim/gov-status
                 </a>
               </p>
             </div>
