@@ -1,0 +1,51 @@
+name: "🐛 버그"
+description: "버그 리포트 템플릿"
+title: "🐛 "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 버그 보고 가이드
+        - 발생한 버그를 구체적으로 작성해주세요.
+        - 환경(OS, 브라우저, 앱 버전)을 꼭 적어주세요.
+        - 재현 가능한 단계(steps)가 있으면 함께 작성해주세요.
+
+  - type: input
+    id: bug_title
+    attributes:
+      label: "🏷 버그 제목"
+      description: "버그의 간단한 요약"
+      placeholder: "예: 로그인 버튼이 동작하지 않음"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_steps
+    attributes:
+      label: "🪜 재현 단계"
+      description: "버그를 재현할 수 있는 과정"
+      placeholder: |
+        1. 첫 번째 단계
+        2. 두 번째 단계
+        3. 오류 발생
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_expected
+    attributes:
+      label: "🌟 기대 동작"
+      description: "정상적으로 기대한 동작"
+      placeholder: "예: 로그인 버튼 클릭 시 홈 화면으로 이동해야 함"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_actual
+    attributes:
+      label: "🚨 실제 동작"
+      description: "실제로 발생한 동작"
+      placeholder: "예: 버튼 클릭 시 아무 반응 없음"
+    validations:
+      required: true

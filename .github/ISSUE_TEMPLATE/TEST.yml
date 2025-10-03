@@ -1,0 +1,44 @@
+name: "🧪 테스트"
+description: "테스트 코드 관련 작업 이슈 템플릿"
+title: "🧪 "
+labels: ["test"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧪 테스트 가이드
+        - 새로운 테스트 코드 추가나 기존 테스트 수정 시 사용해주세요.
+        - 어떤 기능을 테스트하는지 명확하게 작성해주세요.
+
+  - type: input
+    id: test_title
+    attributes:
+      label: "🏷 테스트 이름"
+      description: "추가/수정하려는 테스트의 이름"
+      placeholder: "예: 로그인 API 단위 테스트"
+    validations:
+      required: true
+
+  - type: textarea
+    id: test_scope
+    attributes:
+      label: "💭 테스트 범위"
+      description: "어떤 부분을 테스트하는지 작성해주세요."
+      placeholder: |
+        <테스트 범위>
+        1. 단위 테스트 (unit)
+        2. 통합 테스트 (integration)
+    validations:
+      required: true
+
+  - type: textarea
+    id: test_tasks
+    attributes:
+      label: "✅ 테스트 작업 리스트"
+      description: "진행해야 할 테스트 작업 목록"
+      placeholder: |
+        - [ ] 로그인 성공 케이스
+        - [ ] 로그인 실패 케이스
+        - [ ] 토큰 만료 케이스
+    validations:
+      required: true

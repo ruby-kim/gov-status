@@ -1,0 +1,45 @@
+name: "📝 문서"
+description: "문서 작업 템플릿"
+title: "📝 "
+labels: ["docs"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📝 문서 작업 가이드
+        - 어떤 문서를 수정/추가하는지 작성해주세요.
+        - 왜 필요한지 간단히 적어주세요.
+        - 필요한 작업 목록을 작성해주세요.
+
+  - type: input
+    id: docs_title
+    attributes:
+      label: "🏷 문서 이름"
+      description: "작업할 문서의 이름"
+      placeholder: "예: README.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: docs_reason
+    attributes:
+      label: "💭 문서 작업 이유"
+      description: "문서를 작성/수정해야 하는 이유"
+      placeholder: |
+        <작업 이유>
+        1. 이유 1
+        2. 이유 2
+    validations:
+      required: false
+
+  - type: textarea
+    id: docs_tasks
+    attributes:
+      label: "✅ 작업 리스트"
+      description: "문서 작업에 필요한 목록"
+      placeholder: |
+        - [ ] 작업 1
+        - [ ] 작업 2
+        - [ ] 작업 3
+    validations:
+      required: true

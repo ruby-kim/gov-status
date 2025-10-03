@@ -1,0 +1,44 @@
+name: "🧹 잡무"
+description: "빌드, 설정, 의존성 업데이트 등 잡무 이슈 템플릿"
+title: "🧹 "
+labels: ["chore"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧹 잡무 가이드
+        - 빌드, 환경 설정, 의존성 업데이트, CI/CD 설정 변경 등 코드 외적인 작업을 기록해주세요.
+        - 필요한 작업 목록을 작성해주세요.
+
+  - type: input
+    id: chore_title
+    attributes:
+      label: "🏷 작업 제목"
+      description: "작업의 이름"
+      placeholder: "예: ESLint 설정 업데이트"
+    validations:
+      required: true
+
+  - type: textarea
+    id: chore_reason
+    attributes:
+      label: "💭 작업 목적"
+      description: "이 작업을 하는 이유"
+      placeholder: |
+        <작업 이유>
+        1. 이유 1
+        2. 이유 2
+    validations:
+      required: false
+
+  - type: textarea
+    id: chore_tasks
+    attributes:
+      label: "✅ 작업 리스트"
+      description: "진행해야 할 작업 목록"
+      placeholder: |
+        - [ ] 의존성 패키지 업데이트
+        - [ ] 빌드 스크립트 수정
+        - [ ] CI 설정 변경
+    validations:
+      required: true
