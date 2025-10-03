@@ -402,6 +402,9 @@ export default function AnalyticsContent() {
       </div>
 
       {/* 주요 지표 */}
+      <div className="mb-2">
+        <p className="text-sm text-gray-500">※ 최신 데이터 기준</p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 w-full">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 w-full">
           <div className="flex items-center justify-between w-full">
