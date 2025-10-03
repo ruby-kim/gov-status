@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, AlertCircle, Bell, Info } from 'lucide-react';
+import { ExternalLink, AlertCircle, Bell } from 'lucide-react';
 import { EXTERNAL_LINKS } from '@/constants/config';
 
 export default function NoticesPage() {
