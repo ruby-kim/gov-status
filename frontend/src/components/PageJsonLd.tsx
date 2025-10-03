@@ -52,7 +52,7 @@ const pageConfigs = {
     ]
   },
   analytics: {
-    name: "서비스 분석 - 정부 사이트 장애 현황",
+    name: "서비스 통계 - 정부 사이트 장애 현황",
     description: "정부 서비스의 상세한 분석 데이터를 확인하세요. 기관별 정상율, 시간대별 트렌드, 서비스 상태 분포 등을 실시간으로 모니터링합니다.",
     url: "https://gov-status.vercel.app/analytics",
     faq: [
@@ -71,7 +71,7 @@ const pageConfigs = {
     ],
     breadcrumb: [
       { name: "홈", url: "https://gov-status.vercel.app", position: 1 },
-      { name: "서비스 분석", url: "https://gov-status.vercel.app/analytics", position: 2 }
+      { name: "서비스 통계", url: "https://gov-status.vercel.app/analytics", position: 2 }
     ]
   },
   services: {
