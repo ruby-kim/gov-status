@@ -25,3 +25,8 @@ export const API_CONFIG = {
     GOV_SITES_STATUS: '/api/gov-sites-status'
   }
 } as const;
+
+// 행정안전부 공지사항 (네이버)
+export const EXTERNAL_LINKS = {
+  NAVER_NOTICE: 'https://notice.naver.com/notices/wwwpc?searchValue=%25EA%25B5%25AD%25EA%25B0%2580%25EC%25A0%2595%25EB%25B3%25B4%25EC%259E%2590%25EC%259B%2590%25EA%25B4%2580%25EB%25A6%25AC%25EC%259B%2590%2520%25ED%2599%2594%25EC%259E%25AC&page=1&pageSize=10&newNoticeHour=168&darkmode=n&t=l'
+} as const;

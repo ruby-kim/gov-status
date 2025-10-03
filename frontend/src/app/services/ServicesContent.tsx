@@ -179,7 +179,7 @@ function ServicesContent() {
   return (
     <>
       <PageJsonLd page="services" />
-      <div className="space-y-6">
+      <div className="space-y-6 pt-28 services-page">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -274,7 +274,7 @@ function ServicesContent() {
       {filteredAndSortedServices.length > 0 && (
         <div className="flex items-center justify-center py-8">
           <p className="text-sm text-gray-500">
-            {filteredAndSortedServices.length}개의 서비스를 표시 중
+            <span className="stats-text">{filteredAndSortedServices.length}개의 서비스를 표시 중</span>
           </p>
         </div>
       )}

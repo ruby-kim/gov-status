@@ -86,7 +86,7 @@ export default function DashboardContent() {
   return (
     <>
       <PageJsonLd page="home" />
-      <div className="space-y-8">
+      <div className="space-y-8 pt-28">
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -109,7 +109,7 @@ export default function DashboardContent() {
           <div>
             <h2 className="text-2xl font-bold">전체 서비스 정상율</h2>
             <p className="text-blue-100 mt-1">
-              {serviceStats.total.toLocaleString()}개 서비스 중 {serviceStats.normal.toLocaleString()}개 정상 운영
+              <span className="stats-text">{serviceStats.total.toLocaleString()}개 서비스 중 {serviceStats.normal.toLocaleString()}개 정상 운영</span>
             </p>
           </div>
           <div className="text-right">
@@ -191,7 +191,7 @@ export default function DashboardContent() {
                 모든 정부 서비스의 상태를 확인하고 필터링할 수 있습니다.
               </p>
               <div className="text-blue-600 font-medium group-hover:text-blue-700">
-                {serviceStats.total}개 서비스 보기 →
+                <span className="stats-text">{serviceStats.total}개 서비스 보기 →</span>
               </div>
             </div>
           </a>

@@ -69,7 +69,7 @@ export default function ReportContent() {
   return (
     <>
       <PageJsonLd page="report" />
-      <div className="space-y-8">
+      <div className="space-y-8 pt-20">
       {/* 헤더 */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900">정보 제보</h1>
