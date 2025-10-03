@@ -8,6 +8,7 @@ interface StatusData {
   name: string;
   value: number;
   color: string;
+  [key: string]: string | number;
 }
 
 interface HourlyData {
@@ -44,7 +45,7 @@ export default function AnalyticsCharts({ statusData, totalServices, hourlyData 
       {/* 서비스 상태 분포 */}
       <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">서비스 상태 분포</h3>
-        <div className="h-[25vh] sm:h-[30vh] md:h-[40vh] w-full">
+        <div className="h-[30vh] sm:h-[35vh] md:h-[35vh] lg:h-[45vh] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -78,7 +79,7 @@ export default function AnalyticsCharts({ statusData, totalServices, hourlyData 
       {/* 시간대별 트렌드 */}
       <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">시간대별 서비스 정상율 트렌드</h3>
-        <div className="h-[25vh] sm:h-[30vh] md:h-[40vh] w-full">
+        <div className="h-[30vh] sm:h-[35vh] md:h-[35vh] lg:h-[45vh] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={hourlyData}>
               <CartesianGrid strokeDasharray="3 3" />

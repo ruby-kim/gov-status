@@ -142,7 +142,7 @@ export default function AnalyticsTable({ agencyStats }: AnalyticsTableProps) {
     <div className="w-full">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-4 lg:p-6 text-xs sm:text-sm md:text-base lg:text-lg w-full">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-0">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
             기관별 정상율 상세 통계
           </h3>
           
@@ -319,7 +319,7 @@ export default function AnalyticsTable({ agencyStats }: AnalyticsTableProps) {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {paginatedAgencyStats.map((agency, index: number) => {
+              {paginatedAgencyStats.map((agency) => {
                 const getCurrentRateColor = () => {
                   if (agency.day1.normalRate === null) return 'text-gray-900'; // 어제 데이터가 없으면 기본 색상
                   
