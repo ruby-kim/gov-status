@@ -1,0 +1,45 @@
+name: "⚡️ 기능"
+description: "새로운 기능 제안 템플릿"
+title: "⚡️ "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚡️ 기능 제안 가이드
+        - 어떤 기능을 추가하려는지 작성해주세요.
+        - 왜 필요한지, 어떤 문제를 해결하는지 작성해주세요.
+        - 필요한 작업 목록을 작성해주세요.
+
+  - type: input
+    id: feature_title
+    attributes:
+      label: "🏷 기능 이름"
+      description: "추가하려는 기능의 이름"
+      placeholder: "예: 다크 모드 지원"
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_reason
+    attributes:
+      label: "💭 기능 추가 이유"
+      description: "이 기능을 추가해야 하는 이유"
+      placeholder: |
+        <추가 이유>
+        1. 이유 1
+        2. 이유 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_tasks
+    attributes:
+      label: "✅ 작업 리스트"
+      description: "기능 구현에 필요한 작업 목록"
+      placeholder: |
+        - [ ] 작업 1
+        - [ ] 작업 2
+        - [ ] 작업 3
+    validations:
+      required: true

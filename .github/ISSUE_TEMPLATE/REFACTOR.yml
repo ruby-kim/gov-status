@@ -1,0 +1,55 @@
+name: "♻️ 리팩토링"
+description: "코드 리팩토링 이슈 템플릿"
+title: "♻️ "
+labels: ["refactor"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ♻️ 리팩토링 가이드
+        - 어떤 부분을 리팩토링하는지 간단히 작성해주세요.
+        - 왜 필요한지 목적을 적어주세요.
+        - 관련된 이슈 번호가 있다면 함께 기입해주세요.
+        - 필요한 작업 목록을 작성해주세요.
+
+  - type: input
+    id: refactor_title
+    attributes:
+      label: "🏷 리팩토링 이름"
+      description: "리팩토링 작업의 이름"
+      placeholder: "예: 로그인 모듈 리팩토링"
+    validations:
+      required: true
+
+  - type: textarea
+    id: refactor_reason
+    attributes:
+      label: "💭 리팩토링 목적"
+      description: "리팩토링을 하는 이유"
+      placeholder: |
+        <리팩토링 이유>
+        1. 코드 가독성 향상
+        2. 성능 개선
+    validations:
+      required: true
+
+  - type: input
+    id: related_issue
+    attributes:
+      label: "🔗 관련 이슈"
+      description: "리팩토링 대상과 관련된 이슈 번호 (있다면)"
+      placeholder: "#12"
+    validations:
+      required: false
+
+  - type: textarea
+    id: refactor_tasks
+    attributes:
+      label: "✅ 리팩토링 작업 리스트"
+      description: "리팩토링에 필요한 작업 목록"
+      placeholder: |
+        - [ ] 불필요한 의존성 제거
+        - [ ] 함수 분리
+        - [ ] 네이밍 수정
+    validations:
+      required: true
