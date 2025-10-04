@@ -35,12 +35,12 @@ async def main():
         # agency_mgr.upload_gov_sites()
 
         # --- Step 3: 상태 점검 ---
-        # checker = StatusChecker(db)
-        # await checker.check_all_sites_from_csv(CSV_FILE)
+        checker = StatusChecker(db)
+        await checker.check_all_sites_from_csv(CSV_FILE)
 
         # --- Step 4: 데이터 저장 ---
         storage = Storage(db)
-        # storage.save_hourly_and_overall(checker.results)
+        storage.save_hourly_and_overall(checker.results)
 
         # --- Step 5: Summary 조건부 실행 ---
         if "--summary" in args or "--full" in args:
