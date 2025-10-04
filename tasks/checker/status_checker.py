@@ -1,10 +1,9 @@
 import asyncio
-import aiohttp, time
-from aiohttp import ClientConnectorCertificateError
+import aiohttp
+import async_timeout
 import csv
-import uuid
-from ssl import SSLCertVerificationError
-from config import TIMEOUT_THRESHOLD, USER_AGENT
+import time
+from config import USER_AGENT, TIMEOUT_MS, MAX_CONCURRENCY
 
 
 class StatusChecker:
@@ -14,103 +13,161 @@ class StatusChecker:
         self.maintenance_keywords = maintenance_keywords or [
             "점검", "일시중단", "서비스중단", "maintenance", "개선작업"
         ]
+        self.agencies= []
 
-    async def check_site_status(self, session, semaphore, agency_id, url):
+
+    # --------------------------------------------------------------------------
+    # 사이트 조사
+    # --------------------------------------------------------------------------
+    async def check_site_status(self, session, semaphore, agency):
         async with semaphore:
-            start_time = time.monotonic()
-            response_time = TIMEOUT_THRESHOLD
-            status = "problem"
+            url = agency["url"]
+            agency_id = agency["agencyId"]
 
-            try:
-                async with session.get(
-                    url,
-                    allow_redirects=True,
-                    timeout=aiohttp.ClientTimeout(total=TIMEOUT_THRESHOLD/1000)
-                ) as response:
-                    raw = await response.read()
-                    text = raw.decode(errors="ignore")
-                    response_time = int((time.monotonic() - start_time) * 1000)
-
-                    # 상태 판별
-                    if response.status == 200:
-                        status = "normal" if response_time < TIMEOUT_THRESHOLD else "problem"
-                    elif response.status == 503:
-                        status = "maintenance"
-                    else:
-                        status = "problem"
-
-                    # 본문 내 점검 키워드 탐지
-                    if status == "normal":
-                        for kw in self.maintenance_keywords:
-                            if kw.lower() in text.lower():
-                                status = "maintenance"
-                                break
-                    # print(f"✅ 요청 성공: {url} -> {status}")
-
-            except (ClientConnectorCertificateError, SSLCertVerificationError):
+            for attempt in range(2):
+                start_time = time.monotonic()
                 try:
-                    async with session.get(
-                        url,
-                        allow_redirects=True,
-                        timeout=aiohttp.ClientTimeout(total=TIMEOUT_THRESHOLD/1000),
-                        ssl=False
-                    ) as response:
-                        response_time = int((time.monotonic() - start_time) * 1000)
-                        status = "normal" if response.status == 200 else "problem"
-                        # print(f"🔁 insecure retry 성공: {url} -> {status}")
-                except Exception as e2:
-                    status = "problem"
-            except Exception as e:
-                # print(f"❌ 요청 실패: {url} -> {e if e else 'Timeout'}")
-                status = "problem"
+                    async with async_timeout.timeout(TIMEOUT_MS / 1000):
+                        async with session.get(
+                            url,
+                            ssl=False,
+                            allow_redirects=True
+                        ) as response:
+                            text = await response.text(errors="ignore")
+                            response_time = int((time.monotonic() - start_time) * 1000)
 
-            return {
-                "agencyId": agency_id,
-                "url": url,
-                "status": status,
-                "responseTime": response_time,
-            }
+                            status, reason = self._determine_status(response, text, response_time)
+                            return {
+                                "agencyId": agency_id,
+                                "url": url,
+                                "status": status,
+                                "responseTime": response_time,
+                                "reason": reason,
+                            }
 
-    async def check_all_sites_from_csv(self, csv_file: str, concurrency=30):
+                except Exception as e:
+                    if attempt == 1:
+                        return {
+                            "agencyId": agency_id,
+                            "url": url,
+                            "status": "problem",
+                            "responseTime": TIMEOUT_MS,
+                            "reason": f"예외 발생: {type(e).__name__} - {e}"
+                        }
+                    await asyncio.sleep(0.2)
+
+
+    # --------------------------------------------------------------------------
+    # 상태 판별 + 사유 반환
+    # --------------------------------------------------------------------------
+    def _determine_status(self, response, text, response_time):
+        """응답 상태 및 사유 반환"""
+        if response.status == 200:
+            if response_time >= TIMEOUT_MS:
+                return "problem", f"응답시간 초과 ({response_time}ms ≥ {TIMEOUT_MS}ms)"
+            # 본문 점검 키워드 탐지
+            for kw in self.maintenance_keywords:
+                if kw.lower() in text.lower():
+                    return "maintenance", f"본문 내 '{kw}' 키워드 발견"
+            return "normal", "정상 응답"
+
+        elif response.status == 503:
+            return "maintenance", "HTTP 503 (서비스 점검 중)"
+        elif response.status in (404, 403):
+            return "problem", f"HTTP {response.status} (접근 불가 또는 존재하지 않음)"
+        elif 500 <= response.status < 600:
+            return "problem", f"서버 오류 코드 {response.status}"
+        else:
+            return "problem", f"기타 HTTP 상태 코드 {response.status}"
+
+
+    # --------------------------------------------------------------------------
+    # CSV 로드
+    # --------------------------------------------------------------------------
+    def load_agencies_from_csv(self, csv_file):
         agencies = []
         with open(csv_file, "r", encoding="utf-8-sig") as f:
-            reader = csv.reader(f)
-            next(reader)  # 헤더 스킵
+            reader = csv.DictReader(f)
             for row in reader:
-                if len(row) >= 2 and row[1].strip():
-                    name, url = row[0].strip(), row[1].strip()
-                    agency_id = str(uuid.uuid5(uuid.NAMESPACE_URL, url))
-                    agencies.append({"agencyId": agency_id, "name": name, "url": url})
+                if row.get("id") and row.get("url"):
+                    agencies.append({
+                        "agencyId": row["id"],
+                        "name": row.get("agency", "").strip(),
+                        "url": row["url"].strip(),
+                        "mainCategory": row.get("mainCategory", "").strip(),
+                        "subCategory": row.get("subCategory", "").strip(),
+                        "tags": [t.strip() for t in row.get("tags", "").split("|") if t.strip()]
+                    })
+                else:
+                    print("이거좀봐봐", row)
+        return agencies
 
-        semaphore = asyncio.Semaphore(concurrency)
-        async with aiohttp.ClientSession(headers={"User-Agent": USER_AGENT}) as session:
-            tasks = [
-                self.check_site_status(session, semaphore, a["agencyId"], a["url"])
-                for a in agencies
-            ]
+
+    # --------------------------------------------------------------------------
+    # 전체 검사 실행
+    # --------------------------------------------------------------------------
+    async def check_all_sites_from_csv(self, csv_file: str, concurrency=MAX_CONCURRENCY):
+        self.agencies = self.load_agencies_from_csv(csv_file)
+        total_sites = len(self.agencies)
+        print(f"🚀 총 {total_sites}개 사이트 검사 시작 (동시 {concurrency}개)\n")
+
+        connector = aiohttp.TCPConnector(limit=concurrency, ssl=False)
+        timeout = aiohttp.ClientTimeout(total=TIMEOUT_MS / 1000)
+
+        async with aiohttp.ClientSession(
+            connector=connector,
+            headers={"User-Agent": USER_AGENT},
+            timeout=timeout
+        ) as session:
+            semaphore = asyncio.Semaphore(concurrency)
+            tasks = [self.check_site_status(session, semaphore, agency) for agency in self.agencies]
             for coro in asyncio.as_completed(tasks):
                 result = await coro
                 if result:
                     self.results.append(result)
 
-        # 결과 요약 출력
-        print("\n📊 검사 결과 요약")
+        self._print_summary()
+        return self.results
 
+
+    # --------------------------------------------------------------------------
+    # 결과 요약
+    # --------------------------------------------------------------------------
+    def _print_summary(self):
         total = len(self.results)
-        maintenance_sites = [r for r in self.results if r["status"] == "maintenance"]
-        problem_sites = [r for r in self.results if r["status"] == "problem"]
-        normal_sites = [r for r in self.results if r["status"] == "normal"]
+        if total == 0:
+            print("⚠️ 결과가 없습니다.")
+            return
 
-        def percent(count: int) -> str:
-            return f"{(count/total*100):.1f}%" if total > 0 else "0%"
+        normal = sorted(
+            [r for r in self.results if r["status"] == "normal"],
+            key=lambda x: x["responseTime"]
+        )
+        maintenance = sorted(
+            [r for r in self.results if r["status"] == "maintenance"],
+            key=lambda x: x["responseTime"]
+        )
+        problem = sorted(
+            [r for r in self.results if r["status"] == "problem"],
+            key=lambda x: x["responseTime"]
+        )
 
+        def pct(n): return f"{(n / total * 100):.1f}%" if total > 0 else "0%"
+
+        print("\n📊 검사 결과 요약")
         print(f"총 검사 사이트 수: {total}")
 
-        print(f"✅ Normal 상태: {len(normal_sites)}곳 ({percent(len(normal_sites))})")
-        print(f"⚠️ Maintenance 상태: {len(maintenance_sites)}곳 ({percent(len(maintenance_sites))})")
-        for site in maintenance_sites:
-            print(f"   - {site['url']} (응답시간: {site['responseTime']}ms)")
+        # ✅ Normal
+        print(f"\n✅ Normal 상태: {len(normal)}곳 ({pct(len(normal))})")
 
-        print(f"❌ Problem 상태: {len(problem_sites)}곳 ({percent(len(problem_sites))})")
-        for site in problem_sites:
-            print(f"   - {site['url']} (응답시간: {site['responseTime']}ms)")
+        # ⚠️ Maintenance
+        if maintenance:
+            print(f"\n⚠️ Maintenance 상태: {len(maintenance)}곳 ({pct(len(maintenance))})")
+            for site in maintenance[:20]:
+                print(f"   - {site['url']} (응답시간: {site['responseTime']}ms) -> {site.get('reason','')}")
+
+        # ❌ Problem
+        if problem:
+            print(f"\n❌ Problem 상태: {len(problem)}곳 ({pct(len(problem))})")
+            for site in problem[:20]:
+                print(f"   - {site['url']} (응답시간: {site['responseTime']}ms) -> {site.get('reason','')}")

@@ -128,7 +128,7 @@ class AgencyManager:
             for row in reader:
                 tags = [t.strip() for t in row["tags"].split("|") if t.strip()]
                 sites.append({
-                    "siteId": row["id"],
+                    "agencyId": row["id"],
                     "name": row["agency"],
                     "url": row["url"],
                     "mainCategory": row["mainCategory"],
