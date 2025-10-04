@@ -1,14 +1,12 @@
-// Main service types
+// Service types
 export * from './service';
 
-// API types
-export * from './api/dashboard';
+// Dashboard types
+export * from './dashboard';
 
-// MongoDB types
-export * from './mongodb';
 
-// Chart types
+// Charts types
 export * from './charts';
 
-// Component types
+// Components types
 export * from './components';

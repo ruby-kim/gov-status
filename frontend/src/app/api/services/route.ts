@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
-import { OverallStats, SiteStatus, Services } from '@/types/dashboard';
+import { OverallStats, SiteStatus } from '@/types/dashboard';
+import { Services } from '@/types/service';
 import { DEFAULT_API_HEADERS, COLLECTIONS } from '@/constants/api';
 
 // 실시간 서비스 상태 조회 API

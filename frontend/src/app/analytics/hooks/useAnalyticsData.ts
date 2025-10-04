@@ -30,7 +30,14 @@ export function useAnalyticsData() {
           DashboardData,
           Service[],
           HistoryData[],
-          any
+          Array<{
+            agencyId: string;
+            history: Array<{
+              timestamp: string;
+              normalRate: number;
+              stats: { total: number; normal: number; maintenance: number; problem: number };
+            }>;
+          }>
         ] = await Promise.all([
           loadDashboardData(),
           loadServiceData(),

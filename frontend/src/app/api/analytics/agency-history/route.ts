@@ -85,10 +85,26 @@ export async function GET() {
     // -------------------------------------------------------------------
     // 5. 데이터 매핑
     // -------------------------------------------------------------------
-    const buildMap = (arr: any[], keyField = '_id') =>
+    const buildMap = (
+      arr: Array<{
+        _id?: string;
+        agencyId?: string;
+        total?: number;
+        normal?: number;
+        maintenance?: number;
+        problem?: number;
+        stats?: {
+          total: number;
+          normal: number;
+          maintenance: number;
+          problem: number;
+        };
+      }>,
+      keyField: '_id' | 'agencyId' = '_id'
+    ) =>
       new Map(
         arr.map((r) => [
-          r[keyField] || r.agencyId,
+          keyField === '_id' ? r._id ?? r.agencyId : r.agencyId ?? r._id,
           {
             total: r.total ?? r.stats?.total ?? 0,
             normal: r.normal ?? r.stats?.normal ?? 0,
@@ -97,6 +113,7 @@ export async function GET() {
           },
         ]),
       );
+
 
     const todayMap = buildMap(todayAgg);
     const yesterdayMap = buildMap(yesterdayAgg);
@@ -113,7 +130,12 @@ export async function GET() {
       ...monthMap.keys(),
     ]);
 
-    const calcRate = (s?: any) =>
+    const calcRate = (s?: {
+      total: number;
+      normal: number;
+      maintenance: number;
+      problem: number;
+    }) =>
       s && s.total > 0 ? (s.normal / s.total) * 100 : null;
 
     const results = Array.from(allAgencyIds).map((agencyId) => ({
