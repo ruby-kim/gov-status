@@ -714,26 +714,24 @@ cc524dc1-8373-5a11-890e-f10e329f046a,전문도서관,https://lib.nhis.or.kr,지�
 0cbf02f1-e098-5466-bcd9-d9a77c0f2774,비급여정보포털,https://www.nhis.or.kr/nbinfo/index.do,중앙행정기관,기타,공공기관
 a688b4c7-3f4e-5c60-92cb-3a2db9fc1fcb,한국의료영상품질관리원,https://www.kiami.or.kr,중앙행정기관,기타,공공기관
 c8d83d81-b765-5e4e-8620-ab9eef174845,건강보험심사평가원,https://www.hira.or.kr,중앙행정기관,기타,공공기관
-2fb0d475-fdf6-5f11-aee5-dddf30a07883,근로복지공단,https://www.comwel.or.kr/seoulclinic/,중앙행정기관,기타,공공기관
 862f790a-75ff-5aa7-a8ec-41e72b971c3e,근로복지넷,https://welfare.comwel.or.kr,중앙행정기관,기타,공공기관
 ff708aba-7c8c-5c99-a492-09af506fd87b,퇴직연금제도,https://pension.comwel.or.kr,지방자치단체,도,지방자치단체
-b9aa8d5a-cafc-5f0b-8744-4ab7697f99e5,인천병원,https://www.comwel.or.kr/incheon/,중앙행정기관,기타,공공기관
-a49bf81e-d44f-52b2-b196-54627832cbd1,안산병원,https://www.comwel.or.kr/ansan/,중앙행정기관,기타,공공기관
-3d0b5279-4e43-51ed-9638-49db55d22703,창원병원,https://www.comwel.or.kr/changwon/,중앙행정기관,기타,공공기관
-69ef31e1-bc34-5458-8fa6-d614d295764c,대구병원,https://www.comwel.or.kr/daegu/,중앙행정기관,기타,공공기관
-29e871c8-233f-566d-a4b5-c9b29e81e007,순천병원,https://www.comwel.or.kr/suncheon/,중앙행정기관,기타,공공기관
-1f4ea138-1cc7-54b9-9826-1710ac1acaf8,대전병원,https://www.comwel.or.kr/daejeon/,중앙행정기관,기타,공공기관
-3dae5abc-0100-5e34-93f1-c65e550dc26b,태백병원,https://www.comwel.or.kr/taebaek/,중앙행정기관,기타,공공기관
-5387f6d6-59c2-55e4-9d6d-1aace8a59fec,동해병원,https://www.comwel.or.kr/donghae/,중앙행정기관,기타,공공기관
-e0adba3f-dbe2-5333-b088-a82fd482a2ae,정선병원,https://www.comwel.or.kr/jeongseon/,중앙행정기관,기타,공공기관
-95e2cbc8-7648-5612-8d3e-43d66da389be,경기요양병원,https://www.comwel.or.kr/gyeonggi/,중앙행정기관,기타,공공기관
-36bb17ac-6ae4-503a-8a3e-c64c036e2a15,태백요양병원,https://www.comwel.or.kr/taebaekyoyang/,중앙행정기관,기타,공공기관
-2fb0d475-fdf6-5f11-aee5-dddf30a07883,서울의원,https://www.comwel.or.kr/seoulclinic/,중앙행정기관,기타,공공기관
-3541f1cc-5e9f-5fb9-895e-40570103002c,광주의원,https://www.comwel.or.kr/gwangjuclinic/,중앙행정기관,기타,공공기관
-84d5e284-5d1f-503c-aab9-9e035c50280f,부산의원,https://www.comwel.or.kr/busanclinic/,중앙행정기관,부,부
-91e7b83a-be04-509e-8e21-cb119897f2e5,구미의원,https://www.comwel.or.kr/gumiclinic/,중앙행정기관,기타,공공기관
-9ce38d49-ef2b-596c-9c76-c0909b9851fb,경기케어센터,https://www.comwel.or.kr/care-gyeonggi/,중앙행정기관,기타,공공기관
-3dae5abc-0100-5e34-93f1-c65e550dc26b,태백케어센터,https://www.comwel.or.kr/taebaek/,중앙행정기관,기타,공공기관
+b9aa8d5a-cafc-5f0b-8744-4ab7697f99e5,근로복지공단 인천병원,https://www.comwel.or.kr/incheon/,중앙행정기관,기타,공공기관
+a49bf81e-d44f-52b2-b196-54627832cbd1,근로복지공단 안산병원,https://www.comwel.or.kr/ansan/,중앙행정기관,기타,공공기관
+3d0b5279-4e43-51ed-9638-49db55d22703,근로복지공단 창원병원,https://www.comwel.or.kr/changwon/,중앙행정기관,기타,공공기관
+69ef31e1-bc34-5458-8fa6-d614d295764c,근로복지공단 대구병원,https://www.comwel.or.kr/daegu/,중앙행정기관,기타,공공기관
+29e871c8-233f-566d-a4b5-c9b29e81e007,근로복지공단 순천병원,https://www.comwel.or.kr/suncheon/,중앙행정기관,기타,공공기관
+1f4ea138-1cc7-54b9-9826-1710ac1acaf8,근로복지공단 대전병원,https://www.comwel.or.kr/daejeon/,중앙행정기관,기타,공공기관
+3dae5abc-0100-5e34-93f1-c65e550dc26b,근로복지공단 태백병원,https://www.comwel.or.kr/taebaek/,중앙행정기관,기타,공공기관
+5387f6d6-59c2-55e4-9d6d-1aace8a59fec,근로복지공단 동해병원,https://www.comwel.or.kr/donghae/,중앙행정기관,기타,공공기관
+e0adba3f-dbe2-5333-b088-a82fd482a2ae,근로복지공단 정선병원,https://www.comwel.or.kr/jeongseon/,중앙행정기관,기타,공공기관
+95e2cbc8-7648-5612-8d3e-43d66da389be,근로복지공단 경기요양병원,https://www.comwel.or.kr/gyeonggi/,중앙행정기관,기타,공공기관
+36bb17ac-6ae4-503a-8a3e-c64c036e2a15,근로복지공단 태백요양병원,https://www.comwel.or.kr/taebaekyoyang/,중앙행정기관,기타,공공기관
+2fb0d475-fdf6-5f11-aee5-dddf30a07883,근로복지공단 서울의원,https://www.comwel.or.kr/seoulclinic/,중앙행정기관,기타,공공기관
+3541f1cc-5e9f-5fb9-895e-40570103002c,근로복지공단 광주의원,https://www.comwel.or.kr/gwangjuclinic/,중앙행정기관,기타,공공기관
+84d5e284-5d1f-503c-aab9-9e035c50280f,근로복지공단 부산의원,https://www.comwel.or.kr/busanclinic/,중앙행정기관,부,부
+91e7b83a-be04-509e-8e21-cb119897f2e5,근로복지공단 구미의원,https://www.comwel.or.kr/gumiclinic/,중앙행정기관,기타,공공기관
+9ce38d49-ef2b-596c-9c76-c0909b9851fb,근로복지공단 경기케어센터,https://www.comwel.or.kr/care-gyeonggi/,중앙행정기관,기타,공공기관
 661f21c3-da73-50b1-b9de-d5ac4a20192f,고용산재보험토탈서비스,https://total.comwel.or.kr,중앙행정기관,기타,공공기관
 f63c1d63-808d-5e5a-af68-7cb6e8e17f39,농업e지,https://www.nongupez.go.kr,중앙행정기관,기타,정부도메인
 12df7462-e82a-5754-b135-a33bb1b72ab4,통합포털,https://foco.go.kr,중앙행정기관,기타,정부도메인
