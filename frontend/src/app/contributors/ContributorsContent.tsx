@@ -11,17 +11,7 @@ import { loadDashboardData } from '@/utils/dataTransform';
 
 export default function ContributorsContent() {
   const [contributors, setContributors] = useState<Contributor[]>([]);
-  const [overview, setOverview] = useState<{
-    totalServices: number;
-    normalServices: number;
-    maintenanceServices: number;
-    problemServices: number;
-    overallNormalRate: number;
-    bestAgency: { name: string; rate: number } | null;
-    warningAgencies: number;
-    avgResponseTime: number;
-    fastestAgency: { name: string; responseTime: number } | null;
-  } | null>(null);
+  const [overview, setOverview] = useState<{totalServices: number;} | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +25,9 @@ export default function ContributorsContent() {
         const dashboardData = await loadDashboardData();
         
         setContributors(contributors);
-        setOverview(dashboardData.overview);
+        setOverview({
+          totalServices: dashboardData.overview.totalServices
+        });
         
         setError(null);
       } catch (err) {

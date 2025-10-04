@@ -55,7 +55,7 @@ export default function AnalyticsContent() {
     <>
       <PageJsonLd page="analytics" />
       <div className="space-y-6 pt-28">
-      <Header
+        <Header
           title="서비스 통계"
           description="정부 서비스들의 상세 통계 및 1개월 트렌드를 분석합니다. (10분마다 업데이트)"
           lastUpdated={lastUpdated}
