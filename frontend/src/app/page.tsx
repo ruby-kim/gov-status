@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import DashboardContent from '@/app/DashboardContent';
+import DashboardContent from '@/app/(dashboard)/DashboardContent';
 
 export const metadata: Metadata = {
   title: '정부서비스 장애 현황',

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-import Header from '@/components/Header';
+import Navigation from '@/components/Navigation';
 import NoticeBanner from '@/components/NoticeBanner';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/next';
@@ -101,15 +101,24 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-50 flex flex-col">
-          <Header />
+          <Navigation />
           <NoticeBanner />
-          <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex-1">
+          <main
+            className="
+              w-full 
+              max-w-7xl 
+              mx-auto 
+              flex-1 
+              px-4 sm:px-6 lg:px-8 
+              py-8 sm:py-12 lg:py-16
+            "
+          >
             {children}
           </main>
           <footer className="bg-white border-t border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
+            <div className="mx-auto">
               <div className="text-center text-sm text-gray-600 space-y-2">
-                <p>© {currentYear} 정부 사이트 장애 현황 모니터링 by <a href="https://anb-network.com" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-gray-900 hover:underline">김루비</a>. All rights reserved.</p>
+                <p>© {currentYear} 정부 사이트 현황 모니터링. All rights reserved.</p>
                 <p>
                   Contact: <a href="mailto:govstatus@anb-network.com" className="text-gray-700 hover:text-gray-900 hover:underline">govstatus@anb-network.com</a>
                 </p>
@@ -118,7 +127,7 @@ export default function RootLayout({
                   <a href="/terms" className="text-gray-500 hover:text-gray-700 hover:underline">이용약관</a>
                 </div>
                 <p className="text-sm text-gray-500">
-                  이 서비스는 정부 기관의 공식 웹사이트가 아니며, 오픈소스 프로젝트 및 포트폴리오 일환으로 제작되었습니다.
+                  이 서비스는 정부 기관의 공식 웹사이트가 아니며, 오픈소스 및 무료로 운영됩니다.
                 </p>
               </div>
             </div>

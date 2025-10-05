@@ -1,28 +1,29 @@
-name: Crawl and Update MongoDB
+name: Aggregate Summaries
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: "*/8 * * * *"   # 10분 간격: 8분 간격 + 프로그램 실행 약 1.25분 + github actions 실행 대기 α분
+    - cron: "0 3 * * *"   # 매일 새벽 3시 (UTC 기준)
+  workflow_dispatch:
 
 jobs:
-  crawl:
+  aggregate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip" 
+          cache: "pip"
 
       - name: Install dependencies
         run: pip install -r tasks/requirements.txt
 
-      - name: Run crawler
+      - name: Run summary aggregation
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
         run: |
-          python tasks/main.py
+          python tasks/main.py --summary
