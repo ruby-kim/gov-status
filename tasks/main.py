@@ -1,10 +1,10 @@
 import asyncio
 import sys
-from checker.db import db
 from checker.agencies import AgencyManager
 from checker.statusChecker import StatusChecker
-from checker.storage import Storage
 from crawler.govCrawler import GovCrawler
+from db.storage import Storage
+from db.connection import db
 import time
 
 

@@ -2,7 +2,7 @@ import csv
 import uuid
 from urllib.parse import urlparse
 from config import NAMESPACE_AGENCY
-from checker.db import db
+from db.connection import db
 
 class AgencyManager:
     """기관정보 CSV 자동 생성기"""
