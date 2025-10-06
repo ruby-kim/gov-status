@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from pymongo import UpdateOne
-from checker.stats import StatsBuilder
+from db.stats import StatsBuilder
 
 class Storage:
     def __init__(self, db):
