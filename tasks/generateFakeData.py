@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pymongo import UpdateOne
 import random
 
-from checker.db import db
+from db.connection import db
 
 KST = timezone(timedelta(hours=9))
 
