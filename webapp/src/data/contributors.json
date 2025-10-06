@@ -1,0 +1,24 @@
+[
+  {
+    "name": "김루비",
+    "role": "풀스택 개발자 & 프로젝트 관리자",
+    "description": "정부서비스 모니터링 시스템의 메인 개발자로, 프론트엔드부터 백엔드, 데이터 크롤링까지 전 영역을 담당하고 있습니다.",
+    "avatar": "https://avatars.githubusercontent.com/u/38516906?v=4",
+    "skills": [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Python",
+      "Cloud",
+      "Web Scraping",
+      "Data Analysis"
+    ],
+    "social": {
+      "github": "https://github.com/ruby-kim",
+      "website": "https://anb-network.com",
+      "linkedin": "https://www.linkedin.com/in/rubykimse/",
+      "email": "mailto:contact@anb-network.com"
+    },
+    "contribution": "프로젝트 전체 아키텍처 설계 및 개발, 실시간 데이터 크롤링 시스템 구축"
+  }
+]

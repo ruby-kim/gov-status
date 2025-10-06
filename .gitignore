@@ -1,32 +1,32 @@
 # ===========================================
-# Frontend (Next.js) - Ignore Rules
+# webapp (Next.js) - Ignore Rules
 # ===========================================
 
 # Dependencies
-frontend/node_modules/
-frontend/.pnp
-frontend/.pnp.*
-frontend/.yarn/*
-!frontend/.yarn/patches
-!frontend/.yarn/plugins
-!frontend/.yarn/releases
-!frontend/.yarn/versions
+webapp/node_modules/
+webapp/.pnp
+webapp/.pnp.*
+webapp/.yarn/*
+!webapp/.yarn/patches
+!webapp/.yarn/plugins
+!webapp/.yarn/releases
+!webapp/.yarn/versions
 
 # Testing
-frontend/coverage/
+webapp/coverage/
 
 # Next.js
-frontend/.next/
-frontend/out/
+webapp/.next/
+webapp/out/
 
 # Production
-frontend/build/
+webapp/build/
 
 # Debug logs
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-frontend/.pnpm-debug.log*
+webapp/npm-debug.log*
+webapp/yarn-debug.log*
+webapp/yarn-error.log*
+webapp/.pnpm-debug.log*
 
 # Environment files
 *.env*
@@ -36,11 +36,11 @@ frontend/.pnpm-debug.log*
 *.env.production.local
 
 # Vercel
-frontend/.vercel
+webapp/.vercel
 
 # TypeScript
-frontend/*.tsbuildinfo
-frontend/next-env.d.ts
+webapp/*.tsbuildinfo
+webapp/next-env.d.ts
 
 # ===========================================
 # Backend (Python) - Ignore Rules
