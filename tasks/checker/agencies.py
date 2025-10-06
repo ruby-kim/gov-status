@@ -3,6 +3,7 @@ import uuid
 from urllib.parse import urlparse
 from config import NAMESPACE_AGENCY
 from db.connection import db
+from db.gov_sites import sync_gov_sites
 
 class AgencyManager:
     """기관정보 CSV 자동 생성기"""
@@ -120,10 +121,10 @@ class AgencyManager:
 
         print(f"✅ {self.csv_file} 갱신 완료 (id + 분류 + 태그 추가됨)")
 
-
-    def upload_gov_sites(self,csv_file="tasks/gov_sites.csv"):
+    def upload_gov_sites(self):
+        """CSV 읽은 후 DB 업데이트"""
         sites = []
-        with open(csv_file, "r", encoding="utf-8-sig") as f:
+        with open(self.csv_file, "r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 tags = [t.strip() for t in row["tags"].split("|") if t.strip()]
@@ -136,5 +137,5 @@ class AgencyManager:
                     "tags": tags
                 })
 
-        self.db["gov_sites"].insert_many(sites)
+            sync_gov_sites(sites)
         print(f"✅ {len(sites)}개 정부 사이트 업로드 완료 (컬렉션: gov_sites)")
