@@ -15,60 +15,66 @@ interface ServiceFiltersProps {
 const statusOptions = [
   { value: 'normal', label: '정상', color: 'text-green-600' },
   { value: 'maintenance', label: '점검중', color: 'text-blue-600' },
-  { value: 'problem', label: '문제', color: 'text-red-600' }
+  { value: 'problem', label: '문제', color: 'text-red-600' },
 ] as const;
 
 const mainCategoryOptions = [
   { value: '중앙행정기관', label: '중앙행정기관' },
-  { value: '지방자치단체', label: '지방자치단체' }
+  { value: '지방자치단체', label: '지방자치단체' },
 ];
 
-export default function ServiceFilters({ 
-  filters, 
-  onFiltersChange, 
-  totalCount, 
+export default function ServiceFilters({
+  filters,
+  onFiltersChange,
+  totalCount,
   filteredCount,
-  availableSubCategories = []
+  availableSubCategories = [],
 }: ServiceFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleStatusChange = (status: ServiceStatus) => {
     const currentStatuses = filters.status || [];
     const newStatuses = currentStatuses.includes(status)
-      ? currentStatuses.filter(s => s !== status)
+      ? currentStatuses.filter((s) => s !== status)
       : [...currentStatuses, status];
-    
+
     onFiltersChange({ ...filters, status: newStatuses.length > 0 ? newStatuses : undefined });
   };
 
   const handleMainCategoryChange = (category: string) => {
     const currentCategories = filters.mainCategory || [];
     const newCategories = currentCategories.includes(category)
-      ? currentCategories.filter(c => c !== category)
+      ? currentCategories.filter((c) => c !== category)
       : [...currentCategories, category];
-    
-    onFiltersChange({ ...filters, mainCategory: newCategories.length > 0 ? newCategories : undefined });
+
+    onFiltersChange({
+      ...filters,
+      mainCategory: newCategories.length > 0 ? newCategories : undefined,
+    });
   };
 
   const handleSearchChange = (search: string) => {
     onFiltersChange({ ...filters, search: search || undefined });
   };
 
-
   const handleSubCategoryChange = (subCategory: string) => {
     const currentSubCategories = filters.subCategory || [];
     const newSubCategories = currentSubCategories.includes(subCategory)
-      ? currentSubCategories.filter(c => c !== subCategory)
+      ? currentSubCategories.filter((c) => c !== subCategory)
       : [...currentSubCategories, subCategory];
-    
-    onFiltersChange({ ...filters, subCategory: newSubCategories.length > 0 ? newSubCategories : undefined });
+
+    onFiltersChange({
+      ...filters,
+      subCategory: newSubCategories.length > 0 ? newSubCategories : undefined,
+    });
   };
 
   const clearFilters = () => {
     onFiltersChange({});
   };
 
-  const hasActiveFilters = filters.status || filters.mainCategory || filters.subCategory || filters.search;
+  const hasActiveFilters =
+    filters.status || filters.mainCategory || filters.subCategory || filters.search;
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
@@ -152,7 +158,6 @@ export default function ServiceFilters({
               ))}
             </div>
           </div>
-
 
           {/* 하위 카테고리 필터 */}
           {availableSubCategories.length > 0 && (

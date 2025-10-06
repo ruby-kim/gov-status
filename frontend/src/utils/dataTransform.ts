@@ -69,14 +69,16 @@ export async function loadHistoryData(): Promise<HistoryData[]> {
 // ---------------------------------------------------------------------
 // 기관별 과거 통계 데이터 (오늘 / 어제 / 주간 / 월간)
 // ---------------------------------------------------------------------
-export async function loadAgencyHistoryData(): Promise<Array<{
-  agencyId: string;
-  history: Array<{
-    timestamp: string;
-    normalRate: number;
-    stats: { total: number; normal: number; maintenance: number; problem: number };
-  }>;
-}>> {
+export async function loadAgencyHistoryData(): Promise<
+  Array<{
+    agencyId: string;
+    history: Array<{
+      timestamp: string;
+      normalRate: number;
+      stats: { total: number; normal: number; maintenance: number; problem: number };
+    }>;
+  }>
+> {
   try {
     const response = await fetch('/api/analytics/agency-history', {
       next: { revalidate: 180 },

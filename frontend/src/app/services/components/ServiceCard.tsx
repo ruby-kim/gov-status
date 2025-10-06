@@ -41,9 +41,7 @@ export default function ServiceCard({ service, viewMode = 'grid' }: ServiceCardP
         <div className="flex items-center space-x-3 min-w-[200px]">
           <Icon className={clsx('w-6 h-6 flex-shrink-0', config.iconColor)} />
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 leading-tight">
-              {service.name}
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 leading-tight">{service.name}</h3>
             <span
               className={clsx(
                 'inline-flex px-2 py-0.5 mt-1 text-xs font-semibold rounded-full whitespace-nowrap',
@@ -72,8 +70,8 @@ export default function ServiceCard({ service, viewMode = 'grid' }: ServiceCardP
                   service.responseTime > 5000
                     ? 'text-red-600'
                     : service.responseTime > 1000
-                    ? 'text-yellow-600'
-                    : 'text-gray-800'
+                      ? 'text-yellow-600'
+                      : 'text-gray-800'
                 )}
               >
                 {service.responseTime}ms
@@ -146,9 +144,7 @@ export default function ServiceCard({ service, viewMode = 'grid' }: ServiceCardP
               <h3 className="text-lg font-semibold text-gray-900 leading-tight break-words">
                 {service.name}
               </h3>
-              <p className={clsx('text-sm font-medium', config.text)}>
-                {config.label}
-              </p>
+              <p className={clsx('text-sm font-medium', config.text)}>{config.label}</p>
             </div>
           </div>
         </div>
@@ -169,8 +165,8 @@ export default function ServiceCard({ service, viewMode = 'grid' }: ServiceCardP
                     service.responseTime > 5000
                       ? 'text-red-600'
                       : service.responseTime > 1000
-                      ? 'text-yellow-600'
-                      : 'text-gray-800'
+                        ? 'text-yellow-600'
+                        : 'text-gray-800'
                   )}
                 >
                   {service.responseTime}ms

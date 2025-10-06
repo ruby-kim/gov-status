@@ -7,9 +7,7 @@ interface AnalyticsHeaderProps {
 export default function AnalyticsHeader({ lastUpdated }: AnalyticsHeaderProps) {
   return (
     <>
-
-{/* 헤더 */}
-
+      {/* 헤더 */}
 
       {/* 헤더 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">

@@ -13,20 +13,20 @@ export default function StatsOverview({ stats }: StatsOverviewProps) {
       status: 'normal' as const,
       count: stats.normal,
       total: stats.total,
-      percentage: (stats.normal / stats.total) * 100
+      percentage: (stats.normal / stats.total) * 100,
     },
     {
       status: 'maintenance' as const,
       count: stats.maintenance,
       total: stats.total,
-      percentage: (stats.maintenance / stats.total) * 100
+      percentage: (stats.maintenance / stats.total) * 100,
     },
     {
       status: 'problem' as const,
       count: stats.problem,
       total: stats.total,
-      percentage: (stats.problem / stats.total) * 100
-    }
+      percentage: (stats.problem / stats.total) * 100,
+    },
   ];
 
   return (

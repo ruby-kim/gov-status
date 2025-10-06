@@ -3,7 +3,8 @@ import PageJsonLd from '@/components/PageJsonLd';
 
 export const metadata: Metadata = {
   title: '개인정보처리방침',
-  description: '정부 사이트 장애 현황 모니터링 서비스의 개인정보처리방침입니다. 개인정보 수집, 이용, 보관에 대한 정책을 확인하세요.',
+  description:
+    '정부 사이트 장애 현황 모니터링 서비스의 개인정보처리방침입니다. 개인정보 수집, 이용, 보관에 대한 정책을 확인하세요.',
   openGraph: {
     title: '개인정보처리방침',
     description: '정부 사이트 장애 현황 모니터링 서비스의 개인정보처리방침입니다.',
@@ -22,7 +23,7 @@ export default function PrivacyPolicyPage() {
       <PageJsonLd page="privacy" />
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">개인정보처리방침</h1>
-        
+
         <div className="prose prose-lg max-w-none">
           <p className="text-gray-600 mb-6">
             <strong>최종 업데이트:</strong> 2025년 10월 1일
@@ -36,8 +37,9 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
             <p className="text-gray-700 mb-4">
-              정부 사이트 장애 현황 모니터링 서비스(&quot;서비스&quot;)는 개인정보를 수집하지 않습니다. 
-              서비스는 정부 기관의 공개된 웹사이트 상태만 모니터링하며, 개인을 식별할 수 있는 정보는 처리하지 않습니다.
+              정부 사이트 장애 현황 모니터링 서비스(&quot;서비스&quot;)는 개인정보를 수집하지
+              않습니다. 서비스는 정부 기관의 공개된 웹사이트 상태만 모니터링하며, 개인을 식별할 수
+              있는 정보는 처리하지 않습니다.
             </p>
           </section>
 
@@ -59,26 +61,18 @@ export default function PrivacyPolicyPage() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. 분석 도구</h2>
-            <p className="text-gray-700 mb-4">
-              서비스에서는 다음 분석 도구를 사용합니다:
-            </p>
+            <p className="text-gray-700 mb-4">서비스에서는 다음 분석 도구를 사용합니다:</p>
             <div className="bg-gray-50 p-4 rounded-lg mb-4">
               <h3 className="font-semibold text-gray-900 mb-2">Vercel Analytics</h3>
               <p className="text-gray-700 text-sm mb-2">
                 - 개인정보를 수집하지 않는 프라이버시 친화적 분석 도구
               </p>
-              <p className="text-gray-700 text-sm">
-                - 쿠키를 사용하지 않으며, GDPR을 준수합니다
-              </p>
+              <p className="text-gray-700 text-sm">- 쿠키를 사용하지 않으며, GDPR을 준수합니다</p>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg mb-4">
               <h3 className="font-semibold text-gray-900 mb-2">Google Analytics 4</h3>
-              <p className="text-gray-700 text-sm mb-2">
-                - 익명화된 사용 통계 수집
-              </p>
-              <p className="text-gray-700 text-sm">
-                - IP 주소 익명화 처리 적용
-              </p>
+              <p className="text-gray-700 text-sm mb-2">- 익명화된 사용 통계 수집</p>
+              <p className="text-gray-700 text-sm">- IP 주소 익명화 처리 적용</p>
             </div>
           </section>
 
@@ -94,8 +88,8 @@ export default function PrivacyPolicyPage() {
             </ul>
             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
               <p className="text-yellow-800">
-                <strong>선택적 공개:</strong> 기여자 정보는 선택적으로 공개되며, 
-                기여자가 원하지 않는 경우 기여자 목록에서 제외될 수 있습니다.
+                <strong>선택적 공개:</strong> 기여자 정보는 선택적으로 공개되며, 기여자가 원하지
+                않는 경우 기여자 목록에서 제외될 수 있습니다.
               </p>
             </div>
           </section>
@@ -116,8 +110,8 @@ export default function PrivacyPolicyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. 제3자 공유</h2>
             <p className="text-gray-700 mb-4">
-              저희는 수집된 익명화된 통계 데이터를 제3자와 공유하지 않습니다. 
-              다만, 다음의 경우는 예외입니다:
+              저희는 수집된 익명화된 통계 데이터를 제3자와 공유하지 않습니다. 다만, 다음의 경우는
+              예외입니다:
             </p>
             <ul className="list-disc pl-6 text-gray-700 mb-4">
               <li>법적 요구사항이 있는 경우</li>
@@ -143,8 +137,8 @@ export default function PrivacyPolicyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. 정책 변경</h2>
             <p className="text-gray-700 mb-4">
-              이 개인정보처리방침은 필요에 따라 변경될 수 있습니다. 
-              중요한 변경사항이 있을 경우 서비스 내 공지사항을 통해 알려드리겠습니다.
+              이 개인정보처리방침은 필요에 따라 변경될 수 있습니다. 중요한 변경사항이 있을 경우
+              서비스 내 공지사항을 통해 알려드리겠습니다.
             </p>
           </section>
         </div>

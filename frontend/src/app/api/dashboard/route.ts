@@ -9,9 +9,12 @@ export async function GET() {
 
     // 1. 최신 전체 통계 불러오기
     const latestOverall = await db
-      .collection<{ timestamp: Date; overall: OverallStats; sites: SiteStatus[] }>(
-        COLLECTIONS.OVERALL_STATS
-      ).findOne({}, { sort: { timestamp: -1 } });
+      .collection<{
+        timestamp: Date;
+        overall: OverallStats;
+        sites: SiteStatus[];
+      }>(COLLECTIONS.OVERALL_STATS)
+      .findOne({}, { sort: { timestamp: -1 } });
 
     if (!latestOverall) {
       return NextResponse.json({ error: 'No overall stats found' }, { status: 404 });
@@ -19,7 +22,7 @@ export async function GET() {
 
     // 2. 기관 정보 불러오기
     const agencies = await db.collection<Agency>(COLLECTIONS.GOV_SITES).find({}).toArray();
-    const agencyMap = new Map(agencies.map(a => [a.agencyId, a]));
+    const agencyMap = new Map(agencies.map((a) => [a.agencyId, a]));
 
     // 3. 전체 통계 계산
     const overall = latestOverall.overall ?? { ...DEFAULT_STATS };
@@ -34,15 +37,15 @@ export async function GET() {
 
     // 5. 평균 응답시간 계산 (정상 상태만)
     const validResponses = sites.filter(
-      s => s.status === 'normal' && typeof s.responseTime === 'number'
+      (s) => s.status === 'normal' && typeof s.responseTime === 'number'
     );
 
     const avgResponseTime =
       validResponses.length > 0
         ? Math.round(
-          validResponses.reduce((sum, s) => sum + (s.responseTime || 0), 0) /
-          validResponses.length
-        )
+            validResponses.reduce((sum, s) => sum + (s.responseTime || 0), 0) /
+              validResponses.length
+          )
         : 0;
 
     // 6. Top3 빠른 서비스 (정상 상태만)
@@ -57,10 +60,7 @@ export async function GET() {
       }));
 
     // 7. 기관별 정상률 계산
-    const agencyRates: Record<
-      string,
-      { total: number; normal: number; normalRate: number }
-    > = {};
+    const agencyRates: Record<string, { total: number; normal: number; normalRate: number }> = {};
 
     for (const site of sites) {
       const id = site.agencyId;
@@ -76,7 +76,7 @@ export async function GET() {
     }
 
     // 8. 최고 정상률 기관 추출 (여러 개 허용)
-    const maxRate = Math.max(...Object.values(agencyRates).map(r => r.normalRate));
+    const maxRate = Math.max(...Object.values(agencyRates).map((r) => r.normalRate));
     const bestAgencies = Object.entries(agencyRates)
       .filter(([, r]) => r.normalRate === maxRate)
       .map(([id, r]) => {
@@ -115,9 +115,6 @@ export async function GET() {
     );
   } catch (error) {
     console.error('Error in dashboard API:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500 });
   }
 }

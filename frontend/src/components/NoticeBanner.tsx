@@ -16,7 +16,9 @@ export default function NoticeBanner() {
         <div className="flex items-center gap-1 md:gap-2">
           <Info className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0 text-blue-600" />
           <span className="font-medium text-blue-800">
-            <span className="hidden md:inline">정부의 공식 발표 및 전체 리스트는 행정안전부의 공지사항을 확인하시기 바랍니다.</span>
+            <span className="hidden md:inline">
+              정부의 공식 발표 및 전체 리스트는 행정안전부의 공지사항을 확인하시기 바랍니다.
+            </span>
             <span className="md:hidden">정부 공식 발표는 행정안전부 공지사항을 확인하세요.</span>
           </span>
         </div>

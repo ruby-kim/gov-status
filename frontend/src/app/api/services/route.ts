@@ -11,9 +11,12 @@ export async function GET() {
 
     // 1. 최신 전체 통계 불러오기
     const latestOverall = await db
-      .collection<{ timestamp: Date; overall: OverallStats; sites: SiteStatus[] }>(
-        COLLECTIONS.OVERALL_STATS
-      ).findOne({}, { sort: { timestamp: -1 } });
+      .collection<{
+        timestamp: Date;
+        overall: OverallStats;
+        sites: SiteStatus[];
+      }>(COLLECTIONS.OVERALL_STATS)
+      .findOne({}, { sort: { timestamp: -1 } });
 
     if (!latestOverall) {
       return NextResponse.json({ error: 'No overall stats found' }, { status: 404 });
@@ -21,7 +24,7 @@ export async function GET() {
 
     // 2. 기관 정보 불러오기
     const agencies = await db.collection<Services>(COLLECTIONS.GOV_SITES).find({}).toArray();
-    const agencyMap = new Map(agencies.map(a => [a.agencyId, a]));
+    const agencyMap = new Map(agencies.map((a) => [a.agencyId, a]));
 
     // 3. 각 사이트 상태를 병합
     const services = latestOverall.sites
@@ -51,13 +54,10 @@ export async function GET() {
       },
       {
         headers: DEFAULT_API_HEADERS,
-      },
+      }
     );
   } catch (error) {
     console.error('🚨 Error fetching live service data:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch live service data' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch live service data' }, { status: 500 });
   }
 }

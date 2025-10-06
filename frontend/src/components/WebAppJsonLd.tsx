@@ -34,7 +34,7 @@ export default function WebAppJsonLd({
   offers,
   author,
   faq,
-  breadcrumb
+  breadcrumb,
 }: WebAppJsonLdProps) {
   const webAppJsonLd = {
     '@context': 'https://schema.org',
@@ -56,42 +56,46 @@ export default function WebAppJsonLd({
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${url}/services?search={search_term_string}`
+        urlTemplate: `${url}/services?search={search_term_string}`,
       },
-      'query-input': 'required name=search_term_string'
+      'query-input': 'required name=search_term_string',
     },
     featureList: [
       '실시간 정부 사이트 모니터링',
       '장애 현황 대시보드',
       '기관별 통계 분석',
       '모바일 반응형 디자인',
-      '10분마다 자동 업데이트'
-    ]
+      '10분마다 자동 업데이트',
+    ],
   };
 
-  const faqJsonLd = faq ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faq.map(item => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer
+  const faqJsonLd = faq
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
       }
-    }))
-  } : null;
+    : null;
 
-  const breadcrumbJsonLd = breadcrumb ? {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: breadcrumb.map(item => ({
-      '@type': 'ListItem',
-      position: item.position,
-      name: item.name,
-      item: item.url
-    }))
-  } : null;
+  const breadcrumbJsonLd = breadcrumb
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumb.map((item) => ({
+          '@type': 'ListItem',
+          position: item.position,
+          name: item.name,
+          item: item.url,
+        })),
+      }
+    : null;
 
   const allJsonLd: object[] = [webAppJsonLd];
   if (faqJsonLd) allJsonLd.push(faqJsonLd);

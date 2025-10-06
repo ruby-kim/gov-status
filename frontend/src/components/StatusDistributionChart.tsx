@@ -11,13 +11,15 @@ interface StatusDistributionChartProps {
 }
 
 const COLORS = {
-  normal: '#10B981',    // green-500
+  normal: '#10B981', // green-500
   maintenance: '#3B82F6', // blue-500
-  problem: '#EF4444'    // red-500
+  problem: '#EF4444', // red-500
 };
 
-
-export default function StatusDistributionChart({ stats, height = "h-[25vh] sm:h-[30vh] md:h-[40vh]" }: StatusDistributionChartProps) {
+export default function StatusDistributionChart({
+  stats,
+  height = 'h-[25vh] sm:h-[30vh] md:h-[40vh]',
+}: StatusDistributionChartProps) {
   const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   useEffect(() => {
@@ -34,15 +36,15 @@ export default function StatusDistributionChart({ stats, height = "h-[25vh] sm:h
 
     updateScreenSize();
     window.addEventListener('resize', updateScreenSize);
-    
+
     return () => window.removeEventListener('resize', updateScreenSize);
   }, []);
 
   const data = [
     { name: '정상', value: stats.normal, color: COLORS.normal },
     { name: '점검중', value: stats.maintenance, color: COLORS.maintenance },
-    { name: '문제', value: stats.problem, color: COLORS.problem }
-  ].filter(item => item.value > 0);
+    { name: '문제', value: stats.problem, color: COLORS.problem },
+  ].filter((item) => item.value > 0);
 
   // 반응형 차트 설정
   const chartConfig = {
@@ -50,20 +52,20 @@ export default function StatusDistributionChart({ stats, height = "h-[25vh] sm:h
       innerRadius: 30,
       outerRadius: 60,
       legendHeight: 30,
-      legendFontSize: '10px'
+      legendFontSize: '10px',
     },
     tablet: {
       innerRadius: 50,
       outerRadius: 90,
       legendHeight: 36,
-      legendFontSize: '11px'
+      legendFontSize: '11px',
     },
     desktop: {
       innerRadius: 60,
       outerRadius: 120,
       legendHeight: 36,
-      legendFontSize: '12px'
-    }
+      legendFontSize: '12px',
+    },
   };
 
   const config = chartConfig[screenSize];
@@ -104,15 +106,17 @@ export default function StatusDistributionChart({ stats, height = "h-[25vh] sm:h
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              verticalAlign="bottom" 
+            <Legend
+              verticalAlign="bottom"
               height={config.legendHeight}
               formatter={(value, entry) => (
-                <span style={{ 
-                  color: entry?.color, 
-                  fontSize: config.legendFontSize
-                }}>
-                  {value} ({formatPercentage((entry?.payload?.value || 0) / stats.total * 100)})
+                <span
+                  style={{
+                    color: entry?.color,
+                    fontSize: config.legendFontSize,
+                  }}
+                >
+                  {value} ({formatPercentage(((entry?.payload?.value || 0) / stats.total) * 100)})
                 </span>
               )}
             />

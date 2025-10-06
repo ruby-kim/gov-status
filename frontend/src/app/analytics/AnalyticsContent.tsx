@@ -18,7 +18,7 @@ export default function AnalyticsContent() {
     totalServices,
     hourlyData,
     agencyStats,
-    bestAgenciesCount
+    bestAgenciesCount,
   } = useAnalyticsData();
 
   if (isLoading) {
@@ -61,7 +61,11 @@ export default function AnalyticsContent() {
           lastUpdated={lastUpdated}
         />
         <AnalyticsOverview overview={overview} bestAgenciesCount={bestAgenciesCount} />
-        <AnalyticsCharts statusData={statusData} totalServices={totalServices} hourlyData={hourlyData} />
+        <AnalyticsCharts
+          statusData={statusData}
+          totalServices={totalServices}
+          hourlyData={hourlyData}
+        />
         <AnalyticsTable agencyStats={agencyStats} />
       </div>
     </>

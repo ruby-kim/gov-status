@@ -3,7 +3,8 @@ import PageJsonLd from '@/components/PageJsonLd';
 
 export const metadata: Metadata = {
   title: '이용약관',
-  description: '정부 사이트 장애 현황 모니터링 서비스의 이용약관입니다. 서비스 이용 조건과 제한사항을 확인하세요.',
+  description:
+    '정부 사이트 장애 현황 모니터링 서비스의 이용약관입니다. 서비스 이용 조건과 제한사항을 확인하세요.',
   openGraph: {
     title: '이용약관',
     description: '정부 사이트 장애 현황 모니터링 서비스의 이용약관입니다.',
@@ -22,7 +23,7 @@ export default function TermsOfUsePage() {
       <PageJsonLd page="terms" />
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">이용약관</h1>
-        
+
         <div className="prose prose-lg max-w-none">
           <p className="text-gray-600 mb-6">
             <strong>최종 업데이트:</strong> 2025년 10월 1일
@@ -31,8 +32,8 @@ export default function TermsOfUsePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. 서비스 소개</h2>
             <p className="text-gray-700 mb-4">
-              정부 사이트 장애 현황 모니터링 서비스(&quot;서비스&quot;)는 정부 기관의 공개된 웹사이트 상태를 
-              모니터링하고 시각화하여 제공하는 무료 서비스입니다.
+              정부 사이트 장애 현황 모니터링 서비스(&quot;서비스&quot;)는 정부 기관의 공개된
+              웹사이트 상태를 모니터링하고 시각화하여 제공하는 무료 서비스입니다.
             </p>
             <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
               <p className="text-blue-800 font-medium">
@@ -47,7 +48,7 @@ export default function TermsOfUsePage() {
             <p className="text-gray-700 mb-4">
               본 서비스는 완전히 무료로 제공되며, 별도의 가입 절차 없이 이용할 수 있습니다.
             </p>
-            
+
             <h3 className="text-xl font-semibold text-gray-900 mb-3">2.2 이용 제한</h3>
             <p className="text-gray-700 mb-4">다음 행위는 금지됩니다:</p>
             <ul className="list-disc pl-6 text-gray-700 mb-4">
@@ -78,9 +79,7 @@ export default function TermsOfUsePage() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. 책임 제한</h2>
-            <p className="text-gray-700 mb-4">
-              서비스 제공자는 다음에 대해 책임지지 않습니다:
-            </p>
+            <p className="text-gray-700 mb-4">서비스 제공자는 다음에 대해 책임지지 않습니다:</p>
             <ul className="list-disc pl-6 text-gray-700 mb-4">
               <li>서비스의 정확성, 완전성, 신뢰성</li>
               <li>서비스 이용으로 인한 직접적 또는 간접적 손해</li>
@@ -92,9 +91,7 @@ export default function TermsOfUsePage() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. 지적재산권</h2>
-            <p className="text-gray-700 mb-4">
-              - 서비스의 소스코드는 MIT 라이선스 하에 제공됩니다
-            </p>
+            <p className="text-gray-700 mb-4">- 서비스의 소스코드는 MIT 라이선스 하에 제공됩니다</p>
             <p className="text-gray-700 mb-4">
               - 정부 기관의 로고, 상표 등은 해당 기관의 소유입니다
             </p>
@@ -122,33 +119,31 @@ export default function TermsOfUsePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. 개인정보 보호</h2>
             <p className="text-gray-700 mb-4">
-              서비스는 개인정보를 수집하지 않습니다. 자세한 내용은 {" "}
-              <a href="/privacy" className="text-blue-600 hover:text-blue-800 underline">개인정보처리방침</a>을 
-              참조하시기 바랍니다.
+              서비스는 개인정보를 수집하지 않습니다. 자세한 내용은{' '}
+              <a href="/privacy" className="text-blue-600 hover:text-blue-800 underline">
+                개인정보처리방침
+              </a>
+              을 참조하시기 바랍니다.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. 기여 및 피드백</h2>
-            <p className="text-gray-700 mb-4">
-              서비스 개선을 위한 기여와 피드백을 환영합니다:
-            </p>
+            <p className="text-gray-700 mb-4">서비스 개선을 위한 기여와 피드백을 환영합니다:</p>
             <ul className="list-disc pl-6 text-gray-700 mb-4">
               <li>버그 신고 및 개선 제안</li>
               <li>새로운 정부 서비스 정보 제공</li>
               <li>코드 기여 (GitHub Pull Request)</li>
               <li>문서화 및 번역</li>
             </ul>
-            <p className="text-gray-700 mb-4">
-              기여자 정보는 선택적으로 공개될 수 있습니다.
-            </p>
+            <p className="text-gray-700 mb-4">기여자 정보는 선택적으로 공개될 수 있습니다.</p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. 준거법 및 관할</h2>
             <p className="text-gray-700 mb-4">
-              본 약관은 대한민국 법률에 따라 해석되며, 서비스 이용과 관련된 분쟁은 
-              대한민국 법원의 관할에 따릅니다.
+              본 약관은 대한민국 법률에 따라 해석되며, 서비스 이용과 관련된 분쟁은 대한민국 법원의
+              관할에 따릅니다.
             </p>
           </section>
 
@@ -165,9 +160,11 @@ export default function TermsOfUsePage() {
                 <strong>개발자:</strong> 김루비 (A&B Network)
               </p>
               <p className="text-gray-700">
-                <strong>GitHub:</strong> 
-                <a href="https://github.com/ruby-kim/gov-status" 
-                   className="text-blue-600 hover:text-blue-800 underline ml-1">
+                <strong>GitHub:</strong>
+                <a
+                  href="https://github.com/ruby-kim/gov-status"
+                  className="text-blue-600 hover:text-blue-800 underline ml-1"
+                >
                   github.com/ruby-kim/gov-status
                 </a>
               </p>
@@ -177,8 +174,8 @@ export default function TermsOfUsePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. 약관 변경</h2>
             <p className="text-gray-700 mb-4">
-              본 약관은 필요에 따라 변경될 수 있습니다. 중요한 변경사항이 있을 경우 
-              서비스 내 공지사항을 통해 알려드리겠습니다.
+              본 약관은 필요에 따라 변경될 수 있습니다. 중요한 변경사항이 있을 경우 서비스 내
+              공지사항을 통해 알려드리겠습니다.
             </p>
           </section>
         </div>

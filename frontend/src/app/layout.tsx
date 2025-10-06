@@ -12,9 +12,10 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: {
     default: '정부서비스 장애 현황',
-    template: '%s | 정부서비스 장애 현황'
+    template: '%s | 정부서비스 장애 현황',
   },
-  description: '정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다. 10분마다 최신 데이터로 업데이트.',
+  description:
+    '정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다. 10분마다 최신 데이터로 업데이트.',
   keywords: ['정부사이트', '장애현황', '모니터링', '정부24', '공공서비스', '접속오류', '실시간'],
   authors: [{ name: '김루비', url: 'https://anb-network.com' }],
   creator: '김루비',
@@ -30,7 +31,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: '정부 사이트 장애 현황',
-    description: '정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다. 10분마다 최신 데이터로 업데이트.',
+    description:
+      '정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다. 10분마다 최신 데이터로 업데이트.',
     url: 'https://gov-status.vercel.app',
     siteName: '정부 사이트 장애 현황 모니터링',
     images: [
@@ -47,7 +49,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '정부 사이트 장애 현황',
-    description: '정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다.',
+    description:
+      '정부24, 공공서비스 등 주요 정부 사이트의 접속 오류와 장애 현황을 실시간으로 모니터링합니다.',
     images: ['/og-image.png'],
     creator: '@anb_network',
   },
@@ -72,11 +75,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -120,11 +119,21 @@ export default function RootLayout({
               <div className="text-center text-sm text-gray-600 space-y-2">
                 <p>© {currentYear} 정부 사이트 현황 모니터링. All rights reserved.</p>
                 <p>
-                  Contact: <a href="mailto:govstatus@anb-network.com" className="text-gray-700 hover:text-gray-900 hover:underline">govstatus@anb-network.com</a>
+                  Contact:{' '}
+                  <a
+                    href="mailto:govstatus@anb-network.com"
+                    className="text-gray-700 hover:text-gray-900 hover:underline"
+                  >
+                    govstatus@anb-network.com
+                  </a>
                 </p>
                 <div className="flex justify-center space-x-4 text-xs">
-                  <a href="/privacy" className="text-gray-500 hover:text-gray-700 hover:underline">개인정보처리방침</a>
-                  <a href="/terms" className="text-gray-500 hover:text-gray-700 hover:underline">이용약관</a>
+                  <a href="/privacy" className="text-gray-500 hover:text-gray-700 hover:underline">
+                    개인정보처리방침
+                  </a>
+                  <a href="/terms" className="text-gray-500 hover:text-gray-700 hover:underline">
+                    이용약관
+                  </a>
                 </div>
                 <p className="text-sm text-gray-500">
                   이 서비스는 정부 기관의 공식 웹사이트가 아니며, 오픈소스 및 무료로 운영됩니다.

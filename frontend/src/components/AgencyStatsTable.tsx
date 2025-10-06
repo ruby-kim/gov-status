@@ -73,10 +73,12 @@ export default function AgencyStatsTable({ agencyStats }: AgencyStatsTableProps)
                   {formatPercentage(agency.current.normalRate)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={clsx(
-                    'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
-                    getStatusColor(agency.current.normalRate)
-                  )}>
+                  <span
+                    className={clsx(
+                      'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
+                      getStatusColor(agency.current.normalRate)
+                    )}
+                  >
                     {getStatusText(agency.current.normalRate)}
                   </span>
                 </td>

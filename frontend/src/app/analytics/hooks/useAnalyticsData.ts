@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { loadDashboardData, loadServiceData, loadHistoryData, loadAgencyHistoryData } from '@/utils/dataTransform';
+import {
+  loadDashboardData,
+  loadServiceData,
+  loadHistoryData,
+  loadAgencyHistoryData,
+} from '@/utils/dataTransform';
 import { HistoryData, OverviewData } from '@/types/analytics';
 import { DashboardData } from '@/types/dashboard';
 import { Service } from '@/types/service';
@@ -11,14 +16,16 @@ export function useAnalyticsData() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
-  const [agencyHistoryData, setAgencyHistoryData] = useState<Array<{
-    agencyId: string;
-    history: Array<{
-      timestamp: string;
-      normalRate: number;
-      stats: { total: number; normal: number; maintenance: number; problem: number };
-    }>;
-  }>>([]);
+  const [agencyHistoryData, setAgencyHistoryData] = useState<
+    Array<{
+      agencyId: string;
+      history: Array<{
+        timestamp: string;
+        normalRate: number;
+        stats: { total: number; normal: number; maintenance: number; problem: number };
+      }>;
+    }>
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,12 +44,12 @@ export function useAnalyticsData() {
               normalRate: number;
               stats: { total: number; normal: number; maintenance: number; problem: number };
             }>;
-          }>
+          }>,
         ] = await Promise.all([
           loadDashboardData(),
           loadServiceData(),
           loadHistoryData(),
-          loadAgencyHistoryData()
+          loadAgencyHistoryData(),
         ]);
 
         setOverview({
@@ -76,7 +83,7 @@ export function useAnalyticsData() {
       totalServices: 0,
       hourlyData: [],
       agencyStats: [],
-      bestAgenciesCount: 0
+      bestAgenciesCount: 0,
     };
   }
 
@@ -84,7 +91,7 @@ export function useAnalyticsData() {
 
   // 각 기관별 서비스 정상율 계산
   const agencyRates = new Map<string, { total: number; normal: number }>();
-  services.forEach(service => {
+  services.forEach((service) => {
     const agencyId = service.id;
     if (!agencyRates.has(agencyId)) {
       agencyRates.set(agencyId, { total: 0, normal: 0 });
@@ -103,8 +110,8 @@ export function useAnalyticsData() {
   const statusData = [
     { name: '정상', value: overview.normalServices, color: '#10B981' },
     { name: '점검중', value: overview.maintenanceServices, color: '#3B82F6' },
-    { name: '문제', value: overview.problemServices, color: '#EF4444' }
-  ].filter(item => item.value > 0);
+    { name: '문제', value: overview.problemServices, color: '#EF4444' },
+  ].filter((item) => item.value > 0);
 
   // 최근 6시간 트렌드 데이터 (빈 시간은 0)
   const now = new Date();
@@ -120,8 +127,7 @@ export function useAnalyticsData() {
     const date = new Date(h.timestamp);
     const hourLabel = `${date.getHours()}시`;
     const dateLabel = `${date.getMonth() + 1}/${date.getDate()}`;
-    const normalRate =
-      h.overall.total > 0 ? (h.overall.normal / h.overall.total) * 100 : 0;
+    const normalRate = h.overall.total > 0 ? (h.overall.normal / h.overall.total) * 100 : 0;
     hourlyDataMap.set(`${dateLabel}-${hourLabel}`, Number(normalRate.toFixed(2)));
   });
   const hourlyData = hoursRange.map((item) => ({
@@ -133,12 +139,12 @@ export function useAnalyticsData() {
 
   // 기관별 통계 (services 기반 매핑)
   const agencyStats = agencyHistoryData.map((record) => {
-    const agency = services.find(s => s.id === record.agencyId);
+    const agency = services.find((s) => s.id === record.agencyId);
 
-    const today = record.history.find(h => h.timestamp === 'today');
-    const yesterday = record.history.find(h => h.timestamp === 'yesterday');
-    const week = record.history.find(h => h.timestamp === 'week');
-    const month = record.history.find(h => h.timestamp === 'month');
+    const today = record.history.find((h) => h.timestamp === 'today');
+    const yesterday = record.history.find((h) => h.timestamp === 'yesterday');
+    const week = record.history.find((h) => h.timestamp === 'week');
+    const month = record.history.find((h) => h.timestamp === 'month');
 
     return {
       agencyId: record.agencyId,
@@ -165,6 +171,6 @@ export function useAnalyticsData() {
     totalServices,
     hourlyData,
     agencyStats,
-    bestAgenciesCount
+    bestAgenciesCount,
   };
 }

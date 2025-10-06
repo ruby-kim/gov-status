@@ -29,16 +29,10 @@ export async function GET() {
       { $sort: { _id: 1 } },
     ];
 
-    const results = await db
-      .collection(COLLECTIONS.GOV_SITES_STATUS)
-      .aggregate(pipeline)
-      .toArray();
+    const results = await db.collection(COLLECTIONS.GOV_SITES_STATUS).aggregate(pipeline).toArray();
 
     if (results.length === 0) {
-      return NextResponse.json(
-        { error: 'No hourly stats found' },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'No hourly stats found' }, { status: 404 });
     }
 
     // 프론트엔드 HistoryData 형태로 포맷팅
@@ -57,9 +51,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error('🚨 Error fetching 6-hour history:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch 6-hour history' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch 6-hour history' }, { status: 500 });
   }
 }

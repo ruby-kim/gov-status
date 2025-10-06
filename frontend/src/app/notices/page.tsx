@@ -47,9 +47,7 @@ export default function NoticesPage() {
               <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-yellow-100 mb-4">
                 <AlertCircle className="h-8 w-8 text-yellow-600" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                iframe 로드 실패
-              </h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">iframe 로드 실패</h3>
               <p className="text-gray-500 mb-6">
                 보안 정책으로 인해 iframe으로 표시할 수 없습니다.
               </p>
@@ -87,9 +85,7 @@ export default function NoticesPage() {
               <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-yellow-100 mb-4">
                 <AlertCircle className="h-8 w-8 text-yellow-600" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                iframe 로드 실패
-              </h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">iframe 로드 실패</h3>
               <p className="text-gray-500 mb-6">
                 보안 정책으로 인해 iframe으로 표시할 수 없습니다.
               </p>

@@ -67,7 +67,8 @@ export default function DashboardContent() {
             <div>
               <h2 className="text-2xl font-bold">전체 서비스 정상율</h2>
               <p className="text-blue-100 mt-1">
-                총 {o.totalServices.toLocaleString()}개 중 {o.normalServices.toLocaleString()}개 정상
+                총 {o.totalServices.toLocaleString()}개 중 {o.normalServices.toLocaleString()}개
+                정상
               </p>
             </div>
             <div className="text-right">
@@ -111,7 +112,7 @@ export default function DashboardContent() {
             {o.top3FastestServices.length > 0 ? (
               o.top3FastestServices.map((s, i) => {
                 const style = STATUS_STYLES[s.status as StatusKey];
-                return(
+                return (
                   <div
                     key={i}
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-2"
@@ -120,9 +121,7 @@ export default function DashboardContent() {
                       <span className="text-4xl">{RANK_ICONS[i] ?? '🏅'}</span>
                       <div>
                         <span className="font-medium text-gray-900">{s.name}</span>
-                        <div className={`${style.color} text-sm`}>
-                          {style.text}
-                        </div>
+                        <div className={`${style.color} text-sm`}>{style.text}</div>
                       </div>
                     </div>
                     <div className={`text-right ${RANK_COLORS[i] ?? 'text-gray-500'}`}>
@@ -130,7 +129,8 @@ export default function DashboardContent() {
                       <div className="text-sm text-gray-500">응답시간</div>
                     </div>
                   </div>
-              )})
+                );
+              })
             ) : (
               <div className="text-center text-gray-500 py-6">
                 <AlertCircle className="w-8 h-8 mx-auto mb-2" />

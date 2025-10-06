@@ -35,12 +35,13 @@ export async function GET() {
     // 3. 오늘 / 하루 전 데이터 (gov_sites_status)
     // -------------------------------------------------------------------
     const aggregateDayKST = async (startUTC: Date, endUTC: Date) => {
-      return db.collection(COLLECTIONS.GOV_SITES_STATUS)
+      return db
+        .collection(COLLECTIONS.GOV_SITES_STATUS)
         .aggregate([
           {
             $match: {
-              checkedAt: { $gte: startUTC, $lte: endUTC }
-            }
+              checkedAt: { $gte: startUTC, $lte: endUTC },
+            },
           },
           {
             $group: {
@@ -64,22 +65,24 @@ export async function GET() {
     // 4. 주간 / 월간 (summary)
     // -------------------------------------------------------------------
     const [weeklyAgg, monthlyAgg] = await Promise.all([
-      db.collection(COLLECTIONS.GOV_SITES_SUMMARY)
+      db
+        .collection(COLLECTIONS.GOV_SITES_SUMMARY)
         .aggregate([
           { $match: { periodType: 'weekly' } },
           { $sort: { updatedAt: -1 } },
           { $group: { _id: '$agencyId', doc: { $first: '$$ROOT' } } },
-          { $replaceRoot: { newRoot: '$doc' } }
+          { $replaceRoot: { newRoot: '$doc' } },
         ])
         .toArray(),
-      db.collection(COLLECTIONS.GOV_SITES_SUMMARY)
+      db
+        .collection(COLLECTIONS.GOV_SITES_SUMMARY)
         .aggregate([
           { $match: { periodType: 'monthly' } },
           { $sort: { updatedAt: -1 } },
           { $group: { _id: '$agencyId', doc: { $first: '$$ROOT' } } },
-          { $replaceRoot: { newRoot: '$doc' } }
+          { $replaceRoot: { newRoot: '$doc' } },
         ])
-        .toArray()
+        .toArray(),
     ]);
 
     // -------------------------------------------------------------------
@@ -104,16 +107,15 @@ export async function GET() {
     ) =>
       new Map(
         arr.map((r) => [
-          keyField === '_id' ? r._id ?? r.agencyId : r.agencyId ?? r._id,
+          keyField === '_id' ? (r._id ?? r.agencyId) : (r.agencyId ?? r._id),
           {
             total: r.total ?? r.stats?.total ?? 0,
             normal: r.normal ?? r.stats?.normal ?? 0,
             maintenance: r.maintenance ?? r.stats?.maintenance ?? 0,
             problem: r.problem ?? r.stats?.problem ?? 0,
           },
-        ]),
+        ])
       );
-
 
     const todayMap = buildMap(todayAgg);
     const yesterdayMap = buildMap(yesterdayAgg);
@@ -135,8 +137,7 @@ export async function GET() {
       normal: number;
       maintenance: number;
       problem: number;
-    }) =>
-      s && s.total > 0 ? (s.normal / s.total) * 100 : null;
+    }) => (s && s.total > 0 ? (s.normal / s.total) * 100 : null);
 
     const results = Array.from(allAgencyIds).map((agencyId) => ({
       agencyId,
@@ -165,12 +166,8 @@ export async function GET() {
     }));
 
     return NextResponse.json(results, { headers: DEFAULT_API_HEADERS });
-
   } catch (error) {
     console.error('Error fetching agency history:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch agency history' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch agency history' }, { status: 500 });
   }
 }

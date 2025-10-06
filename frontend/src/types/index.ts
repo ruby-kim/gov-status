@@ -4,7 +4,6 @@ export * from './service';
 // Dashboard types
 export * from './dashboard';
 
-
 // Charts types
 export * from './charts';
 

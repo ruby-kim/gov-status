@@ -21,10 +21,12 @@ export default function ServicesContent() {
   // 필터 + 정렬 결과 메모이제이션
   const filtered = useMemo(() => {
     return services
-      .filter(s => {
+      .filter((s) => {
         if (filters.status?.length && !filters.status.includes(s.status)) return false;
-        if (filters.mainCategory?.length && !filters.mainCategory.includes(s.mainCategory)) return false;
-        if (filters.subCategory?.length && !filters.subCategory.includes(s.subCategory)) return false;
+        if (filters.mainCategory?.length && !filters.mainCategory.includes(s.mainCategory))
+          return false;
+        if (filters.subCategory?.length && !filters.subCategory.includes(s.subCategory))
+          return false;
         if (filters.search) {
           const term = filters.search.toLowerCase();
           const text = [s.name, s.subCategory, ...(s.tags ?? [])].join(' ').toLowerCase();
@@ -36,7 +38,7 @@ export default function ServicesContent() {
         const order = { normal: 0, maintenance: 1, problem: 2 };
         const aVal = sortField === 'status' ? order[a.status] : (a[sortField] ?? '');
         const bVal = sortField === 'status' ? order[b.status] : (b[sortField] ?? '');
-      
+
         if (typeof aVal === 'number' && typeof bVal === 'number') {
           return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
         } else {
@@ -77,7 +79,7 @@ export default function ServicesContent() {
           onFiltersChange={setFilters}
           totalCount={services.length}
           filteredCount={filtered.length}
-          availableSubCategories={[...new Set(services.map(s => s.subCategory).filter(Boolean))]}
+          availableSubCategories={[...new Set(services.map((s) => s.subCategory).filter(Boolean))]}
         />
 
         <ServiceToolbar
@@ -85,7 +87,7 @@ export default function ServicesContent() {
           sortOrder={sortOrder}
           viewMode={viewMode}
           onSortChange={setSortField}
-          onOrderToggle={() => setSortOrder(o => (o === 'asc' ? 'desc' : 'asc'))}
+          onOrderToggle={() => setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'))}
           onViewModeChange={setViewMode}
         />
 

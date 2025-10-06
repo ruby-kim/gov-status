@@ -24,10 +24,7 @@ export default function Navigation() {
     if (!isMobileMenuOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -46,9 +43,7 @@ export default function Navigation() {
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Activity className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">
-                정부 사이트 장애 현황
-              </span>
+              <span className="text-xl font-bold text-gray-900">정부 사이트 장애 현황</span>
             </Link>
           </div>
 
@@ -57,7 +52,7 @@ export default function Navigation() {
             {navigation.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
-              
+
               return (
                 <Link
                   key={item.name}
@@ -84,11 +79,7 @@ export default function Navigation() {
               className="text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-2"
             >
               <span className="sr-only">{isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}</span>
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -101,7 +92,7 @@ export default function Navigation() {
             {navigation.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
-              
+
               return (
                 <Link
                   key={item.name}

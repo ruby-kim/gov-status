@@ -11,8 +11,9 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
       // 스크롤이 300px 이상일 때 버튼 표시
       if (scrollTop > 300) {
         setIsVisible(true);
@@ -38,7 +39,7 @@ export default function ScrollToTop() {
     if (typeof window !== 'undefined') {
       setPosition({
         x: window.innerWidth - 80, // 오른쪽에서 80px
-        y: window.innerHeight - 80  // 아래에서 80px
+        y: window.innerHeight - 80, // 아래에서 80px
       });
     }
   }, []);
@@ -56,26 +57,29 @@ export default function ScrollToTop() {
     if (rect) {
       setDragOffset({
         x: clientX - rect.left,
-        y: clientY - rect.top
+        y: clientY - rect.top,
       });
     }
   };
 
-  const handleMove = useCallback((clientX: number, clientY: number) => {
-    if (isDragging) {
-      const newX = clientX - dragOffset.x;
-      const newY = clientY - dragOffset.y;
-      
-      // 화면 경계 내에서만 이동
-      const maxX = window.innerWidth - 60;
-      const maxY = window.innerHeight - 60;
-      
-      setPosition({
-        x: Math.max(0, Math.min(newX, maxX)),
-        y: Math.max(0, Math.min(newY, maxY))
-      });
-    }
-  }, [isDragging, dragOffset.x, dragOffset.y]);
+  const handleMove = useCallback(
+    (clientX: number, clientY: number) => {
+      if (isDragging) {
+        const newX = clientX - dragOffset.x;
+        const newY = clientY - dragOffset.y;
+
+        // 화면 경계 내에서만 이동
+        const maxX = window.innerWidth - 60;
+        const maxY = window.innerHeight - 60;
+
+        setPosition({
+          x: Math.max(0, Math.min(newX, maxX)),
+          y: Math.max(0, Math.min(newY, maxY)),
+        });
+      }
+    },
+    [isDragging, dragOffset.x, dragOffset.y]
+  );
 
   const handleEnd = useCallback(() => {
     setIsDragging(false);
@@ -96,15 +100,21 @@ export default function ScrollToTop() {
     }
   };
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    handleMove(e.clientX, e.clientY);
-  }, [handleMove]);
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      handleMove(e.clientX, e.clientY);
+    },
+    [handleMove]
+  );
 
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    const touch = e.touches[0];
-    handleMove(touch.clientX, touch.clientY);
-    e.preventDefault();
-  }, [handleMove]);
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      const touch = e.touches[0];
+      handleMove(touch.clientX, touch.clientY);
+      e.preventDefault();
+    },
+    [handleMove]
+  );
 
   const handleMouseUp = useCallback(() => {
     handleEnd();
@@ -120,7 +130,7 @@ export default function ScrollToTop() {
       document.addEventListener('mouseup', handleMouseUp);
       document.addEventListener('touchmove', handleTouchMove, { passive: false });
       document.addEventListener('touchend', handleTouchEnd);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
@@ -140,7 +150,7 @@ export default function ScrollToTop() {
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
-        cursor: isDragging ? 'grabbing' : 'grab'
+        cursor: isDragging ? 'grabbing' : 'grab',
       }}
     >
       <button
@@ -154,7 +164,7 @@ export default function ScrollToTop() {
           backdropFilter: 'blur(4px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           minWidth: '48px',
-          minHeight: '48px'
+          minHeight: '48px',
         }}
         aria-label="맨 위로 이동"
       >

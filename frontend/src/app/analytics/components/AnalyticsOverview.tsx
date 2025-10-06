@@ -2,7 +2,6 @@ import { TrendingUp, Activity, AlertTriangle } from 'lucide-react';
 import { formatPercentage, formatAgencyWithRate } from '@/utils/formatUtils';
 import { AnalyticsOverviewProps } from '@/types/analytics';
 
-
 export default function AnalyticsOverview({ overview, bestAgenciesCount }: AnalyticsOverviewProps) {
   const bestAgency = overview.bestAgency;
   const fastestAgency = overview.fastestAgency;
@@ -20,8 +19,15 @@ export default function AnalyticsOverview({ overview, bestAgenciesCount }: Analy
                 {formatPercentage(overview.overallNormalRate)}
               </dd>
               <dd className="text-xs text-gray-500 mt-1">
-                총 <span className="font-medium text-gray-700">{overview.totalServices.toLocaleString()}</span>개 중{' '}
-                <span className="font-medium text-green-700">{overview.normalServices.toLocaleString()}</span>개 정상
+                총{' '}
+                <span className="font-medium text-gray-700">
+                  {overview.totalServices.toLocaleString()}
+                </span>
+                개 중{' '}
+                <span className="font-medium text-green-700">
+                  {overview.normalServices.toLocaleString()}
+                </span>
+                개 정상
               </dd>
             </div>
           </div>
@@ -39,9 +45,7 @@ export default function AnalyticsOverview({ overview, bestAgenciesCount }: Analy
                 {bestAgency ? formatAgencyWithRate(bestAgency.name, bestAgency.rate) : 'N/A'}
               </dd>
               {bestAgenciesCount > 1 && (
-                <dd className="text-xs text-gray-500 mt-1">
-                  외 {bestAgenciesCount - 1}개
-                </dd>
+                <dd className="text-xs text-gray-500 mt-1">외 {bestAgenciesCount - 1}개</dd>
               )}
             </div>
           </div>
@@ -55,12 +59,19 @@ export default function AnalyticsOverview({ overview, bestAgenciesCount }: Analy
             <AlertTriangle className="h-8 w-8 text-yellow-600" />
             <div className="ml-3">
               <dt className="text-sm font-medium text-gray-500">주의 필요 기관</dt>
-              <dd className="text-xl lg:text-2xl font-bold text-gray-900">{overview.warningAgencies}개</dd>
+              <dd className="text-xl lg:text-2xl font-bold text-gray-900">
+                {overview.warningAgencies}개
+              </dd>
               <dd className="text-xs text-gray-500 mt-1">
                 점검중{' '}
-                <span className="font-medium text-blue-600">{overview.maintenanceServices.toLocaleString()}</span>개 /
-                문제{' '}
-                <span className="font-medium text-red-600">{overview.problemServices.toLocaleString()}</span>개
+                <span className="font-medium text-blue-600">
+                  {overview.maintenanceServices.toLocaleString()}
+                </span>
+                개 / 문제{' '}
+                <span className="font-medium text-red-600">
+                  {overview.problemServices.toLocaleString()}
+                </span>
+                개
               </dd>
             </div>
           </div>
