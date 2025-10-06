@@ -1,7 +1,7 @@
 import asyncio
 import sys
 from checker.agencies import AgencyManager
-from checker.statusChecker import StatusChecker
+from checker.sitesStatus import StatusChecker
 from crawler.govCrawler import GovCrawler
 from db.storage import Storage
 from db.connection import db
@@ -30,7 +30,7 @@ async def main():
         # crawler.crawl_all()
         # crawler.save_to_csv(CSV_FILE)
 
-        # --- Step 2: (선택) DB 업데이트: MongoDB에 데이터 없을 시 사용 ---
+        # --- Step 2: (선택) DB 업데이트: MongoDB에 데이터가 없거나 csv 업데이트 시 사용 ---
         # agency_mgr = AgencyManager(csv_file=CSV_FILE)
         # agency_mgr.upload_gov_sites()
 
